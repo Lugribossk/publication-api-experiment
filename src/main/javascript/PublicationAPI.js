@@ -2,11 +2,11 @@ define(["jquery", "Reference", "Publication"],
     function ($, Reference, Publication) {
         "use strict";
 
-        function getPublicationInfoCached(publicationID) {
+        function getPublicationInfoCached(scope, publicationID) {
             return $.ajax({
-                url: "http://api.viewer.zmags.com/publication/" + publicationID,
+                url: scope.apiURL + publicationID,
                 data: {
-                    key: "715f663c48"
+                    key: scope.key
                 }
             })
                 .fail(function (xhr) {
@@ -14,11 +14,11 @@ define(["jquery", "Reference", "Publication"],
                 });
         }
 
-        function getPublicationInfoRecent(publicationID) {
+        function getPublicationInfoRecent(scope, publicationID) {
             return $.ajax({
-                url: "http://api.viewer.zmags.com/publication/" + publicationID,
+                url: scope.apiURL + publicationID,
                 data: {
-                    key: "715f663c48",
+                    key: scope.key,
                     recent: true
                 },
                 timeout: 2000
@@ -33,15 +33,17 @@ define(["jquery", "Reference", "Publication"],
                 });
         }
 
-        function getPublicationInfo(publicationID) {
-            return $.when(getPublicationInfoCached(publicationID),
-                getPublicationInfoRecent(publicationID))
-                .then(function (info, infoRecent) {
+        function getPublicationInfo(scope, publicationID) {
+            return $.when(getPublicationInfoCached(scope, publicationID),
+                getPublicationInfoRecent(scope, publicationID))
+                .then(function (infoResponse, infoRecentResponse) {
+                    // The parameters are lists of the arguments returned by $.ajax, but we're only interested in the first one.
+                    var info = infoResponse[0],
+                        infoRecent = infoRecentResponse[0];
                     // Use the recent publication info instead if we actually got one, and it is newer.
                     if (infoRecent && infoRecent.version > info.version) {
                         info = infoRecent;
                     }
-                    console.log("Using pub info", info);
                     // Set the Reference base URL as a static property on it, hopefully it won't change between publications.
                     Reference.baseURL = info.baseURL;
                     return info;
@@ -53,14 +55,17 @@ define(["jquery", "Reference", "Publication"],
         }
 
         /**
+         * Zmags Publication API client that can be used to retrieve publication data.
          *
-         * @param apiURL
-         * @param key
+         * @param {String} key The API key.
+         * @param {String} [apiURL] The URL to the "Publication Info service". Optional, defaults to the public HTTP version.
+         *
          * @class PublicationAPI
+         * @author Bo Gotthardt
          */
-        function PublicationAPI(apiURL, key) {
-            this.apiURL = apiURL;
+        function PublicationAPI(key, apiURL) {
             this.key = key;
+            this.apiURL = apiURL || "http://api.viewer.zmags.com/publication/";
             this.baseURL = null;
         }
 
@@ -74,11 +79,11 @@ define(["jquery", "Reference", "Publication"],
         PublicationAPI.prototype.getPublication = function (publicationID) {
             var publication = new Publication(publicationID);
 
-            return getPublicationInfo(publicationID)
+            return getPublicationInfo(this, publicationID)
                 .done(function (info) {
                     // Copy useful properties but not the publication descriptor.
                     // Instead load it afterwards and copy its properties in as well.
-                    // This encapsulates the abstraction that a publication is split into info and descriptor.
+                    // This encapsulates the detail that a publication is split into info and descriptor.
                     publication.version = info.version;
                     publication.expired = info.expired;
                     publication.activated = info.activated;

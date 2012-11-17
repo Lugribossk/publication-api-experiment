@@ -15,11 +15,18 @@ requirejs(["jquery", "PublicationAPI"],
         var key = "715f663c48",
             pubId = "8c628bfc";
 
-        var api = new PublicationAPI("http://api.viewer.zmags.com/publication/", key);
+        var api = new PublicationAPI(key);
 
         api.getPublication(pubId)
             .done(function (publication) {
-                console.log(publication)
-            });
+                console.log(publication);
 
+                publication.getPage(1)
+                    .done(function (page) {
+                        page.getEnrichments()
+                            .done(function (enrs) {
+                                console.log(enrs);
+                            });
+                    });
+            });
     });

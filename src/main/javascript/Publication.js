@@ -1,5 +1,5 @@
-define(["jquery", "PublicationAPI", "Reference"],
-    function ($, APIClient, Reference) {
+define(["jquery", "Reference", "Page"],
+    function ($, Reference, Page) {
         "use strict";
 
         /**
@@ -9,17 +9,24 @@ define(["jquery", "PublicationAPI", "Reference"],
          * Instead use {@link PublicationAPI#getPublication()}.
          *
          * @param {String} id The publication ID
+         *
          * @class Publication
+         * @author Bo Gotthardt
          */
         function Publication(id) {
             this.id = id;
         }
 
-//        Publication.prototype.getPage = function (pageNumber) {
-//            initPageDescriptorMap(this);
-//
-//
-//        }
+        /**
+         * Get the specified page.
+         *
+         * @param {Number} pageNumber The page number, starts at <b>1</b>.
+         * @return {$.Deferred} A deferred that resolves with the page
+         */
+        Publication.prototype.getPage = function (pageNumber) {
+            // The pageDescriptors array has the pages in sorted order.
+            return new Reference(this.pageDescriptors[pageNumber - 1]).getAs(Page);
+        };
 
         return Publication;
     });
