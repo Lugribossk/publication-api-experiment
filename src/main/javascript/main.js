@@ -13,9 +13,10 @@ requirejs(["jquery", "PublicationAPI"],
         "use strict";
 
         var key = "715f663c48",
-            pubId = "8c628bfc";
+//            pubId = "8c628bfc";
+            pubId = "48040223";
 
-        var api = new PublicationAPI(key);
+        var api = new PublicationAPI(key, "http://api-viewer-test.zmags.com/publication/");
 
         api.getPublication(pubId)
             .done(function (publication) {
@@ -23,10 +24,13 @@ requirejs(["jquery", "PublicationAPI"],
 
                 publication.getPage(1)
                     .done(function (page) {
-                        page.getEnrichments()
-                            .done(function (enrs) {
-                                console.log(enrs);
-                            });
+//                        page.getEnrichments()
+//                            .done(function (enrs) {
+//                                console.log(enrs);
+//                                window.enrs = enrs
+//                            });
+                        window.page = page;
+                        page.createDomElement({width: 500, height: 500}).appendTo("body")
                     });
             });
     });

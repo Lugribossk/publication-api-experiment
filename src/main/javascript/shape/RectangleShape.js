@@ -8,12 +8,11 @@ define(["jquery"],
 //        RectangleShape.prototype = new Shape();
 
         RectangleShape.prototype.createDomElement = function () {
-            $("<div/>")
+            return $("<div/>")
                 .addClass("RectangleShape")
                 .css({
-                    position: "absolute", // TODO Move to class
-                    top: this.x * 100 + "%",
-                    left: this.y * 100 + "%",
+                    top: this.y * 100 + "%",
+                    left: this.x * 100 + "%",
                     height: this.height * 100 + "%",
                     width: this.width * 100 + "%",
                     transform: this.rotation ? "rotate(" + this.rotation + "deg)" : undefined

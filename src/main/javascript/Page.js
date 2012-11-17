@@ -1,5 +1,5 @@
-define(["jquery", "PageRepresentation", "Reference", "enrichments/Enrichment"],
-    function ($, PageRepresentation, Reference, Enrichment) {
+define(["jquery", "PageRepresentation", "Reference", "enrichments/EnrichmentParser"],
+    function ($, PageRepresentation, Reference, EnrichmentParser) {
         "use strict";
 
         /**
@@ -37,11 +37,16 @@ define(["jquery", "PageRepresentation", "Reference", "enrichments/Enrichment"],
         Page.prototype.getClosestRepresentation = function (size) {
             var bestRep = null;
             $.each(this.getRepresentations(), function (index, representation) {
-                if ((representation.type === "image" &&
-                     representation.width >= size.width &&
-                     representation.width < bestRep.width)
-                        || !bestRep) {
-                    bestRep = representation;
+                if (representation.type === "image") {
+                    if (!bestRep) {
+                        bestRep = representation;
+                    } else if (representation.width <= size.width &&
+                            representation.width > bestRep.width) {
+                        bestRep = representation;
+                    } else if (representation.width >= size.width &&
+                            representation.width < bestRep.width) {
+                        bestRep = representation;
+                    }
                 }
             });
             return bestRep;
@@ -53,10 +58,34 @@ define(["jquery", "PageRepresentation", "Reference", "enrichments/Enrichment"],
          * @return {$.Deferred} A deferred that resolves with the list of Enrichment objects
          */
         Page.prototype.getEnrichments = function () {
-            var references = $.map(this.pageEnrichments, function (enrichment) {
-                return new Reference(enrichment).get()//.getAs(Enrichment);
+            // If there are no enrichments then pageEnrichments is undefined rather than empty.
+            if (!this.pageEnrichments) {
+                return new $.Deferred().resolve([]);
+            }
+
+            var references = $.map(this.pageEnrichments, function (enrichmentList) {
+                return new Reference(enrichmentList).getEachWith(EnrichmentParser);
             });
+            // TODO combine the lists into one before returning them?
             return $.when.apply(this, references);
+        };
+
+        Page.prototype.createDomElement = function (size) {
+            var rep = this.getClosestRepresentation(size);
+            var element = $("<div/>")
+                .addClass("Page")
+                .height(rep.height)
+                .width(rep.width)
+                .append(rep.createDomElement());
+
+            this.getEnrichments()
+                .done(function (enrichments) {
+                    $.each(enrichments, function (index, enrichment) {
+                        enrichment.createDomElement().appendTo(element);
+                    });
+                });
+
+            return element;
         };
 
         return Page;

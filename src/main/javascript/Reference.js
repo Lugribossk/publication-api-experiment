@@ -83,11 +83,16 @@ define(["jquery"],
         Reference.prototype.getAs = function (Class) {
             return this.get()
                 .then(function (data) {
-                    if (Class.construct) {
-                        return Class.construct(data);
-                    } else {
-                        return new Class(data);
-                    }
+                    return new Class(data);
+                });
+        };
+
+        Reference.prototype.getEachWith = function (Class) {
+            return this.get()
+                .then(function (data) {
+                    return $.map(data, function (item) {
+                        return Class.construct(item);
+                    });
                 });
         };
 
@@ -103,14 +108,14 @@ define(["jquery"],
             } else if (this.resourceURL) {
                 return this.resourceURL;
             } else {
-                console.error("Unable to get binary URL for this type.");
+                console.error("Unable to get binary URL for this reference type.");
                 return null;
             }
         };
 
         /**
          * {String} The base URL used to resolve "resourcePath" and "bundlePath" references.
-         * Must be set after publication info has been retrieved.
+         * <b>Must</b> be set after publication info has been retrieved.
          */
         Reference.baseURL = null;
 

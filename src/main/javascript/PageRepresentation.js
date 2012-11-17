@@ -24,5 +24,12 @@ define(["jquery", "Reference"],
             return new Reference(this.pageRepresentation).getBinaryURL();
         };
 
+        PageRepresentation.prototype.createDomElement = function () {
+            // TODO assert type === "image"
+            return $("<img/>", {
+                src: this.getImageURL()
+            }).addClass("PageRepresentation");
+        };
+
         return PageRepresentation;
     });

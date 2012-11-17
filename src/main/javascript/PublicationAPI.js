@@ -65,7 +65,7 @@ define(["jquery", "Reference", "Publication"],
          */
         function PublicationAPI(key, apiURL) {
             this.key = key;
-            this.apiURL = apiURL || "http://api.viewer.zmags.com/publication/";
+            this.apiURL = apiURL || PublicationAPI.HTTP_URL;
             this.baseURL = null;
         }
 
@@ -94,6 +94,9 @@ define(["jquery", "Reference", "Publication"],
                     return publication;
                 });
         };
+
+        PublicationAPI.HTTP_URL = "http://api.viewer.zmags.com/publication/";
+        PublicationAPI.HTTPS_URL = "https://secure.api.viewer.zmags.com/publication/";
 
         return PublicationAPI;
     });

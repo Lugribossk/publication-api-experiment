@@ -1,5 +1,5 @@
-define(["jquery", "shape/Shape", "enrichments/ProductLink"],
-    function ($, Shape, ProductLink) {
+define(["jquery", "shape/ShapeParser"],
+    function ($, ShapeParser) {
         "use strict";
 
         function Enrichment(data) {
@@ -7,18 +7,22 @@ define(["jquery", "shape/Shape", "enrichments/ProductLink"],
         }
 
         Enrichment.prototype.getShape = function () {
-            return Shape.construct(this.shape);
+            return ShapeParser.construct(this.shape);
         };
 
-        Enrichment.construct = function (data) {
-            var type = data.type;
-            if (type === "productLink") {
-                return new ProductLink(data);
+        Enrichment.prototype.createDomElement = function (label) {
+            var element = this.getShape().createDomElement()
+                .addClass("Enrichment");
+
+            if (label) {
+                $("<span/>")
+                    .addClass("EnrichmentLabel")
+                    .text(label)
+                    .appendTo(element);
             }
-        };
 
-        // TODO
-        ProductLink.prototype = new Enrichment();
+            return element;
+        };
 
         return Enrichment;
     });

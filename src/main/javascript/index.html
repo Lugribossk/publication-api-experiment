@@ -2,10 +2,35 @@
 <html>
     <head>
         <title>Publication API</title>
-        <script src="lib/require.js" data-main="main"></script>
+        <script src="../resources/require.js" data-main="main"></script>
         <style type="text/css">
             body {
                 margin: 0;
+            }
+            .RectangleShape {
+                position: absolute;
+                outline: 1px solid blue;
+                overflow: hidden; /* To avoid .EnrichmentLabel being too wide */
+            }
+            .Page {
+                position: relative;
+            }
+            .ProductLink {
+                outline: 1px solid red;
+            }
+            .PageRepresentation {
+                height: 100%;
+                width: 100%;
+            }
+
+            .EnrichmentLabel {
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                background-color: lightgray;
+                font-family: sans-serif;
+                font-size: 10px;
+                white-space: nowrap;
             }
         </style>
     </head>
