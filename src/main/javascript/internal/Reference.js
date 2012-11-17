@@ -8,6 +8,8 @@ define(["jquery"],
          * Resolving references correctly then lets us reuse this "bonus" data to avoid requesting it from the server.
          * This is a little complicated, but allows for much better usage of the Content Delivery Network caching.
          *
+         * <b>There should be no need to use this class when simply working with the objects returned by PublicationAPI.</b>
+         *
          * @param {Object} rawReference The raw object to convert to a Reference object.
          *
          * @class Reference
@@ -19,37 +21,23 @@ define(["jquery"],
         }
 
         var bundleCache = {};
-        function getBundle(scope) {
+        function getBundlePart(scope) {
             return bundleCache[scope.bundlePath] && bundleCache[scope.bundlePath][scope.bundlePart];
         }
 
-        function putBundle(scope, bundle) {
+        function saveBundle(scope, bundle) {
             bundleCache[scope.bundlePath] = bundle;
         }
 
-        function getStandalonePathReference(scope) {
-            return $.ajax({
-                url: Reference.baseURL + scope.resourcePath
-            });
-        }
-
-        function getStandaloneURLReference(scope) {
-            return $.ajax({
-                url: scope.resourceURL
-            });
-        }
-
         function getBundleReference(scope) {
-            var cachedBundle = getBundle(scope);
+            var cachedBundle = getBundlePart(scope);
             if (cachedBundle) {
                 return new $.Deferred().resolve(cachedBundle);
             } else {
-                return $.ajax({
-                    url: Reference.baseURL + scope.bundlePath
-                })
+                return $.get(Reference.baseURL + scope.bundlePath)
                     .then(function (bundle) {
-                        putBundle(scope, bundle);
-                        return getBundle(scope);
+                        saveBundle(scope, bundle);
+                        return getBundlePart(scope);
                     });
             }
         }
@@ -60,16 +48,22 @@ define(["jquery"],
          * @return {$.Deferred} A deferred that resolves with the reference data.
          */
         Reference.prototype.get = function () {
+            var deferred;
             if (this.resourcePath) {
-                return getStandalonePathReference(this);
+                deferred = $.get(Reference.baseURL + this.resourcePath);
             } else if (this.resourceURL) {
-                return getStandaloneURLReference(this);
+                deferred = $.get(this.resourceURL);
             } else if (this.bundlePath) {
-                return getBundleReference(this);
+                deferred = getBundleReference(this);
             } else {
                 console.error("Unknown reference type", this);
-                return new $.Deferred().reject();
+                deferred = new $.Deferred().reject();
             }
+
+            return deferred
+                .fail(function () {
+                    console.error("Unable to resolve reference", this);
+                });
         };
 
         /**

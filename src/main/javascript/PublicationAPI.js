@@ -1,4 +1,4 @@
-define(["jquery", "Reference", "Publication"],
+define(["jquery", "internal/Reference", "Publication"],
     function ($, Reference, Publication) {
         "use strict";
 
@@ -24,6 +24,7 @@ define(["jquery", "Reference", "Publication"],
                 timeout: 2000
             })
                 .then(null, function (xhr, textStatus) {
+                    // Timeout shouldn't count as a failure as we're okay with it happening.
                     if (textStatus === "timeout") {
                         return new $.Deferred.resolve(null);
                     }
@@ -33,9 +34,16 @@ define(["jquery", "Reference", "Publication"],
                 });
         }
 
+        /**
+         * Get the specified publication's "publication info", respecting the rule about firing off two requests.
+         *
+         * @param scope
+         * @param {String} publicationID The publication ID.
+         * @return {$.Deferred} A deferred that resolves with the publication info.
+         */
         function getPublicationInfo(scope, publicationID) {
             return $.when(getPublicationInfoCached(scope, publicationID),
-                getPublicationInfoRecent(scope, publicationID))
+                          getPublicationInfoRecent(scope, publicationID))
                 .then(function (infoResponse, infoRecentResponse) {
                     // The parameters are lists of the arguments returned by $.ajax, but we're only interested in the first one.
                     var info = infoResponse[0],
@@ -50,8 +58,19 @@ define(["jquery", "Reference", "Publication"],
                 });
         }
 
+        /**
+         * Get the specified publication info's publication descriptor.
+         *
+         * @param {Object} publicationInfo The publication info.
+         * @return {$.Deferred} A deferred that resolves with the publication descriptor.
+         */
         function getPublicationDescriptor(publicationInfo) {
-            return new Reference(publicationInfo.publicationDescriptor).get();
+            if (publicationInfo.publicationDescriptor) {
+                return new Reference(publicationInfo.publicationDescriptor).get();
+            } else {
+                console.error("No publication descriptor, perhaps the publication is not activated?");
+                return new $.Deferred().reject();
+            }
         }
 
         /**
@@ -82,7 +101,7 @@ define(["jquery", "Reference", "Publication"],
             return getPublicationInfo(this, publicationID)
                 .done(function (info) {
                     // Copy useful properties but not the publication descriptor.
-                    // Instead load it afterwards and copy its properties in as well.
+                    // Instead load it afterwards and copy its properties in as well before returning.
                     // This encapsulates the detail that a publication is split into info and descriptor.
                     publication.version = info.version;
                     publication.expired = info.expired;
@@ -95,7 +114,13 @@ define(["jquery", "Reference", "Publication"],
                 });
         };
 
+        /**
+         * {String} The URL to the HTTP version of the Publication Info service.
+         */
         PublicationAPI.HTTP_URL = "http://api.viewer.zmags.com/publication/";
+        /**
+         * {String} The URL to the HTTPS version of the Publication Info service.
+         */
         PublicationAPI.HTTPS_URL = "https://secure.api.viewer.zmags.com/publication/";
 
         return PublicationAPI;

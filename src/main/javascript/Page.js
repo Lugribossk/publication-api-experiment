@@ -1,4 +1,4 @@
-define(["jquery", "PageRepresentation", "Reference", "enrichments/EnrichmentParser"],
+define(["jquery", "PageRepresentation", "internal/Reference", "enrichments/EnrichmentParser"],
     function ($, PageRepresentation, Reference, EnrichmentParser) {
         "use strict";
 
@@ -21,7 +21,6 @@ define(["jquery", "PageRepresentation", "Reference", "enrichments/EnrichmentPars
          * @return {PageRepresentation[]}
          */
         Page.prototype.getRepresentations = function () {
-            // TODO cache this
             return $.map(this.pageRepresentationDescriptors, function (descriptor) {
                 return new PageRepresentation(descriptor);
             });
@@ -66,8 +65,47 @@ define(["jquery", "PageRepresentation", "Reference", "enrichments/EnrichmentPars
             var references = $.map(this.pageEnrichments, function (enrichmentList) {
                 return new Reference(enrichmentList).getEachWith(EnrichmentParser);
             });
-            // TODO combine the lists into one before returning them?
+            // TODO combine the lists into one before returning them
             return $.when.apply(this, references);
+        };
+
+        /**
+         * Get the specified product.
+         * Only works for products that are in enrichments on this page.
+         *
+         * @param {String} productID The product ID.
+         * @return {$.Deferred} A deferred that resolves with the product.
+         */
+        Page.prototype.getProduct = function (productID) {
+            // Get all the enrichments on the page.
+            return this.getEnrichments()
+                .then(function (enrichments) {
+                    // Then get the products for those of the enrichments that have them.
+                    var deferreds = [];
+                    $.each(enrichments, function (i, enrichment) {
+                        if (enrichment.hasProduct) {
+                            deferreds.push(enrichment.getProduct());
+                        }
+                    });
+
+                    return $.when.apply(this, deferreds);
+                })
+                .then(function () {
+                    // Then see if one of them matches the specified ID.
+                    var foundProduct = null;
+                    $.each(arguments, function (i, product) {
+                        if (product.product_id === productID) {
+                            foundProduct = product;
+                            return false;
+                        }
+                    });
+
+                    if (foundProduct) {
+                        return foundProduct;
+                    } else {
+                        return new $.Deferred().reject();
+                    }
+                });
         };
 
         Page.prototype.createDomElement = function (size) {

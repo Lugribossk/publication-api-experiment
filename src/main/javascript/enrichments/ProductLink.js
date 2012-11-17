@@ -1,4 +1,4 @@
-define(["jquery", "Reference", "Product", "enrichments/Enrichment"],
+define(["jquery", "internal/Reference", "Product", "enrichments/Enrichment"],
     function ($, Reference, Product, Enrichment) {
         "use strict";
 
@@ -12,6 +12,8 @@ define(["jquery", "Reference", "Product", "enrichments/Enrichment"],
          */
         function ProductLink(data) {
             Enrichment.call(this, data);
+            // Extra property that identifies this type of enrichment as having product data associated with it.
+            this.hasProduct = true;
         }
         ProductLink.prototype = new Enrichment();
 

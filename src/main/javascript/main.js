@@ -31,6 +31,11 @@ requirejs(["jquery", "PublicationAPI"],
 //                            });
                         window.page = page;
                         page.createDomElement({width: 500, height: 500}).appendTo("body")
+
+//                        var x = require("shape/PolygonShape")
+//                        var y = new x({coordinates: [{x:0.1, y:0.1}, {x:0.5, y:0.5}, {x:0, y:0.9}]})
+////                        var y = new x({coordinates: [{x:10, y:10}, {x:50, y:50}, {x:0, y:90}]})
+//                        y.createDomElement().appendTo("#blah")
                     });
             });
     });
