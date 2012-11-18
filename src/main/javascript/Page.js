@@ -16,13 +16,15 @@ define(["jquery", "PageRepresentation", "internal/Reference", "enrichments/Enric
         }
 
         /**
-         * Get all of this page's page representations.
+         * Get all of this page's page representations, in ascending order by size.
          *
          * @return {PageRepresentation[]}
          */
         Page.prototype.getRepresentations = function () {
             return $.map(this.pageRepresentationDescriptors, function (descriptor) {
                 return new PageRepresentation(descriptor);
+            }).sort(function (a, b) {
+                return a.width - b.width;
             });
         };
 
@@ -35,19 +37,16 @@ define(["jquery", "PageRepresentation", "internal/Reference", "enrichments/Enric
          */
         Page.prototype.getClosestRepresentation = function (size) {
             var bestRep = null;
+
             $.each(this.getRepresentations(), function (index, representation) {
                 if (representation.type === "image") {
-                    if (!bestRep) {
-                        bestRep = representation;
-                    } else if (representation.width <= size.width &&
-                            representation.width > bestRep.width) {
-                        bestRep = representation;
-                    } else if (representation.width >= size.width &&
-                            representation.width < bestRep.width) {
-                        bestRep = representation;
+                    bestRep = representation;
+                    if (representation.width >= size.width) {
+                        return false;
                     }
                 }
             });
+
             return bestRep;
         };
 

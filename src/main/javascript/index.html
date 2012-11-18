@@ -9,7 +9,6 @@
             }
             .RectangleShape {
                 position: absolute;
-                outline: 1px solid blue;
                 overflow: hidden; /* To avoid .Label being too wide */
             }
             .PolygonShape {
@@ -18,10 +17,21 @@
                 stroke-width:0.5;
             }
             .Page {
-                position: relative;
+                position: relative; /* To allow absolute positioning inside it. */
             }
             .ProductLink {
-                outline: 1px solid red;
+                outline: 1px solid blue;
+                /*border: 3px solid blue;*/
+                /*box-sizing:border-box;*/
+            }
+            .ExternalLink {
+                outline: 1px solid blue;
+            }
+            .InternalLink {
+                outline: 1px solid blue;
+            }
+            .CustomLink {
+                outline: 1px solid blue;
             }
             .PageRepresentation {
                 height: 100%;

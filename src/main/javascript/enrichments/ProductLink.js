@@ -35,15 +35,16 @@ define(["jquery", "internal/Reference", "Product", "enrichments/Enrichment"],
         };
 
         ProductLink.prototype.createDomElement = function () {
-            var element = Enrichment.prototype.createDomElement.call(this)
-                .addClass("ProductLink");
+            var scope = this,
+                element = Enrichment.prototype.createDomElement.call(this)
+                    .addClass("ProductLink");
 
             // TODO somehow avoid duplicating this from Enrichment?
             this.getProduct()
                 .done(function (product) {
                     $("<span/>")
                         .addClass("Label")
-                        .text((this.usesProductDatabase ? "DB:" : "Manual:") + product.product_id)
+                        .text(product.product_id /*+ (scope.usesProductDatabase ? " (DB)" : " (Manual)")*/)
                         .appendTo(element);
                 });
 
