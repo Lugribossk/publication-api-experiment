@@ -11,7 +11,12 @@ define(["jquery"],
          * @author Bo Gotthardt
          */
         function Shape(data) {
-            $.extend(this, data);
+            if (!data) { return; }
+
+            /**
+             * {String} The type of this shape.
+             */
+            this.type = data.type;
         }
 
         return Shape;

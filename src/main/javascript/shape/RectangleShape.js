@@ -1,11 +1,16 @@
-define(["jquery"],
-    function ($) {
+define(["jquery", "shape/Shape"],
+    function ($, Shape) {
         "use strict";
 
         function RectangleShape(data) {
-            $.extend(this, data);
+            Shape.call(this, data);
+            this.x = data.x;
+            this.y = data.y;
+            this.height = data.height;
+            this.width = data.width;
+            this.rotation = data.rotation;
         }
-//        RectangleShape.prototype = new Shape();
+        RectangleShape.prototype = new Shape();
 
         RectangleShape.prototype.createDomElement = function () {
             return $("<div/>")

@@ -1,10 +1,15 @@
-define(["jquery"],
-    function ($) {
+define(["jquery", "shape/Shape"],
+    function ($, Shape) {
         "use strict";
 
         function PolygonShape(data) {
-            $.extend(this, data);
+            Shape.call(this, data);
+            /**
+             * {Object[]} A list of coordinate objects, each with x and y properties with a value between 0-1.
+             */
+            this.coordinates = data.coordinates;
         }
+        PolygonShape.prototype = new Shape();
 
         PolygonShape.prototype.createDomElement = function () {
             // Multiply the coordinates by 100 since the viewBox is set to 100 x 100.

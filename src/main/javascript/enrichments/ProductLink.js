@@ -12,8 +12,13 @@ define(["jquery", "internal/Reference", "Product", "enrichments/Enrichment"],
          */
         function ProductLink(data) {
             Enrichment.call(this, data);
-            // Extra property that identifies this type of enrichment as having product data associated with it.
-            this.hasProduct = true;
+            /**
+             * {Boolean} Whether this link's data comes from the product database, rather than being manually entered.
+             */
+            this.usesProductDatabase = data.usesProductDatabase;
+
+            this._productDescriptor = data.productDescriptor;
+            this._manualProduct = data.manualProduct;
         }
         ProductLink.prototype = new Enrichment();
 
@@ -25,11 +30,11 @@ define(["jquery", "internal/Reference", "Product", "enrichments/Enrichment"],
         ProductLink.prototype.getProduct = function () {
             if (this.usesProductDatabase) {
                 // productDescriptor seems to be a reference and not an object.
-                return new Reference(this.productDescriptor).getAs(Product);
+                return new Reference(this._productDescriptor).getAs(Product);
             } else {
                 // Mimic the format for a database product so we can reuse the constructor logic.
                 return new $.Deferred().resolve(new Product({
-                    properties: this.manualProduct
+                    properties: this._manualProduct
                 }));
             }
         };
@@ -50,6 +55,9 @@ define(["jquery", "internal/Reference", "Product", "enrichments/Enrichment"],
 
             return element;
         };
+
+        // Extra property that identifies this type of enrichment as having product data associated with it.
+        ProductLink.prototype.hasProduct = true;
 
         ProductLink.TYPE = "productLink";
 

@@ -4,7 +4,16 @@ define(["jquery", "enrichments/Enrichment"],
 
         function ExternalLink(data) {
             Enrichment.call(this, data);
+            /**
+             * {String} The window to open the URL in.
+             */
+            this.target = data.target;
+            /**
+             * {String} The external link URL.
+             */
+            this.url = data.url;
         }
+//        ExternalLink.prototype.__proto__ = Enrichment.prototype;
         ExternalLink.prototype = new Enrichment();
 
         ExternalLink.prototype.createDomElement = function () {

@@ -4,6 +4,11 @@ define(["jquery", "enrichments/Enrichment"],
 
         function CustomLink(data) {
             Enrichment.call(this, data);
+            /**
+             * {String
+             * @type {*}
+             */
+            this.value = data.value;
         }
         CustomLink.prototype = new Enrichment();
 
