@@ -41,14 +41,14 @@ define(["jquery", "PageRepresentation", "internal/Reference", "enrichments/Enric
          * Get the page representation "closest" to the specified size.
          * TODO details on "closest"
          *
-         * @param size
+         * @param {Object} size
          * @return {PageRepresentation}
          */
         Page.prototype.getClosestRepresentation = function (size) {
             var bestRep = null;
 
             $.each(this.getRepresentations(), function (index, representation) {
-                if (representation.type === "image") {
+                if (representation.type === PageRepresentation.Type.IMAGE) {
                     bestRep = representation;
                     if (representation.width >= size.width) {
                         return false;
@@ -62,12 +62,12 @@ define(["jquery", "PageRepresentation", "internal/Reference", "enrichments/Enric
         /**
          * Get all the enrichments on this page.
          *
-         * @return {$.Deferred} A deferred that resolves with the list of Enrichment objects
+         * @return {Promise} A promise for the list of {@link Enrichment}s.
          */
         Page.prototype.getEnrichments = function () {
             // If there are no enrichments then pageEnrichments is undefined rather than empty.
             if (!this._pageEnrichments) {
-                return new $.Deferred().resolve([]);
+                return new $.Deferred().resolve([]).promise();
             }
 
             var references = $.map(this._pageEnrichments, function (enrichmentList) {
@@ -79,10 +79,10 @@ define(["jquery", "PageRepresentation", "internal/Reference", "enrichments/Enric
 
         /**
          * Get the specified product.
-         * Only works for products that are in enrichments on this page.
+         * Only works for products that are in the enrichments on this page.
          *
          * @param {String} productID The product ID.
-         * @return {$.Deferred} A deferred that resolves with the product.
+         * @return {Promise} A promise for the {@link Product}.
          */
         Page.prototype.getProduct = function (productID) {
             // Get all the enrichments on the page.
@@ -110,7 +110,7 @@ define(["jquery", "PageRepresentation", "internal/Reference", "enrichments/Enric
                     if (foundProduct) {
                         return foundProduct;
                     } else {
-                        return new $.Deferred().reject();
+                        return new $.Deferred().reject().promise();
                     }
                 });
         };

@@ -109,7 +109,7 @@ define(["jquery", "internal/Reference", "Publication"],
          * Note that publications that are not activated or are security restricted may not be available.
          *
          * @param {String} publicationID The ID of the publication, as seen in the Publicator UI.
-         * @return {$.Deferred} A deferred that resolves with the publication, or fails if unable to create it.
+         * @return {Promise} A promise for the {@link Publication}, that fails if unable to create it.
          */
         PublicationAPI.prototype.getPublication = function (publicationID) {
             var publicationInfo;
@@ -121,7 +121,7 @@ define(["jquery", "internal/Reference", "Publication"],
                 .then(getPublicationDescriptor)
                 .then(function (publicationDescriptor) {
                     // Create the publication with both info and descriptor, in order to encapsulate the implementation
-                    // detail that this is split into two requests.
+                    // detail that this is split into two objects from different requests.
                     return new Publication(publicationID, publicationInfo, publicationDescriptor);
                 });
         };

@@ -60,21 +60,21 @@ define(["jquery", "internal/Reference", "Page"],
          * Get the specified page.
          *
          * @param {Number} pageNumber The page number, starts at <b>1</b>.
-         * @return {$.Deferred} A deferred that resolves with the page.
+         * @return {Promise} A promise for the {@link Page}.
          */
         Publication.prototype.getPage = function (pageNumber) {
             if (pageNumber >= 1 && pageNumber <= this.numberOfPages) {
                 // The pageDescriptors array seems to have the pages in sorted order.
                 return new Reference(this._pageDescriptors[pageNumber - 1]).getAs(Page);
             } else {
-                return new $.Deferred().reject();
+                return new $.Deferred().reject().promise();
             }
         };
 
         /**
          * Get all the publication's pages, in ascending order.
          *
-         * @return {$.Deferred} A deferred that resolves with the pages.
+         * @return {Promise} A promise for the list of {@link Page}s.
          */
         Publication.prototype.getPages = function () {
             var deferreds = $.map(this._pageDescriptors, function (descriptor) {
@@ -92,7 +92,7 @@ define(["jquery", "internal/Reference", "Page"],
          * Get the page number of the first page where the product with the specified ID is located.
          *
          * @param {String} productID The product ID.
-         * @return {$.Deferred} A deferred that resolves with the page number.
+         * @return {Promise} A promise for the page number as a {@link Number}.
          */
         Publication.prototype.getPageNumberWithProduct = function (productID) {
             if (this._productIndex) {
@@ -108,7 +108,7 @@ define(["jquery", "internal/Reference", "Page"],
                         });
                         if (!correctPart) {
                             // The product ID does not exist in the publication.
-                            return new $.Deferred().reject();
+                            return new $.Deferred().reject().promise();
                         }
 
                         // Which has a reference pointing to an "index part".
@@ -120,11 +120,11 @@ define(["jquery", "internal/Reference", "Page"],
                         if (pageNumber) {
                             return pageNumber;
                         } else {
-                            return new $.Deferred().reject();
+                            return new $.Deferred().reject().promise();
                         }
                     });
             } else {
-                return new $.Deferred().reject();
+                return new $.Deferred().reject().promise();
             }
         };
 
@@ -133,7 +133,7 @@ define(["jquery", "internal/Reference", "Page"],
          * Only works for products that are actually in the publication.
          *
          * @param {String} productID The product ID.
-         * @return {$.Deferred} A deferred that resolves with the product.
+         * @return {Promise} A promise for the {@link Product}.
          */
         Publication.prototype.getProduct = function (productID) {
             return this.getPageNumberWithProduct(productID)

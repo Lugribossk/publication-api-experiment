@@ -13,10 +13,12 @@ Publication API experiment
 ### RequireJS
 - TODO
 
-### Deferreds
+### Deferreds/promises
 - This project makes heavy use of jQuery [Deferreds](http://api.jquery.com/category/deferred-object/) (aka. "promises" or "futures") to handle the asynchronous nature
   of the Publication API's "references".
 - Note that the jQuery documentation for Deferred#then() is completely wrong. It is actually identical to Deferred#pipe().
+- Functions that return promises should document the type of the data the promise resolves with.
+- Promises are assumed to fail if the requested object could not be found, rather then resolve with null data.
 
 
 ### Inheritance implementation

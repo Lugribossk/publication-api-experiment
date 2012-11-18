@@ -2,6 +2,11 @@ define(["jquery", "enrichments/Enrichment"],
     function ($, Enrichment) {
         "use strict";
 
+        /**
+         *
+         * @param data
+         * @class CustomLink
+         */
         function CustomLink(data) {
             Enrichment.call(this, data);
             /**

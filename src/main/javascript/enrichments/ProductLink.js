@@ -25,7 +25,7 @@ define(["jquery", "internal/Reference", "Product", "enrichments/Enrichment"],
         /**
          * Get the product this link points to.
          *
-         * @return {$.Deferred} A deferred that resolves with the product.
+         * @return {Promise} A promise for the {@link Product}.
          */
         ProductLink.prototype.getProduct = function () {
             if (this.usesProductDatabase) {
@@ -35,7 +35,7 @@ define(["jquery", "internal/Reference", "Product", "enrichments/Enrichment"],
                 // Mimic the format for a database product so we can reuse the constructor logic.
                 return new $.Deferred().resolve(new Product({
                     properties: this._manualProduct
-                }));
+                })).promise();
             }
         };
 

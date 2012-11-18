@@ -2,6 +2,12 @@ define(["jquery", "internal/Reference"],
     function ($, Reference) {
         "use strict";
 
+        /**
+         * A product.
+         *
+         * @param data
+         * @class Product
+         */
         function Product(data) {
             // Place the properties directly on the object so they are easier to work with.
             $.extend(this, data.properties);

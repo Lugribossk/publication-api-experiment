@@ -2,6 +2,11 @@ define(["jquery", "shape/ShapeParser"],
     function ($, ShapeParser) {
         "use strict";
 
+        /**
+         *
+         * @param {Object} data
+         * @class Enrichment
+         */
         function Enrichment(data) {
             // data will be null when this is called to set up the prototype on subclasses.
             if (!data) { return; }

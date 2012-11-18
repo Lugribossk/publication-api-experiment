@@ -75,7 +75,7 @@ define(["jquery"],
         /**
          * Get the data that this reference points to.
          *
-         * @return {$.Deferred} A deferred that resolves with the reference data as a raw object.
+         * @return {Promise} A promise for the reference data as an {@link Object}.
          */
         Reference.prototype.get = function () {
             var deferred;
@@ -93,7 +93,8 @@ define(["jquery"],
             return deferred
                 .fail(function () {
                     console.error("Unable to resolve reference", this);
-                });
+                })
+                .promise();
         };
 
         /**
@@ -102,7 +103,7 @@ define(["jquery"],
          * @param {Function} Class The constructor function of the class to use. Must take a single parameter with the reference data as input
          *                          If it has a static construct() method, it will be called with the reference data.
          *                          Otherwise a new instance will be created with the reference data as input.
-         * @return {$.Deferred} A deferred that resolves with the data instance
+         * @return {Promise} A promise for the reference data as an instance of Class.
          */
         Reference.prototype.getAs = function (Class) {
             return this.get()
@@ -117,7 +118,7 @@ define(["jquery"],
          *
          * @param {Function} Class The constructor function of the class to use.
          *                         It must have a static construct method that takes a single parameter with an element of the reference data as input.
-         * @return {$.Deferred} A deferred that resolves with the list of data instances.
+         * @return {Promise} A promise for the reference data as a list of instances created by Class.construct().
          */
         Reference.prototype.getEachWith = function (Class) {
             return this.get()

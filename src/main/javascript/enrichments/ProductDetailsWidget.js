@@ -2,6 +2,11 @@ define(["jquery", "enrichments/Enrichment", "internal/Reference", "Product"],
     function ($, Enrichment, Reference, Product) {
         "use strict";
 
+        /**
+         *
+         * @param data
+         * @class ProductDetailsWidget
+         */
         function ProductDetailsWidget(data) {
             Enrichment.call(this, data);
             this.windowLocationHint = data.windowLocationHint;
@@ -16,7 +21,7 @@ define(["jquery", "enrichments/Enrichment", "internal/Reference", "Product"],
         /**
          * Get the product this widget has.
          *
-         * @return {$.Deferred} A deferred that resolves with the product.
+         * @return {Promise} A promise for the {@link Product}.
          */
         ProductDetailsWidget.prototype.getProduct = function () {
             return new Reference(this._productDescriptor).getAs(Product);
