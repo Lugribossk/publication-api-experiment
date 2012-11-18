@@ -12,5 +12,7 @@ define(["jquery", "enrichments/Enrichment"],
                 .addClass("InternalLink");
         };
 
+        InternalLink.TYPE = "internalLink";
+
         return InternalLink;
     });

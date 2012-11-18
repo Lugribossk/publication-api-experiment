@@ -5,7 +5,7 @@ define(["jquery", "internal/Reference", "Page"],
         /**
          * A Zmags publication.
          *
-         * Note: This constructor is private and will not create a useful object.
+         * Note that this constructor is private and will not create a useful object.
          * Instead use {@link PublicationAPI#getPublication()}.
          *
          * @param {String} id The publication ID

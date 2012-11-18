@@ -50,5 +50,7 @@ define(["jquery", "internal/Reference", "Product", "enrichments/Enrichment"],
             return element;
         };
 
+        ProductLink.TYPE = "productLink";
+
         return ProductLink;
     });

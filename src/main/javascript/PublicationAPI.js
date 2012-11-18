@@ -2,6 +2,28 @@ define(["jquery", "internal/Reference", "Publication"],
     function ($, Reference, Publication) {
         "use strict";
 
+        /**
+         * Zmags Publication API client that can be used to retrieve publication data.
+         *
+         * @param {String} key The API key.
+         * @param {String} [apiURL] The URL to the Publication Info service. Optional, defaults to the public HTTP version.
+         *
+         * @class PublicationAPI
+         * @author Bo Gotthardt
+         */
+        function PublicationAPI(key, apiURL) {
+            this.key = key;
+            this.apiURL = apiURL || PublicationAPI.HTTP_URL;
+            this.baseURL = null;
+        }
+
+        /**
+         * Get the cached publication info.
+         *
+         * @param {PublicationAPI} scope
+         * @param {String} publicationID
+         * @return {$.Deferred} A deferred that resolves with the info.
+         */
         function getPublicationInfoCached(scope, publicationID) {
             return $.ajax({
                 url: scope.apiURL + publicationID,
@@ -14,6 +36,13 @@ define(["jquery", "internal/Reference", "Publication"],
                 });
         }
 
+        /**
+         * Get the recent publication info.
+         *
+         * @param {PublicationAPI} scope
+         * @param {String} publicationID
+         * @return {$.Deferred} A deferred that resolves with the info.
+         */
         function getPublicationInfoRecent(scope, publicationID) {
             return $.ajax({
                 url: scope.apiURL + publicationID,
@@ -37,7 +66,7 @@ define(["jquery", "internal/Reference", "Publication"],
         /**
          * Get the specified publication's "publication info", respecting the rule about firing off two requests.
          *
-         * @param scope
+         * @param {PublicationAPI} scope
          * @param {String} publicationID The publication ID.
          * @return {$.Deferred} A deferred that resolves with the publication info.
          */
@@ -52,7 +81,7 @@ define(["jquery", "internal/Reference", "Publication"],
                     if (infoRecent && infoRecent.version > info.version) {
                         info = infoRecent;
                     }
-                    // Set the Reference base URL as a static property on it, hopefully it won't change between publications.
+                    // Set the Reference base URL, hopefully it won't change between publications.
                     Reference.baseURL = info.baseURL;
                     return info;
                 });
@@ -73,20 +102,7 @@ define(["jquery", "internal/Reference", "Publication"],
             }
         }
 
-        /**
-         * Zmags Publication API client that can be used to retrieve publication data.
-         *
-         * @param {String} key The API key.
-         * @param {String} [apiURL] The URL to the "Publication Info service". Optional, defaults to the public HTTP version.
-         *
-         * @class PublicationAPI
-         * @author Bo Gotthardt
-         */
-        function PublicationAPI(key, apiURL) {
-            this.key = key;
-            this.apiURL = apiURL || PublicationAPI.HTTP_URL;
-            this.baseURL = null;
-        }
+
 
         /**
          * Get the specified publication.
@@ -101,7 +117,7 @@ define(["jquery", "internal/Reference", "Publication"],
             return getPublicationInfo(this, publicationID)
                 .done(function (info) {
                     // Copy useful properties but not the publication descriptor.
-                    // Instead load it afterwards and copy its properties in as well before returning.
+                    // Instead resolve it afterwards and copy its properties in as well before returning.
                     // This encapsulates the detail that a publication is split into info and descriptor.
                     publication.version = info.version;
                     publication.expired = info.expired;

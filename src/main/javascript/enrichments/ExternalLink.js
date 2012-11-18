@@ -13,5 +13,7 @@ define(["jquery", "enrichments/Enrichment"],
                 .addClass("ExternalLink");
         };
 
+        ExternalLink.TYPE =  "externalLink";
+
         return ExternalLink;
     });

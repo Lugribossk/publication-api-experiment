@@ -21,5 +21,7 @@ define(["jquery"],
                     "</svg>");
         };
 
+        PolygonShape.TYPE = "polygon";
+
         return PolygonShape;
     });

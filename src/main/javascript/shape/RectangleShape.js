@@ -19,5 +19,7 @@ define(["jquery"],
                 });
         };
 
+        RectangleShape.TYPE = "rectangle";
+
         return RectangleShape;
     });

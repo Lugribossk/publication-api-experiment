@@ -2,21 +2,20 @@ define(["jquery", "enrichments/ProductLink", "enrichments/Enrichment", "enrichme
     function ($, ProductLink, Enrichment, ExternalLink, InternalLink, CustomLink) {
         "use strict";
 
-        function EnrichmentParser() {
-        }
+        function EnrichmentParser() {}
 
         EnrichmentParser.construct = function (data) {
             var type = data.type;
-            if (type === "productLink") {
+            if (type === ProductLink.TYPE) {
                 return new ProductLink(data);
-            } else if (type === "externalLink") {
+            } else if (type === ExternalLink.TYPE) {
                 return new ExternalLink(data);
-            } else if (type === "internalLink") {
+            } else if (type === InternalLink.TYPE) {
                 return new InternalLink(data);
-            } else if (type === "customLink") {
+            } else if (type === CustomLink.TYPE) {
                 return new CustomLink(data);
             } else {
-                // TODO
+                // TODO widgets
                 console.warn("Unimplemented enrichment type", type);
                 return new Enrichment(data);
             }

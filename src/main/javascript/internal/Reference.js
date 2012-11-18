@@ -16,7 +16,6 @@ define(["jquery"],
          * @author Bo Gotthardt
          */
         function Reference(rawReference) {
-            // TODO validation?
             $.extend(this, rawReference);
         }
 
@@ -30,9 +29,9 @@ define(["jquery"],
         }
 
         function getBundleReference(scope) {
-            var cachedBundle = getBundlePart(scope);
-            if (cachedBundle) {
-                return new $.Deferred().resolve(cachedBundle);
+            var cachedBundlePart = getBundlePart(scope);
+            if (cachedBundlePart) {
+                return new $.Deferred().resolve(cachedBundlePart);
             } else {
                 return $.get(Reference.baseURL + scope.bundlePath)
                     .then(function (bundle) {

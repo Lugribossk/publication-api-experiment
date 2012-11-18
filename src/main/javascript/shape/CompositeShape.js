@@ -12,5 +12,7 @@ define(["jquery"],
             });
         };
 
+        CompositeShape.TYPE = "composite";
+
         return CompositeShape;
     });
