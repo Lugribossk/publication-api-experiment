@@ -5,7 +5,7 @@ define(["jquery", "internal/Reference", "Product", "enrichments/Enrichment"],
         /**
          * A product link, either with manually entered data or from the product database.
          *
-         * @param data
+         * @param {Object} data
          *
          * @class ProductLink
          * @author Bo Gotthardt

@@ -30,5 +30,7 @@ define(["jquery", "enrichments/Enrichment", "internal/Reference", "Product"],
 
         ProductDetailsWidget.prototype.hasProduct = true;
 
+        ProductDetailsWidget.TYPE = "productDetailsWidget";
+
         return ProductDetailsWidget;
     });

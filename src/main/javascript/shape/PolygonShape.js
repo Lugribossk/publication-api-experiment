@@ -2,6 +2,13 @@ define(["jquery", "shape/Shape"],
     function ($, Shape) {
         "use strict";
 
+        /**
+         * A polygon shape.
+         *
+         * @param {Object} data
+         *
+         * @class PolygonShape
+         */
         function PolygonShape(data) {
             Shape.call(this, data);
             /**

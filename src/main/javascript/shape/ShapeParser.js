@@ -2,12 +2,18 @@ define(["jquery", "shape/RectangleShape", "shape/PolygonShape", "shape/Composite
     function ($, RectangleShape, PolygonShape, CompositeShape) {
         "use strict";
 
+        /**
+         * Utility class for converting untyped objects into Shape subclass instances.
+         *
+         * @class ShapeParser
+         * @author Bo Gotthardt
+         */
         function ShapeParser() {}
 
         /**
-         * Construct an appropriately subtyped Shape from the specified data.
+         * Construct an appropriately subclassed Shape instance from the specified data.
          *
-         * @param data
+         * @param {Object} data
          * @return {Shape}
          */
         ShapeParser.construct = function (data) {
@@ -23,7 +29,7 @@ define(["jquery", "shape/RectangleShape", "shape/PolygonShape", "shape/Composite
                     type: CompositeShape.TYPE
                 });
             } else {
-                console.error("Unknown shape type", type);
+                console.warn("Unknown shape type", type);
                 return null;
             }
         };

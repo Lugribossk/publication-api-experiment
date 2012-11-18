@@ -2,6 +2,14 @@ define(["jquery", "enrichments/Enrichment"],
     function ($, Enrichment) {
         "use strict";
 
+        /**
+         * A link that points to a page in the same publication.
+         *
+         * @param {Object} data
+         *
+         * @class InternalLink
+         * @author Bo Gotthardt
+         */
         function InternalLink(data) {
             Enrichment.call(this, data);
             /**

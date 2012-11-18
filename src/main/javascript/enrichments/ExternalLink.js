@@ -2,6 +2,14 @@ define(["jquery", "enrichments/Enrichment"],
     function ($, Enrichment) {
         "use strict";
 
+        /**
+         * A link to an external website.
+         *
+         * @param {Object} data
+         *
+         * @class ExternalLink
+         * @author Bo Gotthardt
+         */
         function ExternalLink(data) {
             Enrichment.call(this, data);
             /**
@@ -13,7 +21,6 @@ define(["jquery", "enrichments/Enrichment"],
              */
             this.url = data.url;
         }
-//        ExternalLink.prototype.__proto__ = Enrichment.prototype;
         ExternalLink.prototype = new Enrichment();
 
         ExternalLink.prototype.createDomElement = function () {

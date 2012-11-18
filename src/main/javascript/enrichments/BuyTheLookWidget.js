@@ -37,5 +37,9 @@ define(["jquery", "enrichments/Enrichment", "internal/Reference", "Product"],
                 .addClass("ProductDetailsWidget");
         };
 
+        // TODO hasProducts = true ?
+
+        BuyTheLookWidget.TYPE = "buyTheLookWidget";
+
         return BuyTheLookWidget;
     });
