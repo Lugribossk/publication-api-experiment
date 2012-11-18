@@ -33,6 +33,23 @@ define(["jquery", "internal/Reference", "Page"],
         };
 
         /**
+         * Get all the publication's pages, in ascending order.
+         *
+         * @return {$.Deferred} A deferred that resolves with the pages.
+         */
+        Publication.prototype.getPages = function () {
+            var deferreds = $.map(this.pageDescriptors, function (descriptor) {
+                return new Reference(descriptor).getAs(Page);
+            });
+
+            return $.when.apply(this, deferreds)
+                .then(function () {
+                    // We get each page as an individual argument, but would rather return them as one array.
+                    return $.makeArray(arguments);
+                });
+        };
+
+        /**
          * Get the page number of the first page where the product with the specified ID is located.
          *
          * @param {String} productID The product ID.

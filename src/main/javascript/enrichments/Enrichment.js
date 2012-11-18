@@ -16,7 +16,7 @@ define(["jquery", "shape/ShapeParser"],
 
             if (label) {
                 $("<span/>")
-                    .addClass("EnrichmentLabel")
+                    .addClass("Label")
                     .text(label)
                     .appendTo(element);
             }

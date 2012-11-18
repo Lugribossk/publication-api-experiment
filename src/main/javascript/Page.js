@@ -81,10 +81,9 @@ define(["jquery", "PageRepresentation", "internal/Reference", "enrichments/Enric
             return this.getEnrichments()
                 .then(function (enrichments) {
                     // Then get the products for those of the enrichments that have them.
-                    var deferreds = [];
-                    $.each(enrichments, function (i, enrichment) {
+                    var deferreds = $.map(enrichments, function (enrichment) {
                         if (enrichment.hasProduct) {
-                            deferreds.push(enrichment.getProduct());
+                            return enrichment.getProduct();
                         }
                     });
 
@@ -110,7 +109,7 @@ define(["jquery", "PageRepresentation", "internal/Reference", "enrichments/Enric
 
         Page.prototype.createDomElement = function (size) {
             var rep = this.getClosestRepresentation(size);
-            var element = $("<div/>")
+            var page = $("<div/>")
                 .addClass("Page")
                 .height(rep.height)
                 .width(rep.width)
@@ -119,11 +118,16 @@ define(["jquery", "PageRepresentation", "internal/Reference", "enrichments/Enric
             this.getEnrichments()
                 .done(function (enrichments) {
                     $.each(enrichments, function (index, enrichment) {
-                        enrichment.createDomElement().appendTo(element);
+                        enrichment.createDomElement().appendTo(page);
                     });
                 });
 
-            return element;
+            $("<span/>")
+                .addClass("Label")
+                .text(this.pageLabel)
+                .appendTo(page);
+
+            return page;
         };
 
         return Page;

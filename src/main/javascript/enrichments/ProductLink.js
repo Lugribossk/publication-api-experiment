@@ -42,7 +42,7 @@ define(["jquery", "internal/Reference", "Product", "enrichments/Enrichment"],
             this.getProduct()
                 .done(function (product) {
                     $("<span/>")
-                        .addClass("EnrichmentLabel")
+                        .addClass("Label")
                         .text((this.usesProductDatabase ? "DB:" : "Manual:") + product.product_id)
                         .appendTo(element);
                 });
