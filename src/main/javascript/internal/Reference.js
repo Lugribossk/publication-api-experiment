@@ -10,33 +10,64 @@ define(["jquery"],
          *
          * <b>There should be no need to use this class when simply working with the objects returned by PublicationAPI.</b>
          *
-         * @param {Object} rawReference The raw object to convert to a Reference object.
+         * @param {Object} data The raw object to convert to a Reference object.
          *
          * @class Reference
          * @author Bo Gotthardt
          */
-        function Reference(rawReference) {
-            $.extend(this, rawReference);
+        function Reference(data) {
+            // Only one of these three will be set.
+            this._resourcePath = data.resourcePath;
+
+            this._resourceURL = data.resourceURL;
+
+            this._bundlePath = data.bundlePath;
+            this._bundlePart = data.bundlePart;
         }
 
+        /**
+         * {Object} A map of bundle paths to their bundles.
+         * A bundle is then a map of bundle parts to their data.
+         */
         var bundleCache = {};
-        function getBundlePart(scope) {
-            return bundleCache[scope.bundlePath] && bundleCache[scope.bundlePath][scope.bundlePart];
+
+        /**
+         * Get a bundle part's data from the cache.
+         *
+         * @param {String} path The bundle path.
+         * @param {String} part The bundle part.
+         * @return {Object} The data, or null if it was not cached.
+         */
+        function getBundlePart(path, part) {
+            return bundleCache[path] && bundleCache[path][part];
         }
 
-        function saveBundle(scope, bundle) {
-            bundleCache[scope.bundlePath] = bundle;
+        /**
+         * Cache a bundle so its parts can be reused later.
+         *
+         * @param {String} path The bundle path it was retrieved from.
+         * @param {Object} bundle The bundle object that maps bundle parts to their data.
+         */
+        function saveBundle(path, bundle) {
+            bundleCache[path] = bundle;
         }
 
-        function getBundleReference(scope) {
-            var cachedBundlePart = getBundlePart(scope);
+        /**
+         * Get the data for a "bundle" reference type.
+         *
+         * @param {String} path The bundle path.
+         * @param {String} part The bundle part.
+         * @return {$.Deferred} A deferred that resolves with the data.
+         */
+        function getBundleReference(path, part) {
+            var cachedBundlePart = getBundlePart(path, part);
             if (cachedBundlePart) {
                 return new $.Deferred().resolve(cachedBundlePart);
             } else {
-                return $.get(Reference.baseURL + scope.bundlePath)
+                return $.get(Reference.baseURL + path)
                     .then(function (bundle) {
-                        saveBundle(scope, bundle);
-                        return getBundlePart(scope);
+                        saveBundle(path, bundle);
+                        return getBundlePart(path, part);
                     });
             }
         }
@@ -44,18 +75,18 @@ define(["jquery"],
         /**
          * Get the data that this reference points to.
          *
-         * @return {$.Deferred} A deferred that resolves with the reference data.
+         * @return {$.Deferred} A deferred that resolves with the reference data as a raw object.
          */
         Reference.prototype.get = function () {
             var deferred;
-            if (this.resourcePath) {
-                deferred = $.get(Reference.baseURL + this.resourcePath);
-            } else if (this.resourceURL) {
-                deferred = $.get(this.resourceURL);
-            } else if (this.bundlePath) {
-                deferred = getBundleReference(this);
+            if (this._resourcePath) {
+                deferred = $.get(Reference.baseURL + this._resourcePath);
+            } else if (this._resourceURL) {
+                deferred = $.get(this._resourceURL);
+            } else if (this._bundlePath) {
+                deferred = getBundleReference(this._bundlePath, this._bundlePart);
             } else {
-                console.error("Unknown reference type", this);
+                console.warn("Unknown reference type", this);
                 deferred = new $.Deferred().reject();
             }
 
@@ -66,9 +97,9 @@ define(["jquery"],
         };
 
         /**
-         * Get the data that this reference points to, as an instance of the specific class.
+         * Get the data that this reference points to, as an instance of the specified class.
          *
-         * @param {Function} Class The constructor function of the class to use.
+         * @param {Function} Class The constructor function of the class to use. Must take a single parameter with the reference data as input
          *                          If it has a static construct() method, it will be called with the reference data.
          *                          Otherwise a new instance will be created with the reference data as input.
          * @return {$.Deferred} A deferred that resolves with the data instance
@@ -80,6 +111,14 @@ define(["jquery"],
                 });
         };
 
+        /**
+         * Get the data that this reference points to, as a list of instances constructed by the specified class.
+         * Assumes that the raw data returned is a list.
+         *
+         * @param {Function} Class The constructor function of the class to use.
+         *                         It must have a static construct method that takes a single parameter with an element of the reference data as input.
+         * @return {$.Deferred} A deferred that resolves with the list of data instances.
+         */
         Reference.prototype.getEachWith = function (Class) {
             return this.get()
                 .then(function (data) {
@@ -96,10 +135,10 @@ define(["jquery"],
          * @return {String}
          */
         Reference.prototype.getBinaryURL = function () {
-            if (this.resourcePath) {
-                return Reference.baseURL + this.resourcePath;
-            } else if (this.resourceURL) {
-                return this.resourceURL;
+            if (this._resourcePath) {
+                return Reference.baseURL + this._resourcePath;
+            } else if (this._resourceURL) {
+                return this._resourceURL;
             } else {
                 console.error("Unable to get binary URL for this reference type.");
                 return null;
