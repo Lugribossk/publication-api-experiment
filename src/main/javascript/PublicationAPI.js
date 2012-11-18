@@ -112,21 +112,17 @@ define(["jquery", "internal/Reference", "Publication"],
          * @return {$.Deferred} A deferred that resolves with the publication, or fails if unable to create it.
          */
         PublicationAPI.prototype.getPublication = function (publicationID) {
-            var publication = new Publication(publicationID);
+            var publicationInfo;
 
             return getPublicationInfo(this, publicationID)
                 .done(function (info) {
-                    // Copy useful properties but not the publication descriptor.
-                    // Instead resolve it afterwards and copy its properties in as well before returning.
-                    // This encapsulates the detail that a publication is split into info and descriptor.
-                    publication.version = info.version;
-                    publication.expired = info.expired;
-                    publication.activated = info.activated;
+                    publicationInfo = info;
                 })
                 .then(getPublicationDescriptor)
                 .then(function (publicationDescriptor) {
-                    $.extend(publication, publicationDescriptor);
-                    return publication;
+                    // Create the publication with both info and descriptor, in order to encapsulate the implementation
+                    // detail that this is split into two requests.
+                    return new Publication(publicationID, publicationInfo, publicationDescriptor);
                 });
         };
 

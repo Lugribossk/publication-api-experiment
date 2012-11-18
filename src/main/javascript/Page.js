@@ -11,8 +11,17 @@ define(["jquery", "PageRepresentation", "internal/Reference", "enrichments/Enric
          * @author Bo Gotthardt
          */
         function Page(data) {
-            // TODO Validation?
-            $.extend(this, data);
+            /**
+             * {Number} The page number. The first page is page <b>1</b>, not 0.
+             */
+            this.pageNumber = data.pageNumber;
+            /**
+             * {String} The page label.
+             */
+            this.pageLabel = data.pageLabel;
+
+            this._pageRepresentationDescriptors = data.pageRepresentationDescriptors;
+            this._pageEnrichments = data.pageEnrichments;
         }
 
         /**
@@ -21,7 +30,7 @@ define(["jquery", "PageRepresentation", "internal/Reference", "enrichments/Enric
          * @return {PageRepresentation[]}
          */
         Page.prototype.getRepresentations = function () {
-            return $.map(this.pageRepresentationDescriptors, function (descriptor) {
+            return $.map(this._pageRepresentationDescriptors, function (descriptor) {
                 return new PageRepresentation(descriptor);
             }).sort(function (a, b) {
                 return a.width - b.width;
@@ -57,11 +66,11 @@ define(["jquery", "PageRepresentation", "internal/Reference", "enrichments/Enric
          */
         Page.prototype.getEnrichments = function () {
             // If there are no enrichments then pageEnrichments is undefined rather than empty.
-            if (!this.pageEnrichments) {
+            if (!this._pageEnrichments) {
                 return new $.Deferred().resolve([]);
             }
 
-            var references = $.map(this.pageEnrichments, function (enrichmentList) {
+            var references = $.map(this._pageEnrichments, function (enrichmentList) {
                 return new Reference(enrichmentList).getEachWith(EnrichmentParser);
             });
             // TODO combine the lists into one before returning them

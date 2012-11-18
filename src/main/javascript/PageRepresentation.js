@@ -12,7 +12,24 @@ define(["jquery", "internal/Reference"],
          * @author Bo Gotthardt
          */
         function PageRepresentation(data) {
-            $.extend(this, data);
+            /**
+             * {Number} The width.
+             */
+            this.width = data.width;
+            /**
+             * {Number} The height.
+             */
+            this.height = data.height;
+            /**
+             * {Number} The size of the resource in bytes.
+             */
+            this.size = data.size;
+            /**
+             * {PageRepresentation.Type} The type of representation.
+             */
+            this.type = data.type;
+
+            this._pageRepresentation = data.pageRepresentation;
         }
 
         /**
@@ -21,14 +38,27 @@ define(["jquery", "internal/Reference"],
          * @return {String}
          */
         PageRepresentation.prototype.getImageURL = function () {
-            return new Reference(this.pageRepresentation).getBinaryURL();
+            return new Reference(this._pageRepresentation).getBinaryURL();
         };
 
         PageRepresentation.prototype.createDomElement = function () {
-            // TODO assert type === "image"
+            if (this.type !== PageRepresentation.Type.IMAGE) {
+                console.error("Trying to create DOM element for non-image page representation.", this);
+            }
             return $("<img/>", {
                 src: this.getImageURL()
             }).addClass("PageRepresentation");
+        };
+
+        PageRepresentation.Type = {
+            /**
+             * A bitmap image (typically JPEG).
+             */
+            IMAGE: "image",
+            /**
+             * Flash vector representation (SWF).
+             */
+            VECTOR: "vector"
         };
 
         return PageRepresentation;
