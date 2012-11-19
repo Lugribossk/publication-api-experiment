@@ -1,5 +1,5 @@
-define(["jquery", "internal/Reference", "Product", "enrichments/Enrichment"],
-    function ($, Reference, Product, Enrichment) {
+define(["jquery", "internal/Reference", "Product", "enrichments/Enrichment", "util/Promise"],
+    function ($, Reference, Product, Enrichment, Promise) {
         "use strict";
 
         /**
@@ -33,9 +33,9 @@ define(["jquery", "internal/Reference", "Product", "enrichments/Enrichment"],
                 return new Reference(this._productDescriptor).getAs(Product);
             } else {
                 // Mimic the format for a database product so we can reuse the constructor logic.
-                return new $.Deferred().resolve(new Product({
+                return Promise.resolved(new Product({
                     properties: this._manualProduct
-                })).promise();
+                }));
             }
         };
 

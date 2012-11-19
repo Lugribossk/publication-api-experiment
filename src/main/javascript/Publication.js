@@ -1,5 +1,5 @@
-define(["jquery", "internal/Reference", "Page"],
-    function ($, Reference, Page) {
+define(["jquery", "internal/Reference", "Page", "util/Promise"],
+    function ($, Reference, Page, Promise) {
         "use strict";
 
         /**
@@ -67,7 +67,7 @@ define(["jquery", "internal/Reference", "Page"],
                 // The pageDescriptors array seems to have the pages in sorted order.
                 return new Reference(this._pageDescriptors[pageNumber - 1]).getAs(Page);
             } else {
-                return new $.Deferred().reject().promise();
+                return Promise.rejected();
             }
         };
 
@@ -108,7 +108,7 @@ define(["jquery", "internal/Reference", "Page"],
                         });
                         if (!correctPart) {
                             // The product ID does not exist in the publication.
-                            return new $.Deferred().reject().promise();
+                            return Promise.rejected();
                         }
 
                         // Which has a reference pointing to an "index part".
@@ -120,11 +120,13 @@ define(["jquery", "internal/Reference", "Page"],
                         if (pageNumber) {
                             return pageNumber;
                         } else {
-                            return new $.Deferred().reject().promise();
+                            // It should have been found since the index said it was on that page.
+                            console.warn("Inconsistent product index behavior for product ID", productID);
+                            return Promise.rejected();
                         }
                     });
             } else {
-                return new $.Deferred().reject().promise();
+                return Promise.rejected();
             }
         };
 

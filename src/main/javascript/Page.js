@@ -1,5 +1,5 @@
-define(["jquery", "PageRepresentation", "internal/Reference", "enrichments/EnrichmentParser"],
-    function ($, PageRepresentation, Reference, EnrichmentParser) {
+define(["jquery", "PageRepresentation", "internal/Reference", "enrichments/EnrichmentParser", "util/Promise"],
+    function ($, PageRepresentation, Reference, EnrichmentParser, Promise) {
         "use strict";
 
         /**
@@ -67,7 +67,7 @@ define(["jquery", "PageRepresentation", "internal/Reference", "enrichments/Enric
         Page.prototype.getEnrichments = function () {
             // If there are no enrichments then pageEnrichments is undefined rather than empty.
             if (!this._pageEnrichments) {
-                return new $.Deferred().resolve([]).promise();
+                return Promise.resolved([]);
             }
 
             var references = $.map(this._pageEnrichments, function (enrichmentList) {
@@ -110,7 +110,7 @@ define(["jquery", "PageRepresentation", "internal/Reference", "enrichments/Enric
                     if (foundProduct) {
                         return foundProduct;
                     } else {
-                        return new $.Deferred().reject().promise();
+                        return new Promise.rejected();
                     }
                 });
         };
