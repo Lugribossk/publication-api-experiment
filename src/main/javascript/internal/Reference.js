@@ -1,5 +1,5 @@
-define(["jquery"],
-    function ($) {
+define(["jquery", "util/Promise"],
+    function ($, Promise) {
         "use strict";
 
         var baseURL = null;
@@ -59,12 +59,12 @@ define(["jquery"],
          *
          * @param {String} path The bundle path.
          * @param {String} part The bundle part.
-         * @return {$.Deferred} A deferred that resolves with the data.
+         * @return {Promise} A promise for the data.
          */
         function getBundleReference(path, part) {
             var cachedBundlePart = getBundlePart(path, part);
             if (cachedBundlePart) {
-                return new $.Deferred().resolve(cachedBundlePart);
+                return Promise.resolved(cachedBundlePart);
             } else {
                 return $.get(baseURL + path)
                     .then(function (bundle) {
@@ -80,23 +80,22 @@ define(["jquery"],
          * @return {Promise} A promise for the reference data as an {@link Object}.
          */
         Reference.prototype.get = function () {
-            var deferred;
+            var promise;
             if (this._resourcePath) {
-                deferred = $.get(baseURL + this._resourcePath);
+                promise = $.get(baseURL + this._resourcePath).promise();
             } else if (this._resourceURL) {
-                deferred = $.get(this._resourceURL);
+                promise = $.get(this._resourceURL).promise();
             } else if (this._bundlePath) {
-                deferred = getBundleReference(this._bundlePath, this._bundlePart);
+                promise = getBundleReference(this._bundlePath, this._bundlePart);
             } else {
                 console.warn("Unknown reference type", this);
-                deferred = new $.Deferred().reject();
+                promise = Promise.rejected();
             }
 
-            return deferred
+            return promise
                 .fail(function () {
                     console.error("Unable to resolve reference", this);
-                })
-                .promise();
+                });
         };
 
         /**

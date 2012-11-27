@@ -1,4 +1,4 @@
-define(["jquery", "enrichments/Enrichment"],
+define(["jquery", "enrichment/Enrichment"],
     function ($, Enrichment) {
         "use strict";
 

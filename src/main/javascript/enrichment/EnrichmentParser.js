@@ -1,4 +1,4 @@
-define(["jquery", "enrichments/ProductLink", "enrichments/ExternalLink", "enrichments/InternalLink", "enrichments/CustomLink", "enrichments/ProductDetailsWidget", "enrichments/BuyTheLookWidget"],
+define(["jquery", "enrichment/ProductLink", "enrichment/ExternalLink", "enrichment/InternalLink", "enrichment/CustomLink", "enrichment/ProductDetailsWidget", "enrichment/BuyTheLookWidget"],
     function ($, ProductLink, ExternalLink, InternalLink, CustomLink, ProductDetailsWidget, BuyTheLookWidget) {
         "use strict";
 

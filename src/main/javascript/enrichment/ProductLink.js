@@ -1,4 +1,4 @@
-define(["jquery", "internal/Reference", "publication/Product", "enrichments/Enrichment", "util/Promise"],
+define(["jquery", "internal/Reference", "publication/Product", "enrichment/Enrichment", "util/Promise"],
     function ($, Reference, Product, Enrichment, Promise) {
         "use strict";
 
