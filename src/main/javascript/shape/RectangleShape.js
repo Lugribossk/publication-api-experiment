@@ -33,7 +33,7 @@ define(["jquery", "shape/Shape"],
              */
             this.rotation = data.rotation;
         }
-        RectangleShape.prototype = new Shape();
+        Shape.extendedBy(RectangleShape);
 
         RectangleShape.prototype.createDomElement = function () {
             return $("<div/>")

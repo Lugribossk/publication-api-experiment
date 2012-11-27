@@ -18,7 +18,7 @@ define(["jquery", "enrichments/Enrichment", "internal/Reference", "Product"],
             this._productDescriptors = data.productDescriptors;
             this._mediaRepresentationDescriptors = data.mediaRepresentationDescriptors;
         }
-        BuyTheLookWidget.prototype = new Enrichment();
+        Enrichment.extendedBy(BuyTheLookWidget);
 
         /**
          * Get the products this widget has.

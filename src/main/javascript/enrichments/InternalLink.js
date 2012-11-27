@@ -17,7 +17,7 @@ define(["jquery", "enrichments/Enrichment"],
              */
             this.targetPageNumber = data.targetPageNumber;
         }
-        InternalLink.prototype = new Enrichment();
+        Enrichment.extendedBy(InternalLink);
 
         InternalLink.prototype.createDomElement = function () {
             return Enrichment.prototype.createDomElement.call(this, "Page " + this.targetPageNumber)

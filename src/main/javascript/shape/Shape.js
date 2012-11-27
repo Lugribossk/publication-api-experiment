@@ -1,5 +1,5 @@
-define(["jquery"],
-    function ($) {
+define(["jquery", "util/Inheritance"],
+    function ($, Inheritance) {
         "use strict";
 
         /**
@@ -13,13 +13,13 @@ define(["jquery"],
          * @author Bo Gotthardt
          */
         function Shape(data) {
-            if (!data) { return; }
-
             /**
              * {String} The type of this shape.
              */
             this.type = data.type;
         }
+
+        Inheritance.makeExtensible(Shape);
 
         return Shape;
     });

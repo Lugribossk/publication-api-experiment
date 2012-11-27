@@ -16,7 +16,7 @@ define(["jquery", "enrichments/Enrichment", "internal/Reference", "Product"],
 
             this._productDescriptor = data.productDescriptor;
         }
-        ProductDetailsWidget.prototype = new Enrichment();
+        Enrichment.extendedBy(ProductDetailsWidget);
 
         /**
          * Get the product this widget has.

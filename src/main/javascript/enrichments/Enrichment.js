@@ -1,5 +1,5 @@
-define(["jquery", "shape/ShapeParser"],
-    function ($, ShapeParser) {
+define(["jquery", "shape/ShapeParser", "util/Inheritance"],
+    function ($, ShapeParser, Inheritance) {
         "use strict";
 
         /**
@@ -8,9 +8,6 @@ define(["jquery", "shape/ShapeParser"],
          * @class Enrichment
          */
         function Enrichment(data) {
-            // data will be null when this is called to set up the prototype on subclasses.
-            if (!data) { return; }
-
             this.type = data.type;
             this.firstPageNumber = data.firstPageNumber;
             this.lastPageNumber = data.lastPageNumber;
@@ -26,6 +23,8 @@ define(["jquery", "shape/ShapeParser"],
 
             this._shape = data.shape;
         }
+
+        Inheritance.makeExtensible(Enrichment);
 
         Enrichment.prototype.getShape = function () {
             return ShapeParser.construct(this._shape);
