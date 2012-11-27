@@ -2,6 +2,8 @@ define(["jquery"],
     function ($) {
         "use strict";
 
+        var baseURL = null;
+
         /**
          * A Publication API "reference".
          * These are used to encapsulate detailed data into separate requests, while allowing responses to return more data than requested.
@@ -64,7 +66,7 @@ define(["jquery"],
             if (cachedBundlePart) {
                 return new $.Deferred().resolve(cachedBundlePart);
             } else {
-                return $.get(Reference.baseURL + path)
+                return $.get(baseURL + path)
                     .then(function (bundle) {
                         saveBundle(path, bundle);
                         return getBundlePart(path, part);
@@ -80,7 +82,7 @@ define(["jquery"],
         Reference.prototype.get = function () {
             var deferred;
             if (this._resourcePath) {
-                deferred = $.get(Reference.baseURL + this._resourcePath);
+                deferred = $.get(baseURL + this._resourcePath);
             } else if (this._resourceURL) {
                 deferred = $.get(this._resourceURL);
             } else if (this._bundlePath) {
@@ -137,7 +139,7 @@ define(["jquery"],
          */
         Reference.prototype.getBinaryURL = function () {
             if (this._resourcePath) {
-                return Reference.baseURL + this._resourcePath;
+                return baseURL + this._resourcePath;
             } else if (this._resourceURL) {
                 return this._resourceURL;
             } else {
@@ -147,10 +149,18 @@ define(["jquery"],
         };
 
         /**
-         * {String} The base URL used to resolve "resourcePath" and "bundlePath" references.
+         * Set the base URL used to resolve "resourcePath" and "bundlePath" references.
          * <b>Must</b> be set after publication info has been retrieved.
+         *
+         * @param {String} url The base URL
          */
-        Reference.baseURL = null;
+        Reference.setBaseURL = function (url) {
+            if (baseURL && baseURL !== url) {
+                console.error("Inconsistent publication base URLs. This use case is not supported by the current implementation.");
+            } else {
+                baseURL = url;
+            }
+        };
 
         return Reference;
     });

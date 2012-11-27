@@ -1,5 +1,5 @@
-define(["jquery", "internal/Reference", "publication/Publication"],
-    function ($, Reference, Publication) {
+define(["jquery", "internal/Reference", "publication/Publication", "util/Promise"],
+    function ($, Reference, Publication, Promise) {
         "use strict";
 
         /**
@@ -13,8 +13,7 @@ define(["jquery", "internal/Reference", "publication/Publication"],
          */
         function PublicationAPI(key, apiURL) {
             this.key = key;
-            this.apiURL = apiURL || PublicationAPI.HTTP_URL;
-            this.baseURL = null;
+            this.apiURL = apiURL || PublicationAPI.APIUrl.HTTP;
         }
 
         /**
@@ -22,7 +21,7 @@ define(["jquery", "internal/Reference", "publication/Publication"],
          *
          * @param {PublicationAPI} scope
          * @param {String} publicationID
-         * @return {$.Deferred} A deferred that resolves with the info.
+         * @return {Promise} A promise for the info.
          */
         function getPublicationInfoCached(scope, publicationID) {
             return $.ajax({
@@ -41,7 +40,7 @@ define(["jquery", "internal/Reference", "publication/Publication"],
          *
          * @param {PublicationAPI} scope
          * @param {String} publicationID
-         * @return {$.Deferred} A deferred that resolves with the info.
+         * @return {Promise} A promise for the info.
          */
         function getPublicationInfoRecent(scope, publicationID) {
             return $.ajax({
@@ -55,7 +54,7 @@ define(["jquery", "internal/Reference", "publication/Publication"],
                 .then(null, function (xhr, textStatus) {
                     // Timeout shouldn't count as a failure as we're okay with it happening.
                     if (textStatus === "timeout") {
-                        return new $.Deferred.resolve(null);
+                        return Promise.resolved(null);
                     }
                 })
                 .fail(function (xhr) {
@@ -68,7 +67,7 @@ define(["jquery", "internal/Reference", "publication/Publication"],
          *
          * @param {PublicationAPI} scope
          * @param {String} publicationID The publication ID.
-         * @return {$.Deferred} A deferred that resolves with the publication info.
+         * @return {Promise} A promise for the publication info.
          */
         function getPublicationInfo(scope, publicationID) {
             return $.when(getPublicationInfoCached(scope, publicationID),
@@ -82,7 +81,7 @@ define(["jquery", "internal/Reference", "publication/Publication"],
                         info = infoRecent;
                     }
                     // Set the Reference base URL, hopefully it won't change between publications.
-                    Reference.baseURL = info.baseURL;
+                    Reference.setBaseURL(info.baseURL);
                     return info;
                 });
         }
@@ -91,14 +90,14 @@ define(["jquery", "internal/Reference", "publication/Publication"],
          * Get the specified publication info's publication descriptor.
          *
          * @param {Object} publicationInfo The publication info.
-         * @return {$.Deferred} A deferred that resolves with the publication descriptor.
+         * @return {Promise} A promise for the publication descriptor.
          */
         function getPublicationDescriptor(publicationInfo) {
             if (publicationInfo.publicationDescriptor) {
                 return new Reference(publicationInfo.publicationDescriptor).get();
             } else {
                 console.error("No publication descriptor, perhaps the publication is not activated?");
-                return new $.Deferred().reject();
+                return Promise.rejected();
             }
         }
 
@@ -126,14 +125,17 @@ define(["jquery", "internal/Reference", "publication/Publication"],
                 });
         };
 
-        /**
-         * {String} The URL to the HTTP version of the Publication Info service.
-         */
-        PublicationAPI.HTTP_URL = "http://api.viewer.zmags.com/publication/";
-        /**
-         * {String} The URL to the HTTPS version of the Publication Info service.
-         */
-        PublicationAPI.HTTPS_URL = "https://secure.api.viewer.zmags.com/publication/";
+        PublicationAPI.APIUrl = {
+            /**
+             * {String} The URL to the HTTP version of the Publication Info service.
+             */
+            HTTP: "http://api.viewer.zmags.com/publication/",
+
+            /**
+             * {String} The URL to the HTTPS version of the Publication Info service.
+             */
+            HTTPS: "https://secure.api.viewer.zmags.com/publication/"
+        };
 
         return PublicationAPI;
     });

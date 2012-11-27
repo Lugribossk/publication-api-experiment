@@ -17,7 +17,6 @@ define(["jquery", "internal/Reference", "publication/Page", "util/Promise"],
          */
         function Publication(id, info, descriptor) {
             this.id = id;
-
             /**
              * {Number} The version number.
              */
@@ -30,9 +29,6 @@ define(["jquery", "internal/Reference", "publication/Page", "util/Promise"],
              * {Boolean} Whether the publication is activated.
              */
             this.activated = info.activated;
-//            this.baseURL = info.baseURL;
-//            this._publicationDescriptor = info.publicationDescriptor;
-
             /**
              * {String} The name of the publication.
              */
