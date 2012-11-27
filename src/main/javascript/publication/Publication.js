@@ -1,4 +1,4 @@
-define(["jquery", "internal/Reference", "Page", "util/Promise"],
+define(["jquery", "internal/Reference", "publication/Page", "util/Promise"],
     function ($, Reference, Page, Promise) {
         "use strict";
 
@@ -99,7 +99,7 @@ define(["jquery", "internal/Reference", "Page", "util/Promise"],
                 // productIndex actually points to a "part index".
                 return new Reference(this._productIndex).get()
                     .then(function (partIndex) {
-                        // We then use this to look up with part the product is in.
+                        // We then use this to look up which part the product is in.
                         var correctPart = null;
                         $.each(partIndex, function (i, part) {
                             if (productID >= part.from && productID <= part.to) {

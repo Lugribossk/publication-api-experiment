@@ -6,6 +6,7 @@
     <option nomen="true" />
     <option plusplus="true" />
     <option predef="define" />
+    <option todo="true" />
     <option vars="true" />
   </component>
 </project>

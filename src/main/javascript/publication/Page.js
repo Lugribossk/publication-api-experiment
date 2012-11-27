@@ -1,4 +1,4 @@
-define(["jquery", "PageRepresentation", "internal/Reference", "enrichments/EnrichmentParser", "util/Promise"],
+define(["jquery", "publication/PageRepresentation", "internal/Reference", "enrichments/EnrichmentParser", "util/Promise"],
     function ($, PageRepresentation, Reference, EnrichmentParser, Promise) {
         "use strict";
 
