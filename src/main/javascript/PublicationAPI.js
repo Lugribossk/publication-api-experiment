@@ -21,7 +21,7 @@ define(["jquery", "internal/Reference", "publication/Publication", "util/Promise
          *
          * @param {PublicationAPI} scope
          * @param {String} publicationID
-         * @return {Promise} A promise for the info.
+         * @return {Promise} A promise for the info. Will resolve with null instead of reject.
          */
         function getPublicationInfoCached(scope, publicationID) {
             return $.ajax({
@@ -30,8 +30,9 @@ define(["jquery", "internal/Reference", "publication/Publication", "util/Promise
                     key: scope.key
                 }
             })
-                .fail(function (xhr) {
-                    console.error("There was a problem getting the cached publication descriptor.", xhr);
+                .then(null, function (xhr) {
+                    console.warn("There was a problem getting the cached publication descriptor.", xhr);
+                    return Promise.resolved(null);
                 });
         }
 
@@ -40,7 +41,7 @@ define(["jquery", "internal/Reference", "publication/Publication", "util/Promise
          *
          * @param {PublicationAPI} scope
          * @param {String} publicationID
-         * @return {Promise} A promise for the info.
+         * @return {Promise} A promise for the info. Will resolve with null instead of reject.
          */
         function getPublicationInfoRecent(scope, publicationID) {
             return $.ajax({
@@ -49,16 +50,16 @@ define(["jquery", "internal/Reference", "publication/Publication", "util/Promise
                     key: scope.key,
                     recent: true
                 },
+                // Set a timeout as the recent response may be slow due to not being cached as well.
                 timeout: 2000
             })
                 .then(null, function (xhr, textStatus) {
-                    // Timeout shouldn't count as a failure as we're okay with it happening.
                     if (textStatus === "timeout") {
-                        return Promise.resolved(null);
+                        console.warn("Timeout while getting the recent publication descriptor.");
+                    } else {
+                        console.warn("There was a non-timeout problem getting the recent publication descriptor.", xhr);
                     }
-                })
-                .fail(function (xhr) {
-                    console.error("There was a non-timeout problem getting the recent publication descriptor.", xhr);
+                    return Promise.resolved(null);
                 });
         }
 
@@ -73,16 +74,30 @@ define(["jquery", "internal/Reference", "publication/Publication", "util/Promise
             return $.when(getPublicationInfoCached(scope, publicationID),
                           getPublicationInfoRecent(scope, publicationID))
                 .then(function (infoResponse, infoRecentResponse) {
+                    var info,
+                        infoRecent;
+                    // Both requests have been set to always resolve, so we can continue if one of them fails.
                     // The parameters are lists of the arguments returned by $.ajax, but we're only interested in the first one.
-                    var info = infoResponse[0],
-                        infoRecent = infoRecentResponse[0];
-                    // Use the recent publication info instead if we actually got one, and it is newer.
-                    if (infoRecent && infoRecent.version > info.version) {
-                        info = infoRecent;
+                    if (infoResponse) {
+                        info = infoResponse[0];
                     }
+                    if (infoRecentResponse) {
+                        infoRecent = infoRecentResponse[0];
+                    }
+
+                    // If we got both, use the recent publication info if it is newer.
+                    if (infoRecent && info && infoRecent.version > info.version) {
+                        return infoRecent;
+                    } else {
+                        return info || infoRecent || Promise.rejected();
+                    }
+                })
+                .done(function (info) {
                     // Set the Reference base URL, hopefully it won't change between publications.
                     Reference.setBaseURL(info.baseURL);
-                    return info;
+                })
+                .fail(function () {
+                    console.error("Unable to retrieve any publication info.");
                 });
         }
 
