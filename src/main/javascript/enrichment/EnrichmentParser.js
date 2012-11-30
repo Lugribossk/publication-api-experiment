@@ -1,6 +1,7 @@
-define(["jquery", "enrichment/ProductLink", "enrichment/ExternalLink", "enrichment/InternalLink", "enrichment/CustomLink", "enrichment/ProductDetailsWidget", "enrichment/BuyTheLookWidget"],
-    function ($, ProductLink, ExternalLink, InternalLink, CustomLink, ProductDetailsWidget, BuyTheLookWidget) {
+define(["jquery", "enrichment/ProductLink", "enrichment/ExternalLink", "enrichment/InternalLink", "enrichment/CustomLink", "enrichment/ProductDetailsWidget", "enrichment/BuyTheLookWidget", "util/Logger"],
+    function ($, ProductLink, ExternalLink, InternalLink, CustomLink, ProductDetailsWidget, BuyTheLookWidget, Logger) {
         "use strict";
+        var log = new Logger("EnrichmentParser");
 
         /**
          * Utility class for converting untyped objects into Enrichment subclass instances.
@@ -31,7 +32,7 @@ define(["jquery", "enrichment/ProductLink", "enrichment/ExternalLink", "enrichme
             } else if (type === BuyTheLookWidget.TYPE) {
                 return new BuyTheLookWidget(data);
             } else {
-                console.warn("Unknown enrichment type", type);
+                log.error("Unknown enrichment type", type);
                 return null;
             }
         };

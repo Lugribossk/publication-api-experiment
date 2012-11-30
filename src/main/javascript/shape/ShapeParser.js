@@ -1,6 +1,7 @@
-define(["jquery", "shape/RectangleShape", "shape/PolygonShape", "shape/CompositeShape"],
-    function ($, RectangleShape, PolygonShape, CompositeShape) {
+define(["jquery", "shape/RectangleShape", "shape/PolygonShape", "shape/CompositeShape", "util/Logger"],
+    function ($, RectangleShape, PolygonShape, CompositeShape, Logger) {
         "use strict";
+        var log = new Logger("ShapeParser");
 
         /**
          * Utility class for converting untyped objects into Shape subclass instances.
@@ -29,7 +30,7 @@ define(["jquery", "shape/RectangleShape", "shape/PolygonShape", "shape/Composite
                     type: CompositeShape.TYPE
                 });
             } else {
-                console.warn("Unknown shape type", type);
+                log.warn("Unknown shape type", type);
                 return null;
             }
         };

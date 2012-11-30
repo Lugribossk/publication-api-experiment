@@ -1,6 +1,7 @@
-define(["jquery", "util/Promise"],
-    function ($, Promise) {
+define(["jquery", "util/Promise", "util/Logger"],
+    function ($, Promise, Logger) {
         "use strict";
+        var log = new Logger("Reference");
 
         var baseURL = null;
 
@@ -26,7 +27,7 @@ define(["jquery", "util/Promise"],
                 this._bundlePath = data.bundlePath;
                 this._bundlePart = data.bundlePart;
             } else {
-                console.error("Unknown reference type", data);
+                log.error("Unknown reference type", data);
             }
         }
 
@@ -97,7 +98,7 @@ define(["jquery", "util/Promise"],
 
             return promise
                 .fail(function () {
-                    console.error("Unable to resolve reference", scope);
+                    log.error("Unable to resolve reference", scope);
                 });
         };
 
@@ -145,7 +146,7 @@ define(["jquery", "util/Promise"],
             } else if (this._resourceURL) {
                 return this._resourceURL;
             } else {
-                console.error("Unable to get binary URL for bundle path/part reference type.");
+                log.error("Unable to get binary URL for bundle path/part reference type.");
                 return null;
             }
         };
@@ -158,7 +159,7 @@ define(["jquery", "util/Promise"],
          */
         Reference.setBaseURL = function (url) {
             if (baseURL && baseURL !== url) {
-                console.error("Inconsistent publication base URLs. This use case is not supported by the current implementation.");
+                log.error("Inconsistent publication base URLs. This use case is not supported by the current implementation.");
             } else {
                 baseURL = url;
             }

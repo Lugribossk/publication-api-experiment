@@ -1,6 +1,7 @@
-define(["jquery", "internal/Reference", "publication/Page", "util/Promise"],
-    function ($, Reference, Page, Promise) {
+define(["jquery", "internal/Reference", "publication/Page", "util/Promise", "util/Logger"],
+    function ($, Reference, Page, Promise, Logger) {
         "use strict";
+        var log = new Logger("Publication");
 
         /**
          * A Zmags publication.
@@ -63,7 +64,7 @@ define(["jquery", "internal/Reference", "publication/Page", "util/Promise"],
                 // The pageDescriptors array seems to have the pages in sorted order.
                 return new Reference(this._pageDescriptors[pageNumber - 1]).getAs(Page);
             } else {
-                console.error("Page number", pageNumber, "out of range.");
+                log.error("Page number", pageNumber, "out of range.");
                 return Promise.rejected();
             }
         };
@@ -102,6 +103,8 @@ define(["jquery", "internal/Reference", "publication/Page", "util/Promise"],
                             if (productID >= part.from && productID <= part.to) {
                                 correctPart = part;
                                 return false;
+                            } else {
+                                return true;
                             }
                         });
                         if (!correctPart) {
@@ -119,7 +122,7 @@ define(["jquery", "internal/Reference", "publication/Page", "util/Promise"],
                             return pageNumber;
                         } else {
                             // It should have been found since the index said it was on that page.
-                            console.warn("Inconsistent product index behavior for product ID", productID);
+                            log.warn("Inconsistent product index behavior for product ID", productID);
                             return Promise.rejected();
                         }
                     });

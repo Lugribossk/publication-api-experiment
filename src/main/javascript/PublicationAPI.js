@@ -1,6 +1,7 @@
-define(["jquery", "internal/Reference", "publication/Publication", "util/Promise"],
-    function ($, Reference, Publication, Promise) {
+define(["jquery", "internal/Reference", "publication/Publication", "util/Promise", "util/Logger"],
+    function ($, Reference, Publication, Promise, Logger) {
         "use strict";
+        var log = new Logger("PublicationAPI");
 
         /**
          * Zmags Publication API client that can be used to retrieve publication data.
@@ -31,7 +32,7 @@ define(["jquery", "internal/Reference", "publication/Publication", "util/Promise
                 }
             })
                 .then(null, function (xhr) {
-                    console.warn("There was a problem getting the cached publication descriptor.", xhr);
+                    log.warn("There was a problem getting the cached publication descriptor.", xhr);
                     return Promise.resolved(null);
                 });
         }
@@ -55,9 +56,9 @@ define(["jquery", "internal/Reference", "publication/Publication", "util/Promise
             })
                 .then(null, function (xhr, textStatus) {
                     if (textStatus === "timeout") {
-                        console.warn("Timeout while getting the recent publication descriptor.");
+                        log.warn("Timeout while getting the recent publication descriptor.");
                     } else {
-                        console.warn("There was a non-timeout problem getting the recent publication descriptor.", xhr);
+                        log.warn("There was a non-timeout problem getting the recent publication descriptor.", xhr);
                     }
                     return Promise.resolved(null);
                 });
@@ -97,7 +98,7 @@ define(["jquery", "internal/Reference", "publication/Publication", "util/Promise
                     Reference.setBaseURL(info.baseURL);
                 })
                 .fail(function () {
-                    console.error("Unable to retrieve any publication info.");
+                    log.error("Unable to retrieve any publication info.");
                 });
         }
 
@@ -111,7 +112,7 @@ define(["jquery", "internal/Reference", "publication/Publication", "util/Promise
             if (publicationInfo.publicationDescriptor) {
                 return new Reference(publicationInfo.publicationDescriptor).get();
             } else {
-                console.error("No publication descriptor, perhaps the publication is not activated?");
+                log.error("No publication descriptor, perhaps the publication is not activated?");
                 return Promise.rejected();
             }
         }
