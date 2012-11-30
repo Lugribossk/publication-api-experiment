@@ -16,7 +16,7 @@ define(["jquery", "shape/Shape"],
              */
             this.coordinates = data.coordinates;
         }
-        Shape.extendedBy(PolygonShape);
+        PolygonShape.prototype = Object.create(Shape.prototype);
 
         PolygonShape.prototype.createDomElement = function () {
             // Multiply the coordinates by 100 since the viewBox is set to 100 x 100.

@@ -15,8 +15,7 @@ define(["jquery", "enrichment/Enrichment"],
              */
             this.value = data.value;
         }
-        Enrichment.extendedBy(CustomLink);
-
+        CustomLink.prototype = Object.create(Enrichment.prototype);
 
         CustomLink.prototype.createDomElement = function () {
             return Enrichment.prototype.createDomElement.call(this, this.value)

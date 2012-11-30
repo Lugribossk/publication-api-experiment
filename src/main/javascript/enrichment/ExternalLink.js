@@ -21,7 +21,7 @@ define(["jquery", "enrichment/Enrichment"],
              */
             this.url = data.url;
         }
-        Enrichment.extendedBy(ExternalLink);
+        ExternalLink.prototype = Object.create(Enrichment.prototype);
 
         ExternalLink.prototype.createDomElement = function () {
             // As an alternative we could ignore the superclass method and make this one an actual link instead.

@@ -1,5 +1,5 @@
-define(["jquery", "util/Inheritance"],
-    function ($, Inheritance) {
+define(["jquery"],
+    function ($) {
         "use strict";
 
         /**
@@ -18,8 +18,6 @@ define(["jquery", "util/Inheritance"],
              */
             this.type = data.type;
         }
-
-        Inheritance.makeExtensible(Shape);
 
         return Shape;
     });

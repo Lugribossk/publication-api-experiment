@@ -20,7 +20,7 @@ define(["jquery", "internal/Reference", "publication/Product", "enrichment/Enric
             this._productDescriptor = data.productDescriptor;
             this._manualProduct = data.manualProduct;
         }
-        Enrichment.extendedBy(ProductLink);
+        ProductLink.prototype = Object.create(Enrichment.prototype);
 
         /**
          * Get the product this link points to.

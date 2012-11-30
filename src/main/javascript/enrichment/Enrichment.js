@@ -1,5 +1,5 @@
-define(["jquery", "shape/ShapeParser", "util/Inheritance"],
-    function ($, ShapeParser, Inheritance) {
+define(["jquery", "shape/ShapeParser"],
+    function ($, ShapeParser) {
         "use strict";
 
         /**
@@ -23,8 +23,6 @@ define(["jquery", "shape/ShapeParser", "util/Inheritance"],
 
             this._shape = data.shape;
         }
-
-        Inheritance.makeExtensible(Enrichment);
 
         Enrichment.prototype.getShape = function () {
             return ShapeParser.construct(this._shape);
