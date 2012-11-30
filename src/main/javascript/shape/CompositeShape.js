@@ -18,7 +18,7 @@ define(["jquery", "shape/Shape"],
         CompositeShape.prototype = Object.create(Shape.prototype);
 
         CompositeShape.prototype.createDomElement = function () {
-            return $.map(this.shapes, function (shape) {
+            this.shapes.map(function (shape) {
                 return shape.createDomElement();
             });
         };

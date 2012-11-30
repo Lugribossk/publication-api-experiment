@@ -13,7 +13,7 @@ define(["jquery", "internal/Reference"],
             $.extend(this, data.properties);
             // Hopefully no one will end up creating custom properties with the same names as these.
             if (data.variants) {
-                this.variants = $.map(data.variants, function (variant) {
+                this.variants = data.variants.map(function (variant) {
                     return new Product(variant);
                 });
             }

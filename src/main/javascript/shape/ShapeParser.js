@@ -26,7 +26,7 @@ define(["jquery", "shape/RectangleShape", "shape/PolygonShape", "shape/Composite
             } else if (type === CompositeShape.TYPE) {
                 // We have to parse the composite shapes here as well, or CompositeShape will end up with a circular dependency on ShapeParser.
                 return new CompositeShape({
-                    shapes: $.map(data.shapes, ShapeParser.construct),
+                    shapes: data.shapes.map(ShapeParser.construct),
                     type: CompositeShape.TYPE
                 });
             } else {

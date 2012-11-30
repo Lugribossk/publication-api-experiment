@@ -21,7 +21,7 @@ define(["jquery", "shape/Shape"],
         PolygonShape.prototype.createDomElement = function () {
             // Multiply the coordinates by 100 since the viewBox is set to 100 x 100.
             // Setting the viewBox to 1 x 1 scales the line strokes up to monstrous size.
-            var points = $.map(this.coordinates, function (coord) {
+            var points = this.coordinates.map(function (coord) {
                 return (coord.x * 100) + "," + (coord.y * 100);
             }).join(" ");
 

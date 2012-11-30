@@ -30,7 +30,7 @@ define(["jquery", "publication/PageRepresentation", "internal/Reference", "enric
          * @return {PageRepresentation[]}
          */
         Page.prototype.getRepresentations = function () {
-            return $.map(this._pageRepresentationDescriptors, function (descriptor) {
+            return this._pageRepresentationDescriptors.map(function (descriptor) {
                 return new PageRepresentation(descriptor);
             }).sort(function (a, b) {
                 return a.width - b.width;
@@ -47,14 +47,16 @@ define(["jquery", "publication/PageRepresentation", "internal/Reference", "enric
         Page.prototype.getClosestRepresentation = function (size) {
             var bestRep = null;
 
-            $.each(this.getRepresentations(), function (index, representation) {
-                if (representation.type === PageRepresentation.Type.IMAGE) {
+            this.getRepresentations()
+                .filter(function(representation) {
+                    // We can't use SWF representations, so filter them out.
+                    return representation.type === PageRepresentation.Type.IMAGE;
+                })
+                .some(function (representation) {
+                    // Find the first representation that is larger than the specified size.
                     bestRep = representation;
-                    if (representation.width >= size.width) {
-                        return false;
-                    }
-                }
-            });
+                    return representation.width >= size.width;
+                });
 
             return bestRep;
         };
@@ -70,7 +72,7 @@ define(["jquery", "publication/PageRepresentation", "internal/Reference", "enric
                 return Promise.resolved([]);
             }
 
-            var references = $.map(this._pageEnrichments, function (enrichmentList) {
+            var references = this._pageEnrichments.map(function (enrichmentList) {
                 return new Reference(enrichmentList).getEachWith(EnrichmentParser.construct);
             });
             // TODO combine the lists into one before returning them
@@ -125,7 +127,7 @@ define(["jquery", "publication/PageRepresentation", "internal/Reference", "enric
 
             this.getEnrichments()
                 .done(function (enrichments) {
-                    $.each(enrichments, function (index, enrichment) {
+                    enrichments.forEach(function (enrichment) {
                         enrichment.createDomElement().appendTo(page);
                     });
                 });

@@ -75,7 +75,7 @@ define(["jquery", "internal/Reference", "publication/Page", "util/Promise", "uti
          * @return {Promise} A promise for the list of {@link Page}s.
          */
         Publication.prototype.getPages = function () {
-            var deferreds = $.map(this._pageDescriptors, function (descriptor) {
+            var deferreds = this._pageDescriptors.map(function (descriptor) {
                 return new Reference(descriptor).getAs(Page);
             });
 

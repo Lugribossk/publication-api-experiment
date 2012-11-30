@@ -127,9 +127,8 @@ define(["jquery", "util/Promise", "util/Logger"],
         Reference.prototype.getEachWith = function (parserFunction) {
             return this.get()
                 .then(function (data) {
-                    return $.map(data, function (item) {
-                        return parserFunction(item);
-                    });
+                    log.assert(Array.isArray(data), "Reference must resolve to a list, was", data);
+                    return data.map(parserFunction);
                 });
         };
 
