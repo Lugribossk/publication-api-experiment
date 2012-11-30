@@ -6,8 +6,8 @@ define(["jquery", "internal/Reference", "publication/Page", "util/Promise", "uti
         /**
          * A Zmags publication.
          *
-         * Note that this constructor is only useful with internal data from {@link PublicationAPI}.
-         * Instead use {@link PublicationAPI#getPublication()}.
+         * Note that the constructor is only useful with internal data from {@link PublicationAPI}.
+         * Instead use {@link PublicationAPI#getPublication}.
          *
          * @param {String} id The publication ID
          * @param {Object} info

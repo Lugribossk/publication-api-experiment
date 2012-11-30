@@ -15,6 +15,7 @@ define(["jquery", "util/Promise", "util/Logger"],
          *
          * @param {Object} data The raw object to convert to a Reference object.
          *
+         * @private
          * @class Reference
          * @author Bo Gotthardt
          */

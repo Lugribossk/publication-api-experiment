@@ -5,10 +5,14 @@ define(["jquery"],
         // Create a fake Promise class to stop IntelliJ warning about it not being found.
         // It is actually a part of jQuery.
         /**
-         * @see jQuery documentation
+         * @see http://api.jquery.com/category/deferred-object/
          * @class Promise
          */
         function Promise() {}
+
+        Promise.prototype.then = function (doneFilter, failFilter, progressFilter) {};
+        Promise.prototype.done = function (callback) {};
+        Promise.prototype.fail = function (callback) {};
 
         // TODO Fix these to work with any number of arguments.
         // There seems to be a problem with new $.Deferred().reject.apply() returning window.
