@@ -63,6 +63,7 @@ define(["jquery", "internal/Reference", "publication/Page", "util/Promise"],
                 // The pageDescriptors array seems to have the pages in sorted order.
                 return new Reference(this._pageDescriptors[pageNumber - 1]).getAs(Page);
             } else {
+                console.error("Page number", pageNumber, "out of range.");
                 return Promise.rejected();
             }
         };
@@ -100,6 +101,7 @@ define(["jquery", "internal/Reference", "publication/Page", "util/Promise"],
                         $.each(partIndex, function (i, part) {
                             if (productID >= part.from && productID <= part.to) {
                                 correctPart = part;
+                                return false;
                             }
                         });
                         if (!correctPart) {

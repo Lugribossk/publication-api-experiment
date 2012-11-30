@@ -18,13 +18,16 @@ define(["jquery", "util/Promise"],
          * @author Bo Gotthardt
          */
         function Reference(data) {
-            // Only one of these three will be set.
-            this._resourcePath = data.resourcePath;
-
-            this._resourceURL = data.resourceURL;
-
-            this._bundlePath = data.bundlePath;
-            this._bundlePart = data.bundlePart;
+            if (data.resourcePath) {
+                this._resourcePath = data.resourcePath;
+            } else if (data.resourceURL) {
+                this._resourceURL = data.resourceURL;
+            } else if (data.bundlePath) {
+                this._bundlePath = data.bundlePath;
+                this._bundlePart = data.bundlePart;
+            } else {
+                console.error("Unknown reference type", data);
+            }
         }
 
         /**
@@ -80,7 +83,8 @@ define(["jquery", "util/Promise"],
          * @return {Promise} A promise for the reference data as an {@link Object}.
          */
         Reference.prototype.get = function () {
-            var promise;
+            var scope = this,
+                promise;
             if (this._resourcePath) {
                 promise = $.get(baseURL + this._resourcePath).promise();
             } else if (this._resourceURL) {
@@ -88,13 +92,12 @@ define(["jquery", "util/Promise"],
             } else if (this._bundlePath) {
                 promise = getBundleReference(this._bundlePath, this._bundlePart);
             } else {
-                console.warn("Unknown reference type", this);
                 promise = Promise.rejected();
             }
 
             return promise
                 .fail(function () {
-                    console.error("Unable to resolve reference", this);
+                    console.error("Unable to resolve reference", scope);
                 });
         };
 
@@ -142,7 +145,7 @@ define(["jquery", "util/Promise"],
             } else if (this._resourceURL) {
                 return this._resourceURL;
             } else {
-                console.error("Unable to get binary URL for this reference type.");
+                console.error("Unable to get binary URL for bundle path/part reference type.");
                 return null;
             }
         };
