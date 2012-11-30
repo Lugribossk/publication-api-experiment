@@ -10,6 +10,11 @@ define(["jquery"],
          */
         function Promise() {}
 
+        /**
+         * @param doneFilter
+         * @param [failFilter]
+         * @param [progressFilter]
+         */
         Promise.prototype.then = function (doneFilter, failFilter, progressFilter) {};
         Promise.prototype.done = function (callback) {};
         Promise.prototype.fail = function (callback) {};

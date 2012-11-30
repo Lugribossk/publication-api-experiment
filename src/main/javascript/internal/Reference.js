@@ -106,9 +106,7 @@ define(["jquery", "util/Promise", "util/Logger"],
         /**
          * Get the data that this reference points to, as an instance of the specified class.
          *
-         * @param {Function} Class The constructor function of the class to use. Must take a single parameter with the reference data as input
-         *                          If it has a static construct() method, it will be called with the reference data.
-         *                          Otherwise a new instance will be created with the reference data as input.
+         * @param {Function} Class The constructor function of the class to use. Must take a single parameter with the reference data as input.
          * @return {Promise} A promise for the reference data as an instance of Class.
          */
         Reference.prototype.getAs = function (Class) {
@@ -119,18 +117,18 @@ define(["jquery", "util/Promise", "util/Logger"],
         };
 
         /**
-         * Get the data that this reference points to, as a list of instances constructed by the specified class.
+         * Get the data that this reference points to, as a list of instances constructed by the specified function.
          * Assumes that the raw data returned is a list.
          *
-         * @param {Function} Class The constructor function of the class to use.
-         *                         It must have a static construct method that takes a single parameter with an element of the reference data as input.
-         * @return {Promise} A promise for the reference data as a list of instances created by Class.construct().
+         * @param {Function} parserFunction The function to call with each item of raw data to parse them into some kind of object.
+         *                                  Must take a single parameter with the reference data as input.
+         * @return {Promise} A promise for the reference data as a list of objects created by the parsing function.
          */
-        Reference.prototype.getEachWith = function (Class) {
+        Reference.prototype.getEachWith = function (parserFunction) {
             return this.get()
                 .then(function (data) {
                     return $.map(data, function (item) {
-                        return Class.construct(item);
+                        return parserFunction(item);
                     });
                 });
         };

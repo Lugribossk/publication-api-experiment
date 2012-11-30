@@ -71,7 +71,7 @@ define(["jquery", "publication/PageRepresentation", "internal/Reference", "enric
             }
 
             var references = $.map(this._pageEnrichments, function (enrichmentList) {
-                return new Reference(enrichmentList).getEachWith(EnrichmentParser);
+                return new Reference(enrichmentList).getEachWith(EnrichmentParser.construct);
             });
             // TODO combine the lists into one before returning them
             return $.when.apply(this, references);
