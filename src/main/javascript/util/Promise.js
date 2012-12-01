@@ -58,7 +58,7 @@ define(["jquery"],
          * @param {Object[]} subordinates
          * @return {Promise} The combined promise for the values of all the subordinates.
          */
-        Promise.when = function (subordinates) {
+        Promise.all = function (subordinates) {
             // We would like the returned promise to progress whenever an individual promise has resolved, but $.when() does not support that.
             // So we have to create our own deferred that can be resolved by $.when(), and progressed by done() from the individual promises.
             var combinedDeferred = new $.Deferred(),

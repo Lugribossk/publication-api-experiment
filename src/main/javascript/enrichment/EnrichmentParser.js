@@ -1,5 +1,5 @@
-define(["jquery", "enrichment/ProductLink", "enrichment/ExternalLink", "enrichment/InternalLink", "enrichment/CustomLink", "enrichment/ProductDetailsWidget", "enrichment/BuyTheLookWidget", "util/Logger"],
-    function ($, ProductLink, ExternalLink, InternalLink, CustomLink, ProductDetailsWidget, BuyTheLookWidget, Logger) {
+define(["jquery", "enrichment/ProductLink", "enrichment/ExternalLink", "enrichment/InternalLink", "enrichment/CustomLink", "enrichment/ProductDetailsWidget", "enrichment/BuyTheLookWidget", "enrichment/Video", "util/Logger"],
+    function ($, ProductLink, ExternalLink, InternalLink, CustomLink, ProductDetailsWidget, BuyTheLookWidget, Video, Logger) {
         "use strict";
         var log = new Logger("EnrichmentParser");
 
@@ -31,6 +31,8 @@ define(["jquery", "enrichment/ProductLink", "enrichment/ExternalLink", "enrichme
                 return new ProductDetailsWidget(data);
             } else if (type === BuyTheLookWidget.TYPE) {
                 return new BuyTheLookWidget(data);
+            } else if (type === Video.TYPE) {
+                return new Video(data);
             } else {
                 log.error("Unknown enrichment type", type);
                 return null;

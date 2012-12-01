@@ -16,7 +16,7 @@ define(["jquery", "enrichment/Enrichment", "internal/Reference", "publication/Pr
             this.shapeEnabled = data.shapeEnabled;
 
             this._productDescriptors = data.productDescriptors;
-            this._mediaRepresentationDescriptors = data.mediaRepresentationDescriptors;
+//            this._mediaRepresentationDescriptors = data.mediaRepresentationDescriptors;
         }
         BuyTheLookWidget.prototype = Object.create(Enrichment.prototype);
 

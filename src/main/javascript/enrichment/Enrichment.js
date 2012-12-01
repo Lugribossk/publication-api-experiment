@@ -12,7 +12,7 @@ define(["jquery", "shape/ShapeParser"],
             this.firstPageNumber = data.firstPageNumber;
             this.lastPageNumber = data.lastPageNumber;
 
-            // non-widget
+            // non-widget, non-video
             this.color = data.color;
             this.opacity = data.opacity;
             this.effect = data.effect;
@@ -40,6 +40,14 @@ define(["jquery", "shape/ShapeParser"],
             }
 
             return element;
+        };
+
+        Enrichment.EffectTypes = {
+            NONE: "none",
+            FADE: "fadeInOut",
+            FRAME: "frame",
+            PULSATING: "pulsating",
+            SHADOW_FRAME: "shadowFrame"
         };
 
         return Enrichment;

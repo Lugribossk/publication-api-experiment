@@ -35,7 +35,12 @@ define(["jquery", "internal/Reference", "publication/Product", "enrichment/Enric
             } else {
                 // Mimic the format for a database product so we can reuse the constructor logic.
                 return Promise.resolved(new Product({
-                    properties: this._manualProduct
+                    properties: {
+                        product_id: this._manualProduct.productID,
+                        name: this._manualProduct.productName,
+                        description: this._manualProduct.productDescription,
+                        price: this._manualProduct.productPrice
+                    }
                 }));
             }
         };
