@@ -1,6 +1,7 @@
-define(["jquery", "internal/Reference", "publication/Product", "enrichment/Enrichment", "util/Promise"],
-    function ($, Reference, Product, Enrichment, Promise) {
+define(["jquery", "internal/Reference", "publication/Product", "enrichment/Enrichment", "util/Promise", "util/Logger"],
+    function ($, Reference, Product, Enrichment, Promise, Logger) {
         "use strict";
+        var log = new Logger("ProductLink");
 
         /**
          * A product link, either with manually entered data or from the product database.
@@ -40,17 +41,19 @@ define(["jquery", "internal/Reference", "publication/Product", "enrichment/Enric
         };
 
         ProductLink.prototype.createDomElement = function () {
-            var scope = this,
-                element = Enrichment.prototype.createDomElement.call(this)
-                    .addClass("ProductLink");
+            var element = Enrichment.prototype.createDomElement.call(this)
+                    .addClass("ProductLink " + (this.usesProductDatabase ? "DatabaseProduct" : "ManualProduct"));
 
-            // TODO somehow avoid duplicating this from Enrichment?
             this.getProduct()
                 .done(function (product) {
                     $("<span/>")
                         .addClass("Label")
-                        .text(product.product_id /*+ (scope.usesProductDatabase ? " (DB)" : " (Manual)")*/)
+                        .text(product.product_id)
                         .appendTo(element);
+
+                    element.on("click", function () {
+                        log.info(product);
+                    });
                 });
 
             return element;

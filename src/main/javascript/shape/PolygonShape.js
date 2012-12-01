@@ -25,12 +25,10 @@ define(["jquery", "shape/Shape"],
                 return (coord.x * 100) + "," + (coord.y * 100);
             }).join(" ");
 
-            // TODO wrap in div?
-
-            // jQuery can't create and append the polygon element individually, so we have to create it as one big string.
-            return $("<svg xmlns='http://www.w3.org/2000/svg' version='1.1' viewBox='0 0 100 100'>" +
-                        "<polygon class='PolygonShape' points='" + points + "'/>" +
-                    "</svg>");
+            return Shape.prototype.createDomElement.call(this)
+                .append("<svg xmlns='http://www.w3.org/2000/svg' version='1.1' viewBox='0 0 100 100'>" +
+                            "<polygon class='PolygonShape' points='" + points + "'/>" +
+                        "</svg>");
         };
 
         PolygonShape.TYPE = "polygon";

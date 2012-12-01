@@ -36,7 +36,7 @@ define(["jquery", "shape/Shape"],
         RectangleShape.prototype = Object.create(Shape.prototype);
 
         RectangleShape.prototype.createDomElement = function () {
-            return $("<div/>")
+            return Shape.prototype.createDomElement.call(this)
                 .addClass("RectangleShape")
                 .css({
                     top: this.y * 100 + "%",
