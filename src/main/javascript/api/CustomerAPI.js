@@ -1,5 +1,5 @@
-define(["jquery", "api/PublicationAPI", "util/Logger"],
-    function ($, PublicationAPI, Logger) {
+define(["jquery", "api/PublicationAPI", "util/Logger", "util/Promise"],
+    function ($, PublicationAPI, Logger, Promise) {
         "use strict";
         var log = new Logger("CustomerAPI");
 
@@ -38,18 +38,15 @@ define(["jquery", "api/PublicationAPI", "util/Logger"],
                 .fail(function (xhr) {
                     log.error("There was a problem retrieving the publication ID list.", xhr);
                 })
-                .then(function (publicationIDs) {
-                    var deferreds = publicationIDs.map(function (publicationID) {
+                .then(function (data) {
+                    var deferreds = data.publicationIDs.map(function (publicationID) {
                         return scope.publicationAPI.getPublication(publicationID)
                             .fail(function () {
                                 log.warn("Unable to retrieve publication", publicationID);
                             });
                     });
 
-                    return $.when.apply(this, deferreds);
-                })
-                .then(function () {
-                    return $.makeArray(arguments);
+                    return Promise.any(deferreds);
                 });
         };
 

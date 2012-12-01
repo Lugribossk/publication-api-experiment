@@ -86,6 +86,8 @@ define(["jquery", "internal/Reference", "publication/Publication", "util/Promise
                         infoRecent = infoRecentResponse[0];
                     }
 
+                    // TODO Can activation status change without version being bumped?
+
                     // If we got both, use the recent publication info if it is newer.
                     if (infoRecent && info && infoRecent.version > info.version) {
                         return infoRecent;
