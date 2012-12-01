@@ -6,8 +6,8 @@ define(["jquery", "enrichment/ProductLink", "enrichment/ExternalLink", "enrichme
         /**
          * Utility class for converting untyped objects into Enrichment subclass instances.
          *
-         * @class EnrichmentParser
          * @author Bo Gotthardt
+         * @constructor
          */
         function EnrichmentParser() {}
 

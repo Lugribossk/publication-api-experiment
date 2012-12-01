@@ -13,11 +13,10 @@ define(["jquery", "util/Promise", "util/Logger"],
          *
          * <b>There should be no need to use this class when simply working with the objects returned by PublicationAPI.</b>
          *
-         * @param {Object} data The raw object to convert to a Reference object.
-         *
-         * @private
-         * @class Reference
          * @author Bo Gotthardt
+         * @constructor
+         *
+         * @param {Object} data The raw object to convert to a Reference object.
          */
         function Reference(data) {
             if (data.resourcePath) {

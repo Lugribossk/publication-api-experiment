@@ -5,10 +5,10 @@ define(["jquery", "publication/PageRepresentation", "internal/Reference", "enric
         /**
          * A page in a publication.
          *
-         * @param {Object} data The raw object to convert to a Page object.
-         *
-         * @class Page
          * @author Bo Gotthardt
+         * @constructor
+         *
+         * @param {Object} data The raw object to convert to a Page object.
          */
         function Page(data) {
             /**

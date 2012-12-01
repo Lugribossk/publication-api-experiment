@@ -4,14 +4,14 @@ define(["jquery", "api/PublicationAPI", "util/Logger", "util/Promise"],
         var log = new Logger("CustomerAPI");
 
         /**
-         * Zmags Customer API client that can be used to retrieve publications.
+         * Zmags Customer API client that can be used to retrieve publications for specific customers.
          * Also known as the "Publication<b>s</b> API".
+         *
+         * @author Bo Gotthardt
+         * @constructor
          *
          * @param {String} key The API key.
          * @param {String} [apiURL] The URL to the Customer Publication List service. Optional, defaults to the public HTTP version.
-         *
-         * @class CustomerAPI
-         * @author Bo Gotthardt
          */
         function CustomerAPI(key, apiURL) {
             this.key = key;

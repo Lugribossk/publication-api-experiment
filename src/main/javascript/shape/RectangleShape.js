@@ -5,11 +5,11 @@ define(["jquery", "shape/Shape"],
         /**
          * A rectangular shape.
          *
-         * @param {Object} data The raw API data.
-         *
-         * @class RectangleShape
          * @extends Shape
          * @author Bo Gotthardt
+         * @constructor
+         *
+         * @param {Object} data The raw API data.
          */
         function RectangleShape(data) {
             Shape.call(this, data);

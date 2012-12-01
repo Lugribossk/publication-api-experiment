@@ -5,11 +5,11 @@ define(["jquery", "shape/ShapeParser"],
         /**
          * Abstract base class for the different enrichment types.
          *
-         * @param {Object} data The raw API data.
-         *
-         * @class Enrichment
          * @abstract
          * @author Bo Gotthardt
+         * @constructor
+         *
+         * @param {Object} data The raw API data.
          */
         function Enrichment(data) {
             this.type = data.type;

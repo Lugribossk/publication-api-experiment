@@ -5,11 +5,11 @@ define(["jquery", "shape/Shape"],
         /**
          * A shape composed of other shapes.
          *
-         * @param {Object} data The raw API data.
-         *
-         * @class CompositeShape
          * @extends Shape
          * @author Bo Gotthardt
+         * @constructor
+         *
+         * @param {Object} data The raw API data.
          */
         function CompositeShape(data) {
             Shape.call(this, data);

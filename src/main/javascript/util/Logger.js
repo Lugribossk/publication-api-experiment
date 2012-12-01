@@ -3,6 +3,11 @@ define(["jquery"],
     function ($) {
         "use strict";
 
+        /**
+         * @constructor
+         *
+         * @param {String} name
+         */
         function Logger(name) {
             this.name = name;
         }

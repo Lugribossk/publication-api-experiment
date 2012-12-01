@@ -5,8 +5,10 @@ define(["jquery", "internal/Reference"],
         /**
          * A product.
          *
-         * @param data
          * @class Product
+         * @constructor
+         *
+         * @param data
          */
         function Product(data) {
             // Place the properties directly on the object so they are easier to work with.

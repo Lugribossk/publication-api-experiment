@@ -5,11 +5,11 @@ define(["jquery", "enrichment/Enrichment", "internal/Reference", "publication/Pr
         /**
          * A "buy the look" widget. Also known as "shop the look" and several other similar names.
          *
-         * @param {Object} data The raw API data.
-         *
-         * @class BuyTheLookWidget
          * @extends Enrichment
          * @author Bo Gotthardt
+         * @constructor
+         *
+         * @param {Object} data The raw API data.
          */
         function BuyTheLookWidget(data) {
             Enrichment.call(this, data);

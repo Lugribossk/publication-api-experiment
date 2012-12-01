@@ -3,9 +3,9 @@ define(["jquery", "internal/Reference"],
         "use strict";
 
         /**
+         * @constructor
          *
          * @param {Object} data
-         * @class MediaRepresentation
          */
         function MediaRepresentation(data) {
             /**

@@ -6,11 +6,11 @@ define(["jquery", "internal/Reference", "publication/Product", "enrichment/Enric
         /**
          * A product link, either with manually entered data or from the product database.
          *
-         * @param {Object} data The raw API data.
-         *
-         * @class ProductLink
          * @extends Enrichment
          * @author Bo Gotthardt
+         * @constructor
+         *
+         * @param {Object} data The raw API data.
          */
         function ProductLink(data) {
             Enrichment.call(this, data);

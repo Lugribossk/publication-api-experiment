@@ -7,10 +7,10 @@ define(["jquery", "internal/Reference", "util/Logger"],
          * The data for a visual representation of a page, i.e. the size and URL of an image of it.
          * A logical page can have many page representations, e.g. images in different sizes and formats.
          *
-         * @param {Object} data The raw object to convert to a PageRepresentation object.
-         *
-         * @class PageRepresentation
          * @author Bo Gotthardt
+         * @constructor
+         *
+         * @param {Object} data The raw object to convert to a PageRepresentation object.
          */
         function PageRepresentation(data) {
             /**

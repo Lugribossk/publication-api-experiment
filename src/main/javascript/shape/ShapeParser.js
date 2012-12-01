@@ -6,8 +6,8 @@ define(["jquery", "shape/RectangleShape", "shape/PolygonShape", "shape/Composite
         /**
          * Utility class for converting untyped objects into Shape subclass instances.
          *
-         * @class ShapeParser
          * @author Bo Gotthardt
+         * @constructor
          */
         function ShapeParser() {}
 

@@ -6,11 +6,11 @@ define(["jquery", "internal/Reference", "publication/Publication", "util/Promise
         /**
          * Zmags Publication API client that can be used to retrieve publication data.
          *
+         * @author Bo Gotthardt
+         * @constructor
+         *
          * @param {String} key The API key.
          * @param {String} [apiURL] The URL to the Publication Info service. Optional, defaults to the public HTTP version.
-         *
-         * @class PublicationAPI
-         * @author Bo Gotthardt
          */
         function PublicationAPI(key, apiURL) {
             this.key = key;

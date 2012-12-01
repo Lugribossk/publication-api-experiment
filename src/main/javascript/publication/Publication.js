@@ -6,17 +6,20 @@ define(["jquery", "internal/Reference", "publication/Page", "util/Promise", "uti
         /**
          * A Zmags publication.
          *
-         * Note that the constructor is only useful with internal data from {@link PublicationAPI}.
+         * @author Bo Gotthardt
+         * @constructor
+         *
+         * Note that this constructor is only useful with internal data from {@link PublicationAPI}.
          * Instead use {@link PublicationAPI#getPublication}.
          *
          * @param {String} id The publication ID
-         * @param {Object} info
-         * @param {Object} descriptor
-         *
-         * @class Publication
-         * @author Bo Gotthardt
+         * @param {Object} info The publication info
+         * @param {Object} descriptor The publication descriptor
          */
         function Publication(id, info, descriptor) {
+            /**
+             * {String} The ID of the publication.
+             */
             this.id = id;
             /**
              * {Number} The version number.
@@ -90,7 +93,7 @@ define(["jquery", "internal/Reference", "publication/Page", "util/Promise", "uti
          * Get the page number of the first page where the product with the specified ID is located.
          *
          * @param {String} productID The product ID.
-         * @return {Promise} A promise for the page number as a {@link Number}.
+         * @return {Promise} A promise for the page number.
          */
         Publication.prototype.getPageNumberWithProduct = function (productID) {
             if (this._productIndex) {

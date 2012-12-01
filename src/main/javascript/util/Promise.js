@@ -6,14 +6,14 @@ define(["jquery"],
         // It is actually a part of jQuery.
         /**
          * @see http://api.jquery.com/category/deferred-object/
-         * @class Promise
+         * @constructor
          */
         function Promise() {}
 
         /**
-         * @param doneFilter
-         * @param [failFilter]
-         * @param [progressFilter]
+         * @param {Function} doneFilter
+         * @param {Function} [failFilter]
+         * @param {Function} [progressFilter]
          */
         Promise.prototype.then = function (doneFilter, failFilter, progressFilter) {};
         Promise.prototype.done = function (callback) {};
