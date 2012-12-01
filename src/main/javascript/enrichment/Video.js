@@ -5,11 +5,11 @@ define(["jquery", "enrichment/Enrichment"],
         /**
          * A video enrichment.
          *
+         * @param {Object} data The raw API data.
+         *
          * @class Video
          * @extends Enrichment
          * @author Bo Gotthardt
-         *
-         * @param {Object} data
          */
         function Video(data) {
             Enrichment.call(this, data);

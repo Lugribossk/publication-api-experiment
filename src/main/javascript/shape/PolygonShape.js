@@ -5,9 +5,11 @@ define(["jquery", "shape/Shape"],
         /**
          * A polygon shape.
          *
-         * @param {Object} data
+         * @param {Object} data The raw API data.
          *
          * @class PolygonShape
+         * @extends Shape
+         * @author Bo Gotthardt
          */
         function PolygonShape(data) {
             Shape.call(this, data);

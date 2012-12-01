@@ -8,9 +8,10 @@ define(["jquery", "util/Logger"],
          * Properties related to size and positioning are expressed as number between 0 and 1, which should be
          * interpreted as a percentage relative to the page.
          *
-         * @param {Object} data
+         * @param {Object} data The raw API data.
          *
          * @class Shape
+         * @abstract
          * @author Bo Gotthardt
          */
         function Shape(data) {

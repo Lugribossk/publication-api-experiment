@@ -5,9 +5,10 @@ define(["jquery", "enrichment/Enrichment"],
         /**
          * A link that points to a page in the same publication.
          *
-         * @param {Object} data
+         * @param {Object} data The raw API data.
          *
          * @class InternalLink
+         * @extends Enrichment
          * @author Bo Gotthardt
          */
         function InternalLink(data) {

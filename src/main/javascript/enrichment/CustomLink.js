@@ -3,9 +3,13 @@ define(["jquery", "enrichment/Enrichment"],
         "use strict";
 
         /**
+         * A "custom" link, essentially just a link shape with arbitrary user-defined data.
          *
-         * @param data
+         * @param {Object} data The raw API data.
+         *
          * @class CustomLink
+         * @extends Enrichment
+         * @author Bo Gotthardt
          */
         function CustomLink(data) {
             Enrichment.call(this, data);

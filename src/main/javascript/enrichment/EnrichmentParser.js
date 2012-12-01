@@ -14,7 +14,7 @@ define(["jquery", "enrichment/ProductLink", "enrichment/ExternalLink", "enrichme
         /**
          * Construct an appropriately subclassed Enrichment instance from the specified data.
          *
-         * @param {Object} data
+         * @param {Object} data The raw API data.
          * @return {Enrichment}
          */
         EnrichmentParser.construct = function (data) {

@@ -14,7 +14,7 @@ define(["jquery", "shape/RectangleShape", "shape/PolygonShape", "shape/Composite
         /**
          * Construct an appropriately subclassed Shape instance from the specified data.
          *
-         * @param {Object} data
+         * @param {Object} data The raw API data.
          * @return {Shape}
          */
         ShapeParser.construct = function (data) {

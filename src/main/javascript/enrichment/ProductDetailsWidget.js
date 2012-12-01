@@ -3,9 +3,13 @@ define(["jquery", "enrichment/Enrichment", "internal/Reference", "publication/Pr
         "use strict";
 
         /**
+         * A product details widget. Similar to a product link, but with more advanced settings.
          *
-         * @param data
+         * @param {Object} data The raw API data.
+         *
          * @class ProductDetailsWidget
+         * @extends Enrichment
+         * @author Bo Gotthardt
          */
         function ProductDetailsWidget(data) {
             Enrichment.call(this, data);

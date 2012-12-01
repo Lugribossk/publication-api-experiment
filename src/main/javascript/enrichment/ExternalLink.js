@@ -5,9 +5,10 @@ define(["jquery", "enrichment/Enrichment"],
         /**
          * A link to an external website.
          *
-         * @param {Object} data
+         * @param {Object} data The raw API data.
          *
          * @class ExternalLink
+         * @extends Enrichment
          * @author Bo Gotthardt
          */
         function ExternalLink(data) {
