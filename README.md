@@ -6,6 +6,10 @@ An experiment in constructing a client for the Zmags Publication API from scratc
 Includes a simple diagnostic-style view of the various elements of a publication, in order to illustrate how the data can be visualized.
 Note that while this superficially resembles the viewer webapp, it is very far from it in functionality.
 
+## Getting started
+
+Open `src/main/javascript/example.html` or start reading `src/main/javascript/example.js`.
+
 ## Technical notes
 
 ### Coding conventions
@@ -23,7 +27,7 @@ Note that while this superficially resembles the viewer webapp, it is very far f
 
 ### Deferreds/promises
 - This project makes heavy use of jQuery [Deferreds](http://api.jquery.com/category/deferred-object/) (aka. "promises" or "futures") to handle the asynchronous nature
-  of the Publication API's "references".
+  of the Publication API's references.
 - Note that the jQuery documentation for Deferred#then is completely wrong. It is actually identical to Deferred#pipe.
 - Functions that return promises should document the type of the data the promise resolves with.
 - Promises are assumed to fail if the requested object could not be found, rather then resolve with null data.
