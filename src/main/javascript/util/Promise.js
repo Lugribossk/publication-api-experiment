@@ -43,45 +43,47 @@ define(["jquery"],
         };
 
         /**
-         * An improved version of $.when() that progresses when individual <b>pending</b> subordinates are done.
+         * An improved version of $.when() that progresses when individual subordinates are done and returns the values as a single list.
          *
-         * The progress event will have the same parameters as the resolved Promise, plus a final one with the percentage of subordinates that are done.
+         * The progress event will have the resolved Promise's value and the percentage of subordinates that are done as parameters.
          *
          * Note that due to the way progress() behaves, this function has a rather subtle gotcha when one or more of
          * the subordinates are done already (i.e. non-Promises or already resolved Promises).
-         * These will then generate the progress events *synchronously* while inside this function call. And unlike
+         * These will then trigger the progress events <b>synchronously</b> while inside this function call. And unlike
          * done() and fail(), progress() handlers attached later are not called with a previously triggered events.
-         * So it is therefore not guaranteed how many progress events the caller will actually get.
+         * So it is therefore not guaranteed how many progress events the caller will actually get, unless they create
+         * their own deferred, set up a progress handler and only then pass it as the combinedDeferred parameter.
          *
-         * TODO Take a deferred as input where the caller has already set up progress()?
-         *
-         * @param {Object[]} subordinates
-         * @return {Promise} The combined promise for the values of all the subordinates.
+         * @param {Object[]} subordinates The subordinates, either Promises or arbitrary values.
+         * @param {$.Deferred} [combinedDeferred] The "combined" deferred (not Promise) to use, instead of creating it internally.
+         * @return {Promise} A promise for the list of the values of all the subordinates.
+         *                   The promise interface of combinedDeferred if that was passed.
          */
-        Promise.all = function (subordinates) {
+        Promise.all = function (subordinates, combinedDeferred) {
             // We would like the returned promise to progress whenever an individual promise has resolved, but $.when() does not support that.
             // So we have to create our own deferred that can be resolved by $.when(), and progressed by done() from the individual promises.
-            var combinedDeferred = new $.Deferred(),
-                numDone = 0;
+            combinedDeferred = combinedDeferred || new $.Deferred();
+            var numDone = 0;
 
             subordinates.forEach(function (subordinate) {
                 // The subordinates can be both promises and already computed synchronous values.
                 // This is the same check as in $.when().
-                if ($.isFunction(subordinate.promise) && subordinate.state() === "pending") {
-                    subordinate.done(function () {
+                if ($.isFunction(subordinate.promise)) {
+                    subordinate.done(function (arg) {
                         numDone++;
-                        var args = $.makeArray(arguments);
-                        args.push(numDone / subordinates.length);
-                        combinedDeferred.notify.apply(this, args);
+                        combinedDeferred.notify.call(this, arg, numDone / subordinates.length);
                     });
                 } else {
-                    // Don't bother calling notify() here as no one could possibly be listening for that yet.
                     numDone++;
+                    combinedDeferred.notify.call(this, subordinate, numDone / subordinates.length);
                 }
             });
 
             $.when.apply(this, subordinates)
-                .done(combinedDeferred.resolve)
+                .done(function () {
+                    // Return the subordinates' values as one list, instead of as individual arguments.
+                    combinedDeferred.resolve($.makeArray(arguments));
+                })
                 .fail(combinedDeferred.reject);
 
             return combinedDeferred.promise();
@@ -90,8 +92,8 @@ define(["jquery"],
         /**
          * Alternative version of $.when() that always resolves with a list of the return vales of the subordinates that resolved.
          *
-         * @param {Object[]} subordinates
-         * @return {Promise}
+         * @param {Object[]} subordinates The subordinates, either Promises or arbitrary values.
+         * @return {Promise} A promise for a list of the values of the subordinates that resolved.
          */
         Promise.any = function (subordinates) {
             var combinedDeferred = new $.Deferred();

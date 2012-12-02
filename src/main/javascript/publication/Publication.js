@@ -72,7 +72,7 @@ define(["jquery", "internal/Reference", "publication/Page", "util/Promise", "uti
          */
         Publication.prototype.getPage = function (pageNumber) {
             if (pageNumber >= 1 && pageNumber <= this.numberOfPages) {
-                // The pageDescriptors array seems to have the pages in sorted order.
+                // The pageDescriptors list has the pages in sorted order.
                 return new Reference(this._pageDescriptors[pageNumber - 1]).getAs(Page);
             } else {
                 log.error("Page number", pageNumber, "out of range.");
@@ -90,11 +90,7 @@ define(["jquery", "internal/Reference", "publication/Page", "util/Promise", "uti
                 return new Reference(descriptor).getAs(Page);
             });
 
-            return $.when.apply(this, deferreds)
-                .then(function () {
-                    // We get each page as an individual argument, but would rather return them as one array.
-                    return $.makeArray(arguments);
-                });
+            return Promise.all(deferreds);
         };
 
         /**

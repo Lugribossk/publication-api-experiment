@@ -1,5 +1,5 @@
-define(["jquery", "enrichment/Enrichment", "internal/Reference", "publication/Product"],
-    function ($, Enrichment, Reference, Product) {
+define(["jquery", "enrichment/Enrichment", "internal/Reference", "publication/Product", "util/Promise"],
+    function ($, Enrichment, Reference, Product, Promise) {
         "use strict";
 
         /**
@@ -29,14 +29,11 @@ define(["jquery", "enrichment/Enrichment", "internal/Reference", "publication/Pr
          * @return {Promise} A promise for the list of {@link Product}s.
          */
         BuyTheLookWidget.prototype.getProducts = function () {
-            var deferreds = $.map(this._productDescriptors, function (descriptor) {
+            var deferreds = this._productDescriptors.map(function (descriptor) {
                 return new Reference(descriptor).getAs(Product);
             });
 
-            return $.when.apply(this, deferreds)
-                .then(function () {
-                    return $.makeArray(arguments);
-                });
+            return Promise.all(deferreds);
         };
 
         BuyTheLookWidget.prototype.createDomElement = function () {
