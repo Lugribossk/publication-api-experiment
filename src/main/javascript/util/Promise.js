@@ -54,7 +54,7 @@ define(["jquery"],
          * So it is therefore not guaranteed how many progress events the caller will actually get, unless they create
          * their own deferred, set up a progress handler and only then pass it as the combinedDeferred parameter.
          *
-         * @param {Object[]} subordinates The subordinates, either Promises or arbitrary values.
+         * @param {Object[]} subordinates The list of subordinates, either Promises or arbitrary values.
          * @param {$.Deferred} [combinedDeferred] The "combined" deferred (not Promise) to use, instead of creating it internally.
          * @return {Promise} A promise for the list of the values of all the subordinates.
          *                   The promise interface of combinedDeferred if that was passed.
@@ -92,7 +92,7 @@ define(["jquery"],
         /**
          * Alternative version of $.when() that always resolves with a list of the return vales of the subordinates that resolved.
          *
-         * @param {Object[]} subordinates The subordinates, either Promises or arbitrary values.
+         * @param {Object[]} subordinates The list of subordinates, either Promises or arbitrary values.
          * @return {Promise} A promise for a list of the values of the subordinates that resolved.
          */
         Promise.any = function (subordinates) {
@@ -110,16 +110,15 @@ define(["jquery"],
             });
 
             $.when.apply(this, subordinates)
-                .done(combinedDeferred.resolve);
-
-            return combinedDeferred
-                .then(function () {
+                .done(function () {
                     // Return the subordinates as one list, instead of as individual arguments.
-                    return $.makeArray(arguments).filter(function (item) {
+                    combinedDeferred.resolve($.makeArray(arguments).filter(function (item) {
                         // Filter out empty values caused by the resolution above.
                         return item !== undefined;
-                    });
+                    }));
                 });
+
+            return combinedDeferred.promise();
         };
 
         return Promise;
