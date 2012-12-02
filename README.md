@@ -1,7 +1,10 @@
 Publication API experiment
 ==========================
 
-TODO
+An experiment in constructing a client for the Zmags Publication API from scratch, using just the public documentation.
+
+Includes a simple diagnostic-style view of the various elements of a publication, in order to illustrate how the data can be visualized.
+Note that while this superficially resembles the viewer webapp, it is very far from it in functionality.
 
 ## Technical notes
 
@@ -14,13 +17,14 @@ TODO
 - Tolerate: plusplus, vars, nomen
 - Predefined variables: define
 
-### RequireJS
-- TODO
+### RequireJS and classes
+- RequireJS is used to split each class into its own file, and to have classes depend on each other without polluting the global namespace.
+- Each RequireJS module returns a typed class as its constructor function, rather than a raw object where one of its properties is the class.
 
 ### Deferreds/promises
 - This project makes heavy use of jQuery [Deferreds](http://api.jquery.com/category/deferred-object/) (aka. "promises" or "futures") to handle the asynchronous nature
   of the Publication API's "references".
-- Note that the jQuery documentation for Deferred#then() is completely wrong. It is actually identical to Deferred#pipe().
+- Note that the jQuery documentation for Deferred#then is completely wrong. It is actually identical to Deferred#pipe.
 - Functions that return promises should document the type of the data the promise resolves with.
 - Promises are assumed to fail if the requested object could not be found, rather then resolve with null data.
 
@@ -29,4 +33,5 @@ TODO
   simple $.extend(this, data) but then it would be quite cryptic which properties the class actually has. It also makes it
   possible to turn internal descriptor references into private variables.
 - Functions that rely on references or parsing re-do the same work every time they are called.
-  An obvious optimization would be to cache the result and delete the data it was generated from.
+  An obvious optimization would be to parse on creation and cache the result of references and delete the data they were generated from.
+  However that would make it less clear what data is retrieved from the API, and what is constructed by post-processing afterwards.
