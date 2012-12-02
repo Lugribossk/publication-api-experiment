@@ -23,11 +23,10 @@ define(["jquery", "util/Logger"],
         }
 
         Shape.prototype.createDomElement = function () {
-            var scope = this;
             return $("<div/>")
                 .on("click", function () {
-                    log.info(scope);
-                });
+                    log.info(this);
+                }.bind(this));
         };
 
         return Shape;

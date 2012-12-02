@@ -72,10 +72,12 @@ define(["jquery", "shape/ShapeParser", "util/Logger"],
         };
 
         Enrichment.prototype.createDomElement = function (label, extraClass) {
-            var element = this.getShape().createDomElement();
+            var element = this.getShape().createDomElement()
+                .addClass("Enrichment");
 
-            // addClass() doesn't work with <svg>
-            element.attr("class", element.attr("class") + " Enrichment " + (extraClass || ""));
+            if (extraClass) {
+                element.addClass(extraClass);
+            }
 
             if (label) {
                 $("<span/>")
@@ -84,10 +86,9 @@ define(["jquery", "shape/ShapeParser", "util/Logger"],
                     .appendTo(element);
             }
 
-            var scope = this;
             element.on("click", function () {
-                log.info(scope);
-            });
+                log.info(this);
+            }.bind(this));
 
             return element;
         };

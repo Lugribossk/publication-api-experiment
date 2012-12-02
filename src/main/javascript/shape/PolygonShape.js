@@ -1,7 +1,6 @@
-define(["jquery", "shape/Shape", "util/Logger"],
-    function ($, Shape, Logger) {
+define(["jquery", "shape/Shape"],
+    function ($, Shape) {
         "use strict";
-        var log = new Logger("PolygonShape");
 
         /**
          * A polygon shape.
@@ -30,16 +29,12 @@ define(["jquery", "shape/Shape", "util/Logger"],
             }).join(" ");
 
             // preserveAspectRatio=none to ensure that the svg can be rescaled freely, even if the square viewbox ends up on a non-square page.
-            var element = $("<svg xmlns='http://www.w3.org/2000/svg' version='1.1' class='PolygonShape' viewBox='0 0 100 100' preserveAspectRatio='none'>" +
-                                "<polygon points='" + points + "'/>" +
-                            "</svg>");
-
-            var scope = this;
-            element.find("polygon").on("click", function () {
-                log.info(scope);
-            });
-
-            return element;
+            // Wrap in div and insert polygon directly as string since jQuery has problems handling svgs.
+            return Shape.prototype.createDomElement.call(this)
+                .addClass("PolygonShape")
+                .append("<svg xmlns='http://www.w3.org/2000/svg' version='1.1' viewBox='0 0 100 100' preserveAspectRatio='none'>" +
+                            "<polygon points='" + points + "'/>" +
+                        "</svg>");
         };
 
         PolygonShape.TYPE = "polygon";

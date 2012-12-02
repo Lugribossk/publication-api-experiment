@@ -22,9 +22,11 @@ define(["jquery", "shape/Shape"],
         CompositeShape.prototype = Object.create(Shape.prototype);
 
         CompositeShape.prototype.createDomElement = function () {
-            this.shapes.map(function (shape) {
-                return shape.createDomElement();
-            });
+            return $("<div/>")
+                .addClass("CompositeShape")
+                .append(this.shapes.map(function (shape) {
+                    return shape.createDomElement();
+                }));
         };
 
         CompositeShape.TYPE = "composite";
