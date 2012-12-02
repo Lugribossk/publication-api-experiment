@@ -13,7 +13,7 @@ requirejs(["jquery", "api/PublicationAPI"],
         "use strict";
 
         var key = "715f663c48",
-            publicationID = "8c628bfc";
+            publicationID = "952ac7ea";
 
         var api = new PublicationAPI(key);
 

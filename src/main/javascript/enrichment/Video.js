@@ -1,5 +1,5 @@
-define(["jquery", "enrichment/Enrichment"],
-    function ($, Enrichment) {
+define(["jquery", "enrichment/Enrichment", "publication/MediaRepresentation"],
+    function ($, Enrichment, MediaRepresentation) {
         "use strict";
 
         /**
@@ -39,12 +39,37 @@ define(["jquery", "enrichment/Enrichment"],
              */
             this.externalSource = data.externalSource;
 
-            // Video sources added as this._mediaRepresentationDescriptors in Enrichment
-
-            // List of MediaRepresentations?
             this._posterImageRepresentationDescriptors = data.posterImageRepresentationDescriptors;
         }
         Video.prototype = Object.create(Enrichment.prototype);
+
+        Video.prototype.getVideoRepresentations = function () {
+            return this._mediaRepresentationDescriptors.map(function (rep) {
+                return new MediaRepresentation(rep);
+            });
+        };
+
+        Video.prototype.getPosterImages = function () {
+            return this._posterImageRepresentationDescriptors.map(function (poster) {
+                return new MediaRepresentation(poster);
+            });
+        };
+
+        Video.prototype.createDomElement = function () {
+//            var video = $("<video/>", {
+//                src: this.getVideoRepresentations()[0].getBinaryURL(),
+//                controls: this.enableControls,
+//                autoplay: this.playOnLoad,
+//                loop: this.loop
+//            })
+//                .css({
+//                    width: "100%",
+//                    height: "100%"
+//                });
+
+            return Enrichment.prototype.createDomElement.call(this, null, "Video");
+//                .append(video);
+        };
 
         Video.TYPE = "videoEnrichment";
 

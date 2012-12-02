@@ -1,6 +1,7 @@
-define(["jquery", "shape/Shape"],
-    function ($, Shape) {
+define(["jquery", "shape/Shape", "util/Logger"],
+    function ($, Shape, Logger) {
         "use strict";
+        var log = new Logger("PolygonShape");
 
         /**
          * A polygon shape.
@@ -27,10 +28,16 @@ define(["jquery", "shape/Shape"],
                 return (coord.x * 100) + "," + (coord.y * 100);
             }).join(" ");
 
-            return Shape.prototype.createDomElement.call(this)
-                .append("<svg xmlns='http://www.w3.org/2000/svg' version='1.1' viewBox='0 0 100 100'>" +
-                            "<polygon class='PolygonShape' points='" + points + "'/>" +
-                        "</svg>");
+            var element = $("<svg xmlns='http://www.w3.org/2000/svg' version='1.1' class='PolygonShape' viewBox='0 0 100 100'>" +
+                                "<polygon points='" + points + "'/>" +
+                            "</svg>");
+
+            var scope = this;
+            element.find("polygon").on("click", function () {
+                log.info(scope);
+            });
+
+            return element;
         };
 
         PolygonShape.TYPE = "polygon";

@@ -8,9 +8,19 @@ body {
 }
 
 .PolygonShape {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
     stroke: blue;
-    fill: none;
-    stroke-width:0.5;
+    fill: none;/*rgba(119, 154, 200, 0.2);*/
+    stroke-width: 0.2;
+    pointer-events: none;
+}
+
+.PolygonShape polygon {
+    pointer-events: visible;
 }
 
 .Page {
@@ -32,6 +42,10 @@ body {
 }
 
 .CustomLink {
+    outline: 1px solid blue;
+}
+
+.Video {
     outline: 1px solid blue;
 }
 

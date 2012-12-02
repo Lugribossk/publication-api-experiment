@@ -1,6 +1,7 @@
-define(["jquery", "enrichment/Enrichment", "internal/Reference", "publication/Product"],
-    function ($, Enrichment, Reference, Product) {
+define(["jquery", "enrichment/Enrichment", "internal/Reference", "publication/Product", "util/Logger"],
+    function ($, Enrichment, Reference, Product, Logger) {
         "use strict";
+        var log = new Logger("ProductDetailsWidget");
 
         /**
          * A product details widget. Similar to a product link, but with more advanced settings.
@@ -32,9 +33,16 @@ define(["jquery", "enrichment/Enrichment", "internal/Reference", "publication/Pr
         };
 
         ProductDetailsWidget.prototype.createDomElement = function () {
-            // TODO Product ID label?
-            return Enrichment.prototype.createDomElement.call(this)
-                .addClass("ProductDetailsWidget");
+            var element = Enrichment.prototype.createDomElement.call(this, null, "ProductDetailsWidget");
+
+            this.getProduct()
+                .done(function (product) {
+                    element.on("click", function () {
+                        log.info(product);
+                    });
+                });
+
+            return element;
         };
 
         ProductDetailsWidget.prototype.hasProduct = true;

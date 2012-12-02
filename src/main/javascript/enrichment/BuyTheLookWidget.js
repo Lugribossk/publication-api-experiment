@@ -20,7 +20,6 @@ define(["jquery", "enrichment/Enrichment", "internal/Reference", "publication/Pr
             this.shapeEnabled = data.shapeEnabled;
 
             this._productDescriptors = data.productDescriptors;
-//            this._mediaRepresentationDescriptors = data.mediaRepresentationDescriptors;
         }
         BuyTheLookWidget.prototype = Object.create(Enrichment.prototype);
 
@@ -41,9 +40,7 @@ define(["jquery", "enrichment/Enrichment", "internal/Reference", "publication/Pr
         };
 
         BuyTheLookWidget.prototype.createDomElement = function () {
-            // TODO Product IDs label?
-            return Enrichment.prototype.createDomElement.call(this)
-                .addClass("ProductDetailsWidget");
+            return Enrichment.prototype.createDomElement.call(this, null, "BuyTheLookWidget");
         };
 
         // TODO hasProducts = true ?

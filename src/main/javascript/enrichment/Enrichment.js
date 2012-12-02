@@ -1,6 +1,7 @@
-define(["jquery", "shape/ShapeParser"],
-    function ($, ShapeParser) {
+define(["jquery", "shape/ShapeParser", "util/Logger"],
+    function ($, ShapeParser, Logger) {
         "use strict";
+        var log = new Logger("Enrichment");
 
         /**
          * Abstract base class for the different enrichment types.
@@ -32,9 +33,11 @@ define(["jquery", "shape/ShapeParser"],
             return ShapeParser.construct(this._shape);
         };
 
-        Enrichment.prototype.createDomElement = function (label) {
-            var element = this.getShape().createDomElement()
-                .addClass("Enrichment");
+        Enrichment.prototype.createDomElement = function (label, extraClass) {
+            var element = this.getShape().createDomElement();
+
+            // addClass() doesn't work with <svg>
+            element.attr("class", element.attr("class") + " Enrichment " + (extraClass || ""));
 
             if (label) {
                 $("<span/>")
@@ -42,6 +45,11 @@ define(["jquery", "shape/ShapeParser"],
                     .text(label)
                     .appendTo(element);
             }
+
+            var scope = this;
+            element.on("click", function () {
+                log.info(scope);
+            });
 
             return element;
         };
