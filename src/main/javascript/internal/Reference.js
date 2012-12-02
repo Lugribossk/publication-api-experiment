@@ -84,8 +84,7 @@ define(["jquery", "util/Promise", "util/Logger"],
          * @return {Promise} A promise for the reference data as an {@link Object}.
          */
         Reference.prototype.get = function () {
-            var scope = this,
-                promise;
+            var promise;
             if (this._resourcePath) {
                 promise = $.get(baseURL + this._resourcePath).promise();
             } else if (this._resourceURL) {
@@ -98,8 +97,8 @@ define(["jquery", "util/Promise", "util/Logger"],
 
             return promise
                 .fail(function () {
-                    log.error("Unable to resolve reference", scope);
-                });
+                    log.error("Unable to resolve reference", this);
+                }.bind(this));
         };
 
         /**
@@ -152,6 +151,7 @@ define(["jquery", "util/Promise", "util/Logger"],
          * Set the base URL used to resolve "resourcePath" and "bundlePath" references.
          * <b>Must</b> be set after publication info has been retrieved.
          *
+         * @static
          * @param {String} url The base URL
          */
         Reference.setBaseURL = function (url) {

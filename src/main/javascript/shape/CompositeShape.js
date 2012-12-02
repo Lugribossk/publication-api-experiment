@@ -29,6 +29,12 @@ define(["jquery", "shape/Shape"],
                 }));
         };
 
+        /**
+         * The API type value for this kind of shape.
+         * @static
+         * @const
+         * @type {string}
+         */
         CompositeShape.TYPE = "composite";
 
         return CompositeShape;

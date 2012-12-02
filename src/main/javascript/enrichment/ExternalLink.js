@@ -31,6 +31,12 @@ define(["jquery", "enrichment/Enrichment"],
                 .addClass("ExternalLink");
         };
 
+        /**
+         * The API type value for this kind of enrichment.
+         * @static
+         * @const
+         * @type {string}
+         */
         ExternalLink.TYPE =  "externalLink";
 
         return ExternalLink;

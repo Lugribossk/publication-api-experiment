@@ -51,8 +51,12 @@ define(["jquery", "enrichment/Enrichment", "internal/Reference", "publication/Pr
             return element;
         };
 
-        // TODO hasProducts = true ?
-
+        /**
+         * The API type value for this kind of enrichment.
+         * @static
+         * @const
+         * @type {string}
+         */
         BuyTheLookWidget.TYPE = "buyTheLookWidget";
 
         return BuyTheLookWidget;

@@ -26,6 +26,12 @@ define(["jquery", "enrichment/Enrichment"],
                 .addClass("InternalLink");
         };
 
+        /**
+         * The API type value for this kind of enrichment.
+         * @static
+         * @const
+         * @type {string}
+         */
         InternalLink.TYPE = "internalLink";
 
         return InternalLink;

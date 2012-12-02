@@ -94,9 +94,10 @@ define(["jquery", "publication/PageRepresentation", "internal/Reference", "enric
                 .then(function (enrichments) {
                     // Then get the products for those of the enrichments that have them.
                     var deferreds = $.map(enrichments, function (enrichment) {
-                        if (enrichment.hasProduct) {
+                        if (enrichment.getProduct) {
                             return enrichment.getProduct();
                         }
+                        // TODO BTL widgets?
                     });
 
                     return $.when.apply(this, deferreds);
