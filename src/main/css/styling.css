@@ -5,6 +5,7 @@ body {
 .RectangleShape {
     position: absolute;
     overflow: hidden; /* To avoid .Label being too wide */
+    outline: 1px solid;
 }
 
 .PolygonShape {
@@ -13,8 +14,7 @@ body {
     bottom: 0;
     left: 0;
     right: 0;
-    stroke: blue;
-    fill: none;/*rgba(119, 154, 200, 0.2);*/
+    fill: none;
     stroke-width: 0.2;
     pointer-events: none;
 }
@@ -23,30 +23,41 @@ body {
     pointer-events: visible;
 }
 
-.Page {
-    position: relative; /* To allow absolute positioning inside it. */
+.ProductLink.ManualProduct {
+    outline-color: blue;
 }
 
-.ProductLink {
-    outline: 1px solid blue;
-    /*border: 3px solid blue;*/
-    /*box-sizing:border-box;*/
+.ProductLink.DatabaseProduct {
+    outline-color: blue;
 }
 
 .ExternalLink {
-    outline: 1px solid blue;
+    outline-color: blue;
 }
 
 .InternalLink {
-    outline: 1px solid blue;
+    outline-color: blue;
 }
 
 .CustomLink {
-    outline: 1px solid blue;
+    outline-color: blue;
 }
 
 .Video {
-    outline: 1px solid blue;
+    outline-color: blue;
+}
+
+.ProductDetailsWidget {
+    stroke: blue;
+}
+
+.BuyTheLookWidget {
+    stroke: blue;
+}
+
+
+.Page {
+    position: relative; /* To allow absolute positioning inside it. */
 }
 
 .PageRepresentation {
