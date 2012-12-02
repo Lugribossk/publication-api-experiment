@@ -13,13 +13,38 @@ define(["jquery", "shape/ShapeParser", "util/Logger"],
          * @param {Object} data The raw API data.
          */
         function Enrichment(data) {
+            /**
+             * The type of enrichment.
+             * @type {String}
+             */
             this.type = data.type;
+            /**
+             * The first page the enrichment is on.
+             * @type {Number}
+             */
             this.firstPageNumber = data.firstPageNumber;
+            /**
+             * The last page the enrichment is on.
+             * This will only be different from firstPageNumber for "page-spanning" enrichments.
+             * @type {Number}
+             */
             this.lastPageNumber = data.lastPageNumber;
 
             // non-widget, non-video
+            /**
+             * The enrichment's hex color, in base 10.
+             * @type {Number}
+             */
             this.color = data.color;
+            /**
+             * The opacity, between 0 (transparent) and 100 (solid).
+             * @type {Number}
+             */
             this.opacity = data.opacity;
+            /**
+             * The enrichment "effect", see {@link Enrichment.EffectTypes}
+             * @type {String}
+             */
             this.effect = data.effect;
 
             // optional
@@ -31,6 +56,19 @@ define(["jquery", "shape/ShapeParser", "util/Logger"],
 
         Enrichment.prototype.getShape = function () {
             return ShapeParser.construct(this._shape);
+        };
+
+        /**
+         * Get this enrichment's color as a CSS string (i.e. "#123abc").
+         *
+         * @return {String} The color, or null if it does not have one.
+         */
+        Enrichment.prototype.getCSSColor = function () {
+            if (this.color !== undefined) {
+                return "#" + this.color.toString(16);
+            } else {
+                return null;
+            }
         };
 
         Enrichment.prototype.createDomElement = function (label, extraClass) {

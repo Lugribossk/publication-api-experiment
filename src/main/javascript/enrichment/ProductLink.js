@@ -15,7 +15,8 @@ define(["jquery", "internal/Reference", "publication/Product", "enrichment/Enric
         function ProductLink(data) {
             Enrichment.call(this, data);
             /**
-             * {Boolean} Whether this link's data comes from the product database, rather than being manually entered.
+             * Whether this link's data comes from the product database, rather than being manually entered.
+             * @type {Boolean}
              */
             this.usesProductDatabase = data.usesProductDatabase;
 

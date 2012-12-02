@@ -15,7 +15,8 @@ define(["jquery", "shape/Shape", "util/Logger"],
         function PolygonShape(data) {
             Shape.call(this, data);
             /**
-             * {Object[]} A list of coordinate objects, each with x and y properties with a value between 0-1.
+             * A list of coordinate objects, each with x and y properties with a value between 0 and 1.
+             * @type {Object[]}
              */
             this.coordinates = data.coordinates;
         }

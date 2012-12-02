@@ -14,11 +14,13 @@ define(["jquery", "enrichment/Enrichment"],
         function ExternalLink(data) {
             Enrichment.call(this, data);
             /**
-             * {String} The window to open the URL in.
+             * The window to open the URL in.
+             * @type {String}
              */
             this.target = data.target;
             /**
-             * {String} The external link URL.
+             * The external link URL.
+             * @type {String}
              */
             this.url = data.url;
         }

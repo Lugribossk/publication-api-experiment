@@ -12,11 +12,13 @@ define(["jquery", "publication/PageRepresentation", "internal/Reference", "enric
          */
         function Page(data) {
             /**
-             * {Number} The page number. The first page is page <b>1</b>, not 0.
+             * The page number. The first page is page <b>1</b>, not 0.
+             * @type {Number}
              */
             this.pageNumber = data.pageNumber;
             /**
-             * {String} The page label.
+             * The page label.
+             * @type {String}
              */
             this.pageLabel = data.pageLabel;
 

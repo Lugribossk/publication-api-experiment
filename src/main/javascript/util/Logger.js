@@ -9,11 +9,11 @@ define(["jquery"],
          * @param {String} name
          */
         function Logger(name) {
-            this.name = name;
+            this._name = name;
         }
 
         function blah(scope, args) {
-            return ["[" + scope.name + "]"].concat($.makeArray(args));
+            return ["[" + scope._name + "]"].concat($.makeArray(args));
         }
 
         Logger.prototype.info = function () {

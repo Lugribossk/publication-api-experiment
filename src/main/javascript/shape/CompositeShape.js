@@ -14,7 +14,8 @@ define(["jquery", "shape/Shape"],
         function CompositeShape(data) {
             Shape.call(this, data);
             /**
-             * {Shape[]} The shapes this consists of.
+             * The shapes this consists of.
+             * @type {Shape[]}
              */
             this.shapes = data.shapes;
         }

@@ -14,28 +14,28 @@ define(["jquery", "enrichment/Enrichment", "publication/MediaRepresentation"],
         function Video(data) {
             Enrichment.call(this, data);
             /**
-             * {Boolean}
+             * @type {Boolean}
              */
             this.playOnLoad = data.playOnLoad;
             /**
-             * {Boolean}
+             * @type {Boolean}
              */
             this.enableControls = data.enableControls;
             /**
-             * {Boolean}
+             * @type {Boolean}
              */
             this.showWhenHovering = data.showWhenHovering;
             /**
-             * {Boolean}
+             * @type {Boolean}
              */
             this.loop = data.loop;
 
             /**
-             * {Boolean}
+             * @type {Boolean}
              */
             this.usesExternalSource = data.usesExternalSource;
             /**
-             * {String}
+             * @type {String}
              */
             this.externalSource = data.externalSource;
 

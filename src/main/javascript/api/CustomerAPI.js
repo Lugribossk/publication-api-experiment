@@ -14,9 +14,9 @@ define(["jquery", "api/PublicationAPI", "util/Logger", "util/Promise"],
          * @param {String} [apiURL] The URL to the Customer Publication List service. Optional, defaults to the public HTTP version.
          */
         function CustomerAPI(key, apiURL) {
-            this.key = key;
-            this.apiURL = apiURL || CustomerAPI.APIUrl.HTTP;
-            this.publicationAPI = new PublicationAPI(key);
+            this._key = key;
+            this._apiURL = apiURL || CustomerAPI.APIUrl.HTTP;
+            this._publicationAPI = new PublicationAPI(key);
         }
 
         /**
@@ -30,9 +30,9 @@ define(["jquery", "api/PublicationAPI", "util/Logger", "util/Promise"],
             var scope = this;
 
             return $.ajax({
-                url: this.apiURL + customerID,
+                url: this._apiURL + customerID,
                 data: {
-                    key: this.key
+                    key: this._key
                 }
             })
                 .fail(function (xhr) {
@@ -40,7 +40,7 @@ define(["jquery", "api/PublicationAPI", "util/Logger", "util/Promise"],
                 })
                 .then(function (data) {
                     var deferreds = data.publicationIDs.map(function (publicationID) {
-                        return scope.publicationAPI.getPublication(publicationID)
+                        return scope._publicationAPI.getPublication(publicationID)
                             .fail(function () {
                                 log.warn("Unable to retrieve publication", publicationID);
                             });

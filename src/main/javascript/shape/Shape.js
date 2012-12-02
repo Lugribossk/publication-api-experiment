@@ -16,7 +16,8 @@ define(["jquery", "util/Logger"],
          */
         function Shape(data) {
             /**
-             * {String} The type of this shape.
+             * The type of shape.
+             * @type {String}
              */
             this.type = data.type;
         }

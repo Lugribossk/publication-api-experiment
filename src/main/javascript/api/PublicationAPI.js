@@ -13,8 +13,8 @@ define(["jquery", "internal/Reference", "publication/Publication", "util/Promise
          * @param {String} [apiURL] The URL to the Publication Info service. Optional, defaults to the public HTTP version.
          */
         function PublicationAPI(key, apiURL) {
-            this.key = key;
-            this.apiURL = apiURL || PublicationAPI.APIUrl.HTTP;
+            this._key = key;
+            this._apiURL = apiURL || PublicationAPI.APIUrl.HTTP;
         }
 
         /**
@@ -26,9 +26,9 @@ define(["jquery", "internal/Reference", "publication/Publication", "util/Promise
          */
         function getPublicationInfoCached(scope, publicationID) {
             return $.ajax({
-                url: scope.apiURL + publicationID,
+                url: scope._apiURL + publicationID,
                 data: {
-                    key: scope.key
+                    key: scope._key
                 }
             })
                 .then(null, function (xhr) {
@@ -46,9 +46,9 @@ define(["jquery", "internal/Reference", "publication/Publication", "util/Promise
          */
         function getPublicationInfoRecent(scope, publicationID) {
             return $.ajax({
-                url: scope.apiURL + publicationID,
+                url: scope._apiURL + publicationID,
                 data: {
-                    key: scope.key,
+                    key: scope._key,
                     recent: true
                 },
                 // Set a timeout as the recent response may be slow due to not being cached as well.

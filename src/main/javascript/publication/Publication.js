@@ -18,37 +18,45 @@ define(["jquery", "internal/Reference", "publication/Page", "util/Promise", "uti
          */
         function Publication(id, info, descriptor) {
             /**
-             * {String} The ID of the publication.
+             * The ID of the publication.
+             * @type {String}
              */
             this.id = id;
             /**
-             * {Number} The version number.
+             * The version number.
+             * @type {Number}
              */
             this.version = info.version;
             /**
-             * {Boolean} Whether the publication has expired.
+             * Whether the publication has expired.
+             * @type {Boolean}
              */
             this.expired = info.expired;
             /**
-             * {Boolean} Whether the publication is activated.
+             * Whether the publication is activated.
+             * @type {Boolean}
              */
             this.activated = info.activated;
             /**
-             * {String} The name of the publication.
+             * The name of the publication.
+             * @type {String}
              */
             this.name = descriptor.name;
             /**
-             * {Number} The number of pages in the publication.
+             * The number of pages in the publication.
+             * @type {Number}
              */
             this.numberOfPages = descriptor.numberOfPages;
             /**
-             * {Number} The aspect ratio of the pages in the publication, as width / height.
+             * The aspect ratio of the pages in the publication, as width / height.
+             * @type {Number}
              */
             this.pageAspectRatio = descriptor.pageAspectRatio;
             /**
-             * {Boolean} Whether the first page is a cover page.
+             * Whether the first page is a cover page.
              * For publications where two pages are displayed in a magazine-like spread, this determines if
              * the first page stands alone on the right, rather than being together with page 2.
+             * @type {Boolean}
              */
             this.firstPageIsCoverPage = descriptor.firstPageIsCoverPage;
 

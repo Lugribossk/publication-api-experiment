@@ -14,23 +14,28 @@ define(["jquery", "shape/Shape"],
         function RectangleShape(data) {
             Shape.call(this, data);
             /**
-             * {Number} Top left corner x-coordinate, between 0-1.
+             * Top left corner x-coordinate, between 0 and 1.
+             * @type {Number}
              */
             this.x = data.x;
             /**
-             * {Number} Top left corner y-coordinate, between 0-1.
+             * Top left corner y-coordinate, between 0 and 1.
+             * @type {Number}
              */
             this.y = data.y;
             /**
-             * {Number} Height, between 0-1.
+             * Height, between 0 and 1.
+             * @type {Number}
              */
             this.height = data.height;
             /**
-             * {Number} Width, between 0-1.
+             * Width, between 0 and 1.
+             * @type {Number}
              */
             this.width = data.width;
             /**
-             * {Number} Rotation in degrees, between -180-180.
+             * Rotation in degrees, between -180 and 180.
+             * @type {Number}
              */
             this.rotation = data.rotation;
         }

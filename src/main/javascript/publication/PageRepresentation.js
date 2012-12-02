@@ -14,19 +14,23 @@ define(["jquery", "internal/Reference", "util/Logger"],
          */
         function PageRepresentation(data) {
             /**
-             * {Number} The width.
+             * The width.
+             * @type {Number}
              */
             this.width = data.width;
             /**
-             * {Number} The height.
+             * The height.
+             * @type {Number}
              */
             this.height = data.height;
             /**
-             * {Number} The size of the resource in bytes.
+             * The size of the resource in bytes.
+             * @type {Number}
              */
             this.size = data.size;
             /**
-             * {PageRepresentation.Type} The type of representation.
+             * The type of representation, see {@link PageRepresentation.Type}
+             * @type {String}
              */
             this.type = data.type;
 

@@ -14,8 +14,8 @@ define(["jquery", "enrichment/Enrichment"],
         function CustomLink(data) {
             Enrichment.call(this, data);
             /**
-             * {String
-             * @type {*}
+             * The custom value as a plain object.
+             * @type {Object}
              */
             this.value = data.value;
         }

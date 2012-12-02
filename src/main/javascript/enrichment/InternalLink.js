@@ -14,7 +14,8 @@ define(["jquery", "enrichment/Enrichment"],
         function InternalLink(data) {
             Enrichment.call(this, data);
             /**
-             * {Number} The page number linked to.
+             * The page number linked to.
+             * @type {Number}
              */
             this.targetPageNumber = data.targetPageNumber;
         }

@@ -13,11 +13,13 @@ define(["jquery", "internal/Reference"],
              */
             this.type = data.type;
             /**
-             * {String} The file MIME type.
+             * The file MIME type.
+             * @type {String}
              */
             this.contentType = data.contentType;
             /**
-             * {Number} The file size in bytes.
+             * The file size in bytes.
+             * @type {Number}
              */
             this.size = data.size;
 
