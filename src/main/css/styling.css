@@ -16,6 +16,7 @@ body {
     right: 0;
     fill: none;
     stroke-width: 0.2;
+    fill-rule: evenodd; /* This appears to be the fill rule used in Enriched. */
     pointer-events: none;
 }
 
