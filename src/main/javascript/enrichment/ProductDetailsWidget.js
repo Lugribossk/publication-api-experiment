@@ -33,7 +33,8 @@ define(["jquery", "enrichment/Enrichment", "internal/Reference", "publication/Pr
         };
 
         ProductDetailsWidget.prototype.createDomElement = function () {
-            var element = Enrichment.prototype.createDomElement.call(this, null, "ProductDetailsWidget");
+            var element = Enrichment.prototype.createDomElement.call(this)
+                .addClass("ProductDetailsWidget");
 
             this.getProduct()
                 .done(function (product) {

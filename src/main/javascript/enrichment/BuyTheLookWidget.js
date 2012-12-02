@@ -40,7 +40,8 @@ define(["jquery", "enrichment/Enrichment", "internal/Reference", "publication/Pr
         };
 
         BuyTheLookWidget.prototype.createDomElement = function () {
-            return Enrichment.prototype.createDomElement.call(this, null, "BuyTheLookWidget");
+            return Enrichment.prototype.createDomElement.call(this)
+                .addClass("BuyTheLookWidget");
         };
 
         // TODO hasProducts = true ?

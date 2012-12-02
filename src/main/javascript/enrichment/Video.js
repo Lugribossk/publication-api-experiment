@@ -60,14 +60,16 @@ define(["jquery", "enrichment/Enrichment", "publication/MediaRepresentation"],
 //                src: this.getVideoRepresentations()[0].getBinaryURL(),
 //                controls: this.enableControls,
 //                autoplay: this.playOnLoad,
-//                loop: this.loop
+//                loop: this.loop,
+//                poster: this.getPosterImages()[0].getBinaryURL()
 //            })
 //                .css({
 //                    width: "100%",
 //                    height: "100%"
 //                });
 
-            return Enrichment.prototype.createDomElement.call(this, null, "Video");
+            return Enrichment.prototype.createDomElement.call(this)
+                .addClass("Video");
 //                .append(video);
         };
 

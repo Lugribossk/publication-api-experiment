@@ -71,13 +71,9 @@ define(["jquery", "shape/ShapeParser", "util/Logger"],
             }
         };
 
-        Enrichment.prototype.createDomElement = function (label, extraClass) {
+        Enrichment.prototype.createDomElement = function (label) {
             var element = this.getShape().createDomElement()
                 .addClass("Enrichment");
-
-            if (extraClass) {
-                element.addClass(extraClass);
-            }
 
             if (label) {
                 $("<span/>")
