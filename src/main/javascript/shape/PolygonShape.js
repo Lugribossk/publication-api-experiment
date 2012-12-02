@@ -28,7 +28,8 @@ define(["jquery", "shape/Shape", "util/Logger"],
                 return (coord.x * 100) + "," + (coord.y * 100);
             }).join(" ");
 
-            var element = $("<svg xmlns='http://www.w3.org/2000/svg' version='1.1' class='PolygonShape' viewBox='0 0 100 100'>" +
+            // preserveAspectRatio=none to ensure that the svg can be rescaled freely, even if the square viewbox ends up on a non-square page.
+            var element = $("<svg xmlns='http://www.w3.org/2000/svg' version='1.1' class='PolygonShape' viewBox='0 0 100 100' preserveAspectRatio='none'>" +
                                 "<polygon points='" + points + "'/>" +
                             "</svg>");
 
