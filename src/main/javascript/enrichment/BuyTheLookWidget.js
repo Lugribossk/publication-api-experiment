@@ -55,7 +55,7 @@ define(["jquery", "enrichment/Enrichment", "internal/Reference", "publication/Pr
          * The API type value for this kind of enrichment.
          * @static
          * @const
-         * @type {string}
+         * @type {String}
          */
         BuyTheLookWidget.TYPE = "buyTheLookWidget";
 

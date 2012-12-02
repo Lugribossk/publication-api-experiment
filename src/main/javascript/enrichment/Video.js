@@ -77,7 +77,7 @@ define(["jquery", "enrichment/Enrichment", "publication/MediaRepresentation"],
          * The API type value for this kind of enrichment.
          * @static
          * @const
-         * @type {string}
+         * @type {String}
          */
         Video.TYPE = "videoEnrichment";
 
