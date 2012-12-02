@@ -1,6 +1,7 @@
-define(["jquery", "enrichment/Enrichment", "internal/Reference", "publication/Product", "util/Promise"],
-    function ($, Enrichment, Reference, Product, Promise) {
+define(["jquery", "enrichment/Enrichment", "internal/Reference", "publication/Product", "util/Promise", "util/Logger"],
+    function ($, Enrichment, Reference, Product, Promise, Logger) {
         "use strict";
+        var log = new Logger("BuyTheLookWidget");
 
         /**
          * A "buy the look" widget. Also known as "shop the look" and several other similar names.
@@ -37,8 +38,17 @@ define(["jquery", "enrichment/Enrichment", "internal/Reference", "publication/Pr
         };
 
         BuyTheLookWidget.prototype.createDomElement = function () {
-            return Enrichment.prototype.createDomElement.call(this)
+            var element = Enrichment.prototype.createDomElement.call(this)
                 .addClass("BuyTheLookWidget");
+
+            element.on("click", function () {
+                this.getProducts()
+                    .done(function (products) {
+                        log.info(products);
+                    });
+            }.bind(this));
+
+            return element;
         };
 
         // TODO hasProducts = true ?

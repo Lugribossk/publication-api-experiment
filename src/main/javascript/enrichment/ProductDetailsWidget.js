@@ -36,12 +36,12 @@ define(["jquery", "enrichment/Enrichment", "internal/Reference", "publication/Pr
             var element = Enrichment.prototype.createDomElement.call(this)
                 .addClass("ProductDetailsWidget");
 
-            this.getProduct()
-                .done(function (product) {
-                    element.on("click", function () {
+            element.on("click", function () {
+                this.getProduct()
+                    .done(function (product) {
                         log.info(product);
                     });
-                });
+            }.bind(this));
 
             return element;
         };
