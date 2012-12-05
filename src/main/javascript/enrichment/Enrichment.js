@@ -64,11 +64,10 @@ define(["jquery", "shape/ShapeParser", "util/Logger"],
          * @return {String} The color, or null if it does not have one.
          */
         Enrichment.prototype.getCSSColor = function () {
-            if (this.color !== undefined) {
-                return "#" + this.color.toString(16);
-            } else {
+            if (this.color === undefined) {
                 return null;
             }
+            return "#" + this.color.toString(16);
         };
 
         Enrichment.prototype.createDomElement = function (label) {

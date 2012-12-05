@@ -71,13 +71,12 @@ define(["jquery", "internal/Reference", "publication/Page", "util/Promise", "uti
          * @return {Promise} A promise for the {@link Page}.
          */
         Publication.prototype.getPage = function (pageNumber) {
-            if (pageNumber >= 1 && pageNumber <= this.numberOfPages) {
-                // The pageDescriptors list has the pages in sorted order.
-                return new Reference(this._pageDescriptors[pageNumber - 1]).getAs(Page);
-            } else {
+            if (pageNumber < 1 || pageNumber > this.numberOfPages) {
                 log.error("Page number", pageNumber, "out of range.");
                 return Promise.rejected();
             }
+            // The pageDescriptors list has the pages in sorted order.
+            return new Reference(this._pageDescriptors[pageNumber - 1]).getAs(Page);
         };
 
         /**
@@ -100,42 +99,38 @@ define(["jquery", "internal/Reference", "publication/Page", "util/Promise", "uti
          * @return {Promise} A promise for the page number.
          */
         Publication.prototype.getPageNumberWithProduct = function (productID) {
-            if (this._productIndex) {
-                // productIndex actually points to a "part index".
-                return new Reference(this._productIndex).get()
-                    .then(function (partIndex) {
-                        // We then use this to look up which part the product is in.
-                        var correctPart = null;
-                        $.each(partIndex, function (i, part) {
-                            if (productID >= part.from && productID <= part.to) {
-                                correctPart = part;
-                                return false;
-                            } else {
-                                return true;
-                            }
-                        });
-                        if (!correctPart) {
-                            // The product ID does not exist in the publication.
-                            return Promise.rejected();
-                        }
-
-                        // Which has a reference pointing to an "index part".
-                        return new Reference(correctPart.indexPart).get();
-                    })
-                    .then(function (indexPart) {
-                        // Where we can finally look up the product ID.
-                        var pageNumber = indexPart[productID];
-                        if (pageNumber) {
-                            return pageNumber;
-                        } else {
-                            // It should have been found since the index said it was on that page.
-                            log.warn("Inconsistent product index behavior for product ID", productID);
-                            return Promise.rejected();
-                        }
-                    });
-            } else {
+            if (!this._productIndex) {
                 return Promise.rejected();
             }
+            // productIndex actually points to a "part index".
+            return new Reference(this._productIndex).get()
+                .then(function (partIndex) {
+                    // We then use this to look up which part the product is in.
+                    var correctPart = null;
+                    $.each(partIndex, function (i, part) {
+                        if (productID >= part.from && productID <= part.to) {
+                            correctPart = part;
+                            return false;
+                        }
+                    });
+                    if (!correctPart) {
+                        // The product ID does not exist in the publication.
+                        return Promise.rejected();
+                    }
+
+                    // Which has a reference pointing to an "index part".
+                    return new Reference(correctPart.indexPart).get();
+                })
+                .then(function (indexPart) {
+                    // Where we can finally look up the product ID.
+                    var pageNumber = indexPart[productID];
+                    if (!pageNumber) {
+                        // It should have been found since the index said it was on that page.
+                        log.warn("Inconsistent product index behavior for product ID", productID);
+                        return Promise.rejected();
+                    }
+                    return pageNumber;
+                });
         };
 
         /**

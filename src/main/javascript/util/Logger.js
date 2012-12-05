@@ -31,6 +31,8 @@ define(["jquery"],
         Logger.prototype.assert = function (condition) {
             if (!condition) {
                 this.error.apply(this, $.makeArray(arguments).slice(1));
+                // This debugger statement is allowed to stay in as it's part of the assert functionality.
+                /*jslint debug:true*/
                 debugger;
             }
         };

@@ -18,23 +18,23 @@ define(["jquery", "enrichment/ProductLink", "enrichment/ExternalLink", "enrichme
          * @return {Enrichment}
          */
         EnrichmentParser.construct = function (data) {
-            var type = data.type;
-            if (type === ProductLink.TYPE) {
+            switch (data.type) {
+            case ProductLink.TYPE:
                 return new ProductLink(data);
-            } else if (type === ExternalLink.TYPE) {
+            case ExternalLink.TYPE:
                 return new ExternalLink(data);
-            } else if (type === InternalLink.TYPE) {
+            case InternalLink.TYPE:
                 return new InternalLink(data);
-            } else if (type === CustomLink.TYPE) {
+            case CustomLink.TYPE:
                 return new CustomLink(data);
-            } else if (type === ProductDetailsWidget.TYPE) {
+            case ProductDetailsWidget.TYPE:
                 return new ProductDetailsWidget(data);
-            } else if (type === BuyTheLookWidget.TYPE) {
+            case BuyTheLookWidget.TYPE:
                 return new BuyTheLookWidget(data);
-            } else if (type === Video.TYPE) {
+            case Video.TYPE:
                 return new Video(data);
-            } else {
-                log.error("Unknown enrichment type", type);
+            default:
+                log.error("Unknown enrichment type", data.type);
                 return null;
             }
         };

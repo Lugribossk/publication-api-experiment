@@ -104,9 +104,8 @@ define(["jquery"],
                     return subordinate.then(null, function () {
                         return Promise.resolved();
                     });
-                } else {
-                    return subordinate;
                 }
+                return subordinate;
             });
 
             $.when.apply(this, subordinates)

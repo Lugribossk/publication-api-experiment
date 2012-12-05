@@ -69,13 +69,12 @@ define(["jquery", "util/Promise", "util/Logger"],
             var cachedBundlePart = getBundlePart(path, part);
             if (cachedBundlePart) {
                 return Promise.resolved(cachedBundlePart);
-            } else {
-                return $.get(baseURL + path)
-                    .then(function (bundle) {
-                        saveBundle(path, bundle);
-                        return getBundlePart(path, part);
-                    });
             }
+            return $.get(baseURL + path)
+                .then(function (bundle) {
+                    saveBundle(path, bundle);
+                    return getBundlePart(path, part);
+                });
         }
 
         /**
@@ -139,12 +138,12 @@ define(["jquery", "util/Promise", "util/Logger"],
         Reference.prototype.getBinaryURL = function () {
             if (this._resourcePath) {
                 return baseURL + this._resourcePath;
-            } else if (this._resourceURL) {
-                return this._resourceURL;
-            } else {
-                log.error("Unable to get binary URL for bundle path/part reference type.");
-                return null;
             }
+            if (this._resourceURL) {
+                return this._resourceURL;
+            }
+            log.error("Unable to get binary URL for bundle path/part reference type.");
+            return null;
         };
 
         /**

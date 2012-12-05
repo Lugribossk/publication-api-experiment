@@ -91,9 +91,8 @@ define(["jquery", "internal/Reference", "publication/Publication", "util/Promise
                     // If we got both, use the recent publication info if it is newer.
                     if (infoRecent && info && infoRecent.version > info.version) {
                         return infoRecent;
-                    } else {
-                        return info || infoRecent || Promise.rejected();
                     }
+                    return info || infoRecent || Promise.rejected();
                 })
                 .done(function (info) {
                     // Set the Reference base URL, hopefully it won't change between publications.
@@ -111,12 +110,11 @@ define(["jquery", "internal/Reference", "publication/Publication", "util/Promise
          * @return {Promise} A promise for the publication descriptor.
          */
         function getPublicationDescriptor(publicationInfo) {
-            if (publicationInfo.publicationDescriptor) {
-                return new Reference(publicationInfo.publicationDescriptor).get();
-            } else {
+            if (!publicationInfo.publicationDescriptor) {
                 log.error("No publication descriptor, perhaps the publication is not activated?");
                 return Promise.rejected();
             }
+            return new Reference(publicationInfo.publicationDescriptor).get();
         }
 
 

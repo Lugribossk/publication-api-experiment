@@ -34,17 +34,16 @@ define(["jquery", "internal/Reference", "publication/Product", "enrichment/Enric
             if (this.usesProductDatabase) {
                 // productDescriptor seems to be a reference and not an object.
                 return new Reference(this._productDescriptor).getAs(Product);
-            } else {
-                // Mimic the format for a database product so we can reuse the constructor logic.
-                return Promise.resolved(new Product({
-                    properties: {
-                        product_id: this._manualProduct.productID,
-                        name: this._manualProduct.productName,
-                        description: this._manualProduct.productDescription,
-                        price: this._manualProduct.productPrice
-                    }
-                }));
             }
+            // Mimic the format for a database product so we can reuse the constructor logic.
+            return Promise.resolved(new Product({
+                properties: {
+                    product_id: this._manualProduct.productID,
+                    name: this._manualProduct.productName,
+                    description: this._manualProduct.productDescription,
+                    price: this._manualProduct.productPrice
+                }
+            }));
         };
 
         ProductLink.prototype.createDomElement = function () {
@@ -65,9 +64,6 @@ define(["jquery", "internal/Reference", "publication/Product", "enrichment/Enric
 
             return element;
         };
-
-        // Extra property that identifies this type of enrichment as having product data associated with it.
-        ProductLink.prototype.hasProduct = true;
 
         /**
          * The API type value for this kind of enrichment.

@@ -50,7 +50,7 @@ define(["jquery", "publication/PageRepresentation", "internal/Reference", "enric
             var bestRep = null;
 
             this.getRepresentations()
-                .filter(function(representation) {
+                .filter(function (representation) {
                     // We can't use SWF representations, so filter them out.
                     return representation.type === PageRepresentation.Type.IMAGE;
                 })
@@ -112,11 +112,10 @@ define(["jquery", "publication/PageRepresentation", "internal/Reference", "enric
                         }
                     });
 
-                    if (foundProduct) {
-                        return foundProduct;
-                    } else {
+                    if (!foundProduct) {
                         return new Promise.rejected();
                     }
+                    return foundProduct;
                 });
         };
 

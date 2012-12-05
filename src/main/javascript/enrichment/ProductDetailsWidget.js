@@ -46,8 +46,6 @@ define(["jquery", "enrichment/Enrichment", "internal/Reference", "publication/Pr
             return element;
         };
 
-        ProductDetailsWidget.prototype.hasProduct = true;
-
         /**
          * The API type value for this kind of enrichment.
          * @static

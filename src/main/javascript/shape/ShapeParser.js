@@ -18,19 +18,19 @@ define(["jquery", "shape/RectangleShape", "shape/PolygonShape", "shape/Composite
          * @return {Shape}
          */
         ShapeParser.construct = function (data) {
-            var type = data.type;
-            if (type === RectangleShape.TYPE) {
+            switch (data.type) {
+            case RectangleShape.TYPE:
                 return new RectangleShape(data);
-            } else if (type === PolygonShape.TYPE) {
+            case PolygonShape.TYPE:
                 return new PolygonShape(data);
-            } else if (type === CompositeShape.TYPE) {
+            case CompositeShape.TYPE:
                 // We have to parse the composite shapes here as well, or CompositeShape will end up with a circular dependency on ShapeParser.
                 return new CompositeShape({
                     shapes: data.shapes.map(ShapeParser.construct),
                     type: CompositeShape.TYPE
                 });
-            } else {
-                log.warn("Unknown shape type", type);
+            default:
+                log.warn("Unknown shape type", data.type);
                 return null;
             }
         };
