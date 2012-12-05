@@ -24,6 +24,7 @@ define(["jquery", "util/Logger"],
 
         Shape.prototype.createDomElement = function () {
             return $("<div/>")
+                .addClass("Shape")
                 .on("click", function () {
                     log.info(this);
                 }.bind(this));
