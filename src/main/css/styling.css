@@ -85,6 +85,14 @@ body {
     left: 0;
     background-color: lightgray;
     font-family: sans-serif;
-    font-size: 10px;
     white-space: nowrap;
+    padding: 0 1px;
+}
+
+.Enrichment .Label {
+    font-size: 10px;
+}
+
+.Page > .Label {
+    font-size: 14px;
 }
