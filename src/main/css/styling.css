@@ -72,6 +72,8 @@ body {
 
 .Page {
     position: relative; /* To allow absolute positioning inside it. */
+    background-repeat: no-repeat;
+    background-size: 100% 100%; /* 100% twice = ignore aspect ratio when scaling. */
 }
 
 .Page:last-of-type {

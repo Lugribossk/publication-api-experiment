@@ -51,7 +51,7 @@ define(["jquery", "publication/PageRepresentation", "internal/Reference", "enric
 
             this.getRepresentations()
                 .filter(function (representation) {
-                    // We can't use SWF representations, so filter them out.
+                    // We can only use images and not SWF files.
                     return representation.type === PageRepresentation.Type.IMAGE;
                 })
                 .some(function (representation) {
@@ -159,12 +159,13 @@ define(["jquery", "publication/PageRepresentation", "internal/Reference", "enric
             }
             var pageSize = reduceToAspectRatio(pageBounds, aspectRatio);
 
-            var representation = this.getClosestRepresentation(pageSize);
             var page = $("<div/>")
                 .addClass("Page")
-                .height(pageSize.height)
-                .width(pageSize.width)
-                .append(representation.createDomElement());
+                .css({
+                    height: pageSize.height,
+                    width: pageSize.width,
+                    "background-image": "url(" + this.getClosestRepresentation(pageSize).getImageURL() + ")"
+                });
 
             this.getEnrichments()
                 .done(function (enrichments) {

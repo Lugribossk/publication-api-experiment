@@ -46,15 +46,6 @@ define(["jquery", "internal/Reference", "util/Logger"],
             return new Reference(this._pageRepresentation).getBinaryURL();
         };
 
-        PageRepresentation.prototype.createDomElement = function () {
-            if (this.type !== PageRepresentation.Type.IMAGE) {
-                log.error("Trying to create DOM element for non-image page representation.", this);
-            }
-            return $("<img/>", {
-                src: this.getImageURL()
-            }).addClass("PageRepresentation");
-        };
-
         PageRepresentation.Type = {
             /**
              * A bitmap image (typically JPEG).
