@@ -11,7 +11,7 @@ define(["jquery", "enrichment/Enrichment", "publication/MediaRepresentation"],
          *
          * @param {Object} data The raw API data.
          */
-        function Video(data) {
+        function VideoEnrichment(data) {
             Enrichment.call(this, data);
             /**
              * @type {Boolean}
@@ -29,7 +29,6 @@ define(["jquery", "enrichment/Enrichment", "publication/MediaRepresentation"],
              * @type {Boolean}
              */
             this.loop = data.loop;
-
             /**
              * @type {Boolean}
              */
@@ -41,21 +40,21 @@ define(["jquery", "enrichment/Enrichment", "publication/MediaRepresentation"],
 
             this._posterImageRepresentationDescriptors = data.posterImageRepresentationDescriptors;
         }
-        Video.prototype = Object.create(Enrichment.prototype);
+        VideoEnrichment.prototype = Object.create(Enrichment.prototype);
 
-        Video.prototype.getVideoRepresentations = function () {
+        VideoEnrichment.prototype.getVideoRepresentations = function () {
             return this._mediaRepresentationDescriptors.map(function (rep) {
                 return new MediaRepresentation(rep);
             });
         };
 
-        Video.prototype.getPosterImages = function () {
+        VideoEnrichment.prototype.getPosterImages = function () {
             return this._posterImageRepresentationDescriptors.map(function (poster) {
                 return new MediaRepresentation(poster);
             });
         };
 
-        Video.prototype.createDomElement = function () {
+        VideoEnrichment.prototype.createDomElement = function () {
 //            var video = $("<video/>", {
 //                src: this.getVideoRepresentations()[0].getBinaryURL(),
 //                controls: this.enableControls,
@@ -69,7 +68,7 @@ define(["jquery", "enrichment/Enrichment", "publication/MediaRepresentation"],
 //                });
 
             return Enrichment.prototype.createDomElement.call(this)
-                .addClass("Video");
+                .addClass("VideoEnrichment");
 //                .append(video);
         };
 
@@ -79,7 +78,7 @@ define(["jquery", "enrichment/Enrichment", "publication/MediaRepresentation"],
          * @const
          * @type {String}
          */
-        Video.TYPE = "videoEnrichment";
+        VideoEnrichment.TYPE = "videoEnrichment";
 
-        return Video;
+        return VideoEnrichment;
     });

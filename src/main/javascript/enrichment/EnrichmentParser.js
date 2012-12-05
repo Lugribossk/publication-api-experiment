@@ -1,5 +1,5 @@
-define(["jquery", "enrichment/ProductLink", "enrichment/ExternalLink", "enrichment/InternalLink", "enrichment/CustomLink", "enrichment/ProductDetailsWidget", "enrichment/BuyTheLookWidget", "enrichment/Video", "util/Logger"],
-    function ($, ProductLink, ExternalLink, InternalLink, CustomLink, ProductDetailsWidget, BuyTheLookWidget, Video, Logger) {
+define(["jquery", "enrichment/ProductLink", "enrichment/ExternalLink", "enrichment/InternalLink", "enrichment/CustomLink", "enrichment/ProductDetailsWidget", "enrichment/BuyTheLookWidget", "enrichment/VideoEnrichment", "util/Logger"],
+    function ($, ProductLink, ExternalLink, InternalLink, CustomLink, ProductDetailsWidget, BuyTheLookWidget, VideoEnrichment, Logger) {
         "use strict";
         var log = new Logger("EnrichmentParser");
 
@@ -31,8 +31,8 @@ define(["jquery", "enrichment/ProductLink", "enrichment/ExternalLink", "enrichme
                 return new ProductDetailsWidget(data);
             case BuyTheLookWidget.TYPE:
                 return new BuyTheLookWidget(data);
-            case Video.TYPE:
-                return new Video(data);
+            case VideoEnrichment.TYPE:
+                return new VideoEnrichment(data);
             default:
                 log.error("Unknown enrichment type", data.type);
                 return null;
