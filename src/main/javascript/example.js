@@ -18,12 +18,7 @@ requirejs(["jquery", "api/PublicationAPI"],
         var api = new PublicationAPI(key);
 
         api.getPublication(publicationID)
-            .then(function (publication) {
-                return publication.getPages();
-            })
-            .done(function (pages) {
-                pages.forEach(function (page) {
-                    page.createDomElement({width: 500}).appendTo("body");
-                });
+            .done(function (publication) {
+                publication.createDomElement({width: 700, height: 700}).appendTo("body");
             });
     });

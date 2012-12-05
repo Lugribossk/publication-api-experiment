@@ -74,6 +74,10 @@ body {
     position: relative; /* To allow absolute positioning inside it. */
 }
 
+.Page:last-of-type {
+    clear: both;
+}
+
 .PageRepresentation {
     height: 100%;
     width: 100%;

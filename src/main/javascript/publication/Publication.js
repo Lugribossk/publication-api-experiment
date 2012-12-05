@@ -148,5 +148,20 @@ define(["jquery", "internal/Reference", "publication/Page", "util/Promise", "uti
                 });
         };
 
+        Publication.prototype.createDomElement = function (pageBounds) {
+            var scope = this,
+                element = $("<div/>")
+                    .addClass("Publication");
+
+            this.getPages()
+                .done(function (pages) {
+                    pages.forEach(function (page) {
+                        page.createDomElement(pageBounds, scope.pageAspectRatio).appendTo(element);
+                    });
+                });
+
+            return element;
+        };
+
         return Publication;
     });

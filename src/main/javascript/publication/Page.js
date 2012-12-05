@@ -119,13 +119,52 @@ define(["jquery", "publication/PageRepresentation", "internal/Reference", "enric
                 });
         };
 
-        Page.prototype.createDomElement = function (size) {
-            var rep = this.getClosestRepresentation(size);
+        /**
+         * Reduce the size of one of the dimensions of the specified bounding box so that it has the specified aspect ratio.
+         *
+         * @param {Object} bounds The bounding box
+         * @param {Number} ratio The aspect ratio
+         * @return {{width: Number, height: Number}}
+         */
+        function reduceToAspectRatio(bounds, ratio) {
+            var width, height;
+            if (ratio < 1) {
+                height = bounds.height;
+                width = Math.round(height * ratio);
+            } else if (ratio > 1) {
+                width = bounds.width;
+                height = Math.round(width * ratio);
+            } else {
+                width = Math.min(bounds.height, bounds.width);
+                height = Math.min(bounds.height, bounds.width);
+            }
+
+            return {
+                width: width,
+                height: height
+            };
+        }
+
+        /**
+         * Create a DOM element that visualises this page.
+         *
+         * @param {Object} pageBounds The maximum size of the page.
+         * @param {Number} [aspectRatio] The aspect ratio the page should be. Optional
+         * @return {jQuery} The element
+         */
+        Page.prototype.createDomElement = function (pageBounds, aspectRatio) {
+            if (!aspectRatio) {
+                var largestRep = this.getRepresentations()[this._pageRepresentationDescriptors.length - 1];
+                aspectRatio = largestRep.width / largestRep.height;
+            }
+            var pageSize = reduceToAspectRatio(pageBounds, aspectRatio);
+
+            var representation = this.getClosestRepresentation(pageSize);
             var page = $("<div/>")
                 .addClass("Page")
-                .height(rep.height)
-                .width(rep.width)
-                .append(rep.createDomElement());
+                .height(pageSize.height)
+                .width(pageSize.width)
+                .append(representation.createDomElement());
 
             this.getEnrichments()
                 .done(function (enrichments) {
