@@ -13,6 +13,8 @@ define(["jquery", "util/Promise", "util/Logger"],
          *
          * <b>There should be no need to use this class when simply working with the objects returned by PublicationAPI.</b>
          *
+         * @class internal.Reference
+         * @alternateClassName Reference
          * @author Bo Gotthardt
          * @constructor
          *

@@ -16,6 +16,8 @@ define(["jquery", "internal/Reference", "publication/Publication", "util/Promise
          *                 });
          *         });
          *
+         * @class api.PublicationAPI
+         * @alternateClassName PublicationAPI
          * @author Bo Gotthardt
          * @constructor
          *

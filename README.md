@@ -32,6 +32,14 @@ Open `src/main/javascript/example.html` or start reading `src/main/javascript/ex
 - Functions that return promises should document the type of the data the promise resolves with.
 - Promises are assumed to fail if the requested object could not be found, rather then resolve with null data.
 
+### JSDuck
+[JSDuck](https://github.com/senchalabs/jsduck) is used to generate documentation. It's designed for code using Sencha's frameworks but can be made to with pretty well with some extra tags:
+- @constructor after the class description but before the parameters makes the constructor function show up in the documentation.
+- @private and @static on all methods that are that, even though it is obvious.
+- No static objects on classes to group properties enum-like, they get detected as inner classes.
+- New live example iframe with RequireJS.
+- @class namespace.ClassName and @alternativeClassName ClassName seem to both allow the class to be referenced with it's short name, and be grouped under the namespace.
+
 ### Other
 - Constructors explicitly copy properties from their data object parameter. This could be replaced with a
   simple $.extend(this, data) but then it would be quite cryptic which properties the class actually has. It also makes it

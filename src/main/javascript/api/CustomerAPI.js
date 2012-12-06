@@ -25,6 +25,8 @@ define(["jquery", "api/PublicationAPI", "util/Logger", "util/Promise"],
          *                 });
          *         });
          *
+         * @class api.CustomerAPI
+         * @alternateClassName CustomerAPI
          * @author Bo Gotthardt
          * @constructor
          *
