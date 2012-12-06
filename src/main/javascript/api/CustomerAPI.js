@@ -7,19 +7,21 @@ define(["jquery", "api/PublicationAPI", "util/Logger", "util/Promise"],
          * Zmags Customer API client that can be used to retrieve publications for specific customers.
          * Also known as the "Publication<b>s</b> API".
          *
-         * Example:
-         *
-         *     new CustomerAPI("2a39a9615b").getPublications("85d291bd")
-         *         .then(function (publications) {
-         *             var pages = publications.map(function (publication) {
-         *                 return publication.getPage(1);
-         *             });
-         *             return $.when.apply(this, pages);
-         *         })
-         *         .then(function () {
-         *             $.makeArray(arguments).forEach(function (page) {
-         *                 page.createDomElement({width: 200, height: 200}).appendTo("body");
-         *             });
+         *     @example
+         *     requirejs(["jquery", "api/CustomerAPI"],
+         *         function ($, CustomerAPI) {
+         *             new CustomerAPI("2a39a9615b").getPublications("85d291bd")
+         *                 .then(function (publications) {
+         *                     var pages = publications.map(function (publication) {
+         *                         return publication.getPage(1);
+         *                     });
+         *                     return $.when.apply(this, pages);
+         *                 })
+         *                 .then(function () {
+         *                     $.makeArray(arguments).forEach(function (page) {
+         *                         page.createDomElement({width: 200, height: 200}).appendTo("body");
+         *                     });
+         *                 });
          *         });
          *
          * @author Bo Gotthardt
@@ -30,9 +32,10 @@ define(["jquery", "api/PublicationAPI", "util/Logger", "util/Promise"],
          */
         function CustomerAPI(key, apiURL) {
             this._key = key;
-            this._apiURL = apiURL || CustomerAPI.APIUrl.HTTP;
+            this._apiURL = apiURL || CustomerAPI.HTTP_URL;
             this._publicationAPI = new PublicationAPI(key);
         }
+
 
         /**
          * Get all of the specified customer's publications.
@@ -65,10 +68,21 @@ define(["jquery", "api/PublicationAPI", "util/Logger", "util/Promise"],
                 });
         };
 
-        CustomerAPI.APIUrl = {
-            HTTP: "http://api.viewer.zmags.com/publications/",
-            HTTPS: "https://secure.api.viewer.zmags.com/publications/"
-        };
+        /**
+         * The URL to the HTTP version of the Customer Publication List service.
+         * @static
+         * @const
+         * @type {String}
+         */
+        CustomerAPI.HTTP_URL = "http://api.viewer.zmags.com/publications/";
+
+        /**
+         * The URL to the HTTPS version of the Customer Publication List service.
+         * @static
+         * @const
+         * @type {String}
+         */
+        CustomerAPI.HTTPS_URL = "https://secure.api.viewer.zmags.com/publications/";
 
         return CustomerAPI;
     });

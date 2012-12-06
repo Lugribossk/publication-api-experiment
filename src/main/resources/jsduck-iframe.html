@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Publication API</title>
+    <script src="../../src/main/resources/require.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../src/main/css/styling.css" />
+
+    <script>
+        requirejs.config({
+            baseUrl: "../../src/main/javascript",
+            paths: {
+                jquery: "http://ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min"
+            }
+        });
+
+        function loadInlineExample(code, options, callback) {
+            try {
+                document.body.innerHTML = '';
+                eval(code);
+                callback && callback(true);
+            } catch (e) {
+                document.body.innerHTML = e;
+                callback && callback(false, e);
+            }
+        }
+    </script>
+</head>
+<body>
+</body>
+</html>
