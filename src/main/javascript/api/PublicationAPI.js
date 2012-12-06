@@ -6,19 +6,29 @@ define(["jquery", "internal/Reference", "publication/Publication", "util/Promise
         /**
          * Zmags Publication API client that can be used to retrieve publication data.
          *
+         * Example:
+         *
+         *     new PublicationAPI("2a39a9615b").getPublication("952ac7ea")
+         *         .done(function (publication) {
+         *             publication.createDomElement({width: 700, height: 700}).appendTo("body");
+         *         });
+         *
          * @author Bo Gotthardt
          * @constructor
          *
          * @param {String} key The API key.
-         * @param {String} [apiURL] The URL to the Publication Info service. Optional, defaults to the public HTTP version.
+         * @param {String} [apiURL] The URL to the Publication Info service. Optional, defaults to the HTTP version.
          */
         function PublicationAPI(key, apiURL) {
             this._key = key;
-            this._apiURL = apiURL || PublicationAPI.APIUrl.HTTP;
+            this._apiURL = apiURL || PublicationAPI.HTTP_URL;
         }
 
         /**
          * Get the cached publication info.
+         *
+         * @private
+         * @static
          *
          * @param {PublicationAPI} scope
          * @param {String} publicationID
@@ -39,6 +49,9 @@ define(["jquery", "internal/Reference", "publication/Publication", "util/Promise
 
         /**
          * Get the recent publication info.
+         *
+         * @private
+         * @static
          *
          * @param {PublicationAPI} scope
          * @param {String} publicationID
@@ -66,6 +79,9 @@ define(["jquery", "internal/Reference", "publication/Publication", "util/Promise
 
         /**
          * Get the specified publication's "publication info", respecting the rule about firing off two requests.
+         *
+         * @private
+         * @static
          *
          * @param {PublicationAPI} scope
          * @param {String} publicationID The publication ID.
@@ -106,6 +122,9 @@ define(["jquery", "internal/Reference", "publication/Publication", "util/Promise
         /**
          * Get the specified publication info's publication descriptor.
          *
+         * @private
+         * @static
+         *
          * @param {Object} publicationInfo The publication info.
          * @return {Promise} A promise for the publication descriptor.
          */
@@ -141,17 +160,21 @@ define(["jquery", "internal/Reference", "publication/Publication", "util/Promise
                 });
         };
 
-        PublicationAPI.APIUrl = {
-            /**
-             * {String} The URL to the HTTP version of the Publication Info service.
-             */
-            HTTP: "http://api.viewer.zmags.com/publication/",
+        /**
+         * The URL to the HTTP version of the Publication Info service.
+         * @static
+         * @const
+         * @type {String}
+         */
+        PublicationAPI.HTTP_URL = "http://api.viewer.zmags.com/publication/";
 
-            /**
-             * {String} The URL to the HTTPS version of the Publication Info service.
-             */
-            HTTPS: "https://secure.api.viewer.zmags.com/publication/"
-        };
+        /**
+         * The URL to the HTTPS version of the Publication Info service.
+         * @static
+         * @const
+         * @type {String}
+         */
+        PublicationAPI.HTTPS_URL = "https://secure.api.viewer.zmags.com/publication/";
 
         return PublicationAPI;
     });

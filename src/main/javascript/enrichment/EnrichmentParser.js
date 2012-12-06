@@ -17,7 +17,7 @@ define(["jquery", "enrichment/ProductLink", "enrichment/ExternalLink", "enrichme
          * @param {Object} data The raw API data.
          * @return {Enrichment}
          */
-        EnrichmentParser.construct = function (data) {
+        EnrichmentParser.prototype.construct = function (data) {
             switch (data.type) {
             case ProductLink.TYPE:
                 return new ProductLink(data);

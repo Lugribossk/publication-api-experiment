@@ -7,6 +7,21 @@ define(["jquery", "api/PublicationAPI", "util/Logger", "util/Promise"],
          * Zmags Customer API client that can be used to retrieve publications for specific customers.
          * Also known as the "Publication<b>s</b> API".
          *
+         * Example:
+         *
+         *     new CustomerAPI("2a39a9615b").getPublications("85d291bd")
+         *         .then(function (publications) {
+         *             var pages = publications.map(function (publication) {
+         *                 return publication.getPage(1);
+         *             });
+         *             return $.when.apply(this, pages);
+         *         })
+         *         .then(function () {
+         *             $.makeArray(arguments).forEach(function (page) {
+         *                 page.createDomElement({width: 200, height: 200}).appendTo("body");
+         *             });
+         *         });
+         *
          * @author Bo Gotthardt
          * @constructor
          *

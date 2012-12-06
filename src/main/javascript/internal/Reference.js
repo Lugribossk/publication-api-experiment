@@ -40,6 +40,9 @@ define(["jquery", "util/Promise", "util/Logger"],
         /**
          * Get a bundle part's data from the cache.
          *
+         * @private
+         * @static
+         *
          * @param {String} path The bundle path.
          * @param {String} part The bundle part.
          * @return {Object} The data, or null if it was not cached.
@@ -51,6 +54,9 @@ define(["jquery", "util/Promise", "util/Logger"],
         /**
          * Cache a bundle so its parts can be reused later.
          *
+         * @private
+         * @static
+         *
          * @param {String} path The bundle path it was retrieved from.
          * @param {Object} bundle The bundle object that maps bundle parts to their data.
          */
@@ -60,6 +66,9 @@ define(["jquery", "util/Promise", "util/Logger"],
 
         /**
          * Get the data for a "bundle" reference type.
+         *
+         * @private
+         * @static
          *
          * @param {String} path The bundle path.
          * @param {String} part The bundle part.

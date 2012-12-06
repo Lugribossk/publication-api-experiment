@@ -17,7 +17,7 @@ define(["jquery", "shape/RectangleShape", "shape/PolygonShape", "shape/Composite
          * @param {Object} data The raw API data.
          * @return {Shape}
          */
-        ShapeParser.construct = function (data) {
+        ShapeParser.prototype.construct = function (data) {
             switch (data.type) {
             case RectangleShape.TYPE:
                 return new RectangleShape(data);

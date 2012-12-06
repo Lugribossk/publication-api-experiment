@@ -55,7 +55,7 @@ define(["jquery", "shape/ShapeParser", "util/Logger"],
         }
 
         Enrichment.prototype.getShape = function () {
-            return ShapeParser.construct(this._shape);
+            return new ShapeParser().construct(this._shape);
         };
 
         /**
