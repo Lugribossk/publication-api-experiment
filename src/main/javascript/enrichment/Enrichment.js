@@ -88,6 +88,12 @@ define(["jquery", "shape/ShapeParser", "util/Logger"],
             return element;
         };
 
+        /**
+         * The different types of enrichment effects.
+         *
+         * @static
+         * @enum
+         */
         Enrichment.EffectTypes = {
             NONE: "none",
             FADE: "fadeInOut",
