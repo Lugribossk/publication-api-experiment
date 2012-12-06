@@ -65,7 +65,7 @@ define(["jquery"],
          * Assert that the specified condition is true. If it is not, any additional arguments will be logged as an
          * error and the browser debugger will be triggered.
          *
-         * @param {Object} condition The condition to check
+         * @param {*} condition The condition to check
          */
         Logger.prototype.assert = function (condition) {
             if (!condition) {

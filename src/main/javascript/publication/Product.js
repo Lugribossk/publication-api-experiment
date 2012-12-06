@@ -5,6 +5,8 @@ define(["jquery", "internal/Reference"],
         /**
          * A product.
          *
+         * TODO How to handle inherited properties?
+         *
          * @class Product
          * @constructor
          *

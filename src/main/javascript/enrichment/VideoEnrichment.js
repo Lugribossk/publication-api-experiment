@@ -42,12 +42,22 @@ define(["jquery", "enrichment/Enrichment", "publication/MediaRepresentation"],
         }
         VideoEnrichment.prototype = Object.create(Enrichment.prototype);
 
+        /**
+         * Get the media representations for the actual video.
+         *
+         * @return {MediaRepresentation[]}
+         */
         VideoEnrichment.prototype.getVideoRepresentations = function () {
             return this._mediaRepresentationDescriptors.map(function (rep) {
                 return new MediaRepresentation(rep);
             });
         };
 
+        /**
+         * Get the media representations for the poster images.
+         *
+         * @return {MediaRepresentation[]}
+         */
         VideoEnrichment.prototype.getPosterImages = function () {
             return this._posterImageRepresentationDescriptors.map(function (poster) {
                 return new MediaRepresentation(poster);
@@ -55,21 +65,26 @@ define(["jquery", "enrichment/Enrichment", "publication/MediaRepresentation"],
         };
 
         VideoEnrichment.prototype.createDomElement = function () {
-//            var video = $("<video/>", {
-//                src: this.getVideoRepresentations()[0].getBinaryURL(),
-//                controls: this.enableControls,
-//                autoplay: this.playOnLoad,
-//                loop: this.loop,
-//                poster: this.getPosterImages()[0].getBinaryURL()
-//            })
-//                .css({
-//                    width: "100%",
-//                    height: "100%"
-//                });
-
             return Enrichment.prototype.createDomElement.call(this)
                 .addClass("VideoEnrichment");
-//                .append(video);
+        };
+
+        VideoEnrichment.prototype.createVideoElement = function () {
+            var video = $("<video/>", {
+                src: this.getVideoRepresentations()[0].getBinaryURL(),
+                controls: this.enableControls,
+                autoplay: this.playOnLoad,
+                loop: this.loop,
+                poster: this.getPosterImages()[0].getBinaryURL()
+            })
+                .css({
+                    width: "100%",
+                    height: "100%"
+                });
+
+            return Enrichment.prototype.createDomElement.call(this)
+                .addClass("VideoEnrichment")
+                .append(video);
         };
 
         /**

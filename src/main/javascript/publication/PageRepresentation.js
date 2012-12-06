@@ -46,13 +46,32 @@ define(["jquery", "internal/Reference", "util/Logger"],
             return new Reference(this._pageRepresentation).getBinaryURL();
         };
 
+        PageRepresentation.prototype.createDomElement = function () {
+            if (this.type !== PageRepresentation.Type.IMAGE) {
+                log.error("Trying to create DOM element for non-image page representation.", this);
+            }
+            return $("<img/>", {
+                src: this.getImageURL()
+            }).addClass("PageRepresentation");
+        };
+
+        /**
+         * The different kinds of page representations.
+         *
+         * @static
+         * @enum
+         */
         PageRepresentation.Type = {
             /**
              * A bitmap image (typically JPEG).
+             * @static
+             * @const
              */
             IMAGE: "image",
             /**
              * Flash vector representation (SWF).
+             * @static
+             * @const
              */
             VECTOR: "vector"
         };

@@ -34,8 +34,11 @@ define(["jquery", "util/Promise", "util/Logger"],
         }
 
         /**
-         * {Object} A map of bundle paths to their bundles.
+         * A map of bundle paths to their bundles.
          * A bundle is then a map of bundle parts to their data.
+         * @private
+         * @static
+         * @type {Object}
          */
         var bundleCache = {};
 
@@ -91,7 +94,7 @@ define(["jquery", "util/Promise", "util/Logger"],
         /**
          * Get the data that this reference points to.
          *
-         * @return {Promise} A promise for the reference data as an {@link Object}.
+         * @return {Promise} A promise for the reference data as an Object.
          */
         Reference.prototype.get = function () {
             var promise;
