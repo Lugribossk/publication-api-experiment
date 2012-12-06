@@ -8,7 +8,7 @@ define(["jquery", "api/PublicationAPI", "util/Logger", "util/Promise"],
          * Also known as the "Publication<b>s</b> API".
          *
          *     @example
-         *     requirejs(["jquery", "api/CustomerAPI"],
+         *     require(["jquery", "api/CustomerAPI"],
          *         function ($, CustomerAPI) {
          *             new CustomerAPI("2a39a9615b").getPublications("85d291bd")
          *                 .then(function (publications) {
@@ -19,8 +19,9 @@ define(["jquery", "api/PublicationAPI", "util/Logger", "util/Promise"],
          *                 })
          *                 .then(function () {
          *                     $.makeArray(arguments).forEach(function (page) {
-         *                         page.createDomElement({width: 200, height: 200}).appendTo("body");
+         *                         page.createDomElement({width: 180, height: 180}).appendTo("body");
          *                     });
+         *                     $(".Page").css({float: "left"});
          *                 });
          *         });
          *
@@ -41,7 +42,7 @@ define(["jquery", "api/PublicationAPI", "util/Logger", "util/Promise"],
          * Get all of the specified customer's publications.
          * Note that publications that are not activated or are security restricted may not be available.
          *
-         * @param {String} customerID The ID of the customer.
+         * @param {String} customerID The ID of the customer, as seen in the Publicator under TODO.
          * @return {Promise} A promise for the list of {@link Publication}s.
          */
         CustomerAPI.prototype.getPublications = function (customerID) {

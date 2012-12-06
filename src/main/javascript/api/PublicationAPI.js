@@ -6,11 +6,14 @@ define(["jquery", "internal/Reference", "publication/Publication", "util/Promise
         /**
          * Zmags Publication API client that can be used to retrieve publication data.
          *
-         * Example:
-         *
-         *     new PublicationAPI("2a39a9615b").getPublication("952ac7ea")
-         *         .done(function (publication) {
-         *             publication.createDomElement({width: 700, height: 700}).appendTo("body");
+         *     @example
+         *     require(["api/PublicationAPI"],
+         *         function (PublicationAPI) {
+         *             new PublicationAPI("2a39a9615b").getPublication("952ac7ea")
+         *                 .done(function (publication) {
+         *                     publication.createDomElement({width: 180, height: 180}).appendTo("body");
+         *                     $(".Page").css({float: "left"});
+         *                 });
          *         });
          *
          * @author Bo Gotthardt
@@ -23,6 +26,7 @@ define(["jquery", "internal/Reference", "publication/Publication", "util/Promise
             this._key = key;
             this._apiURL = apiURL || PublicationAPI.HTTP_URL;
         }
+
 
         /**
          * Get the cached publication info.
@@ -142,7 +146,7 @@ define(["jquery", "internal/Reference", "publication/Publication", "util/Promise
          * Get the specified publication.
          * Note that publications that are not activated or are security restricted may not be available.
          *
-         * @param {String} publicationID The ID of the publication, as seen in the Publicator UI.
+         * @param {String} publicationID The ID of the publication, as seen in the Publicator under All Publications -> Edit Publication.
          * @return {Promise} A promise for the {@link Publication}, that fails if unable to create it.
          */
         PublicationAPI.prototype.getPublication = function (publicationID) {

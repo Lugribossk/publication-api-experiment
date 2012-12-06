@@ -5,6 +5,16 @@ define(["jquery", "shape/Shape"],
         /**
          * A polygon shape.
          *
+         * TODO fix example
+         *     @example
+         *     require(["shape/PolygonShape"], function (PolygonShape) {
+         *         new PolygonShape({
+         *             type: "polygon",
+         *             coordinates: [{y: 0.3557, x: 0.1089}, {y: 0.3694, x: 0.4711}, {y: 0.0997, x: 0.4689},
+         *                           {y: 0.3986, x: 0.14}, {y: 0.2629, x: 0.5222}, {y: 0.0945, x: 0.1356}]
+         *         }).createDomElement().css({stroke: "blue"}).appendTo("body");
+         *     });
+         *
          * @extends Shape
          * @author Bo Gotthardt
          * @constructor

@@ -76,9 +76,9 @@ body {
     background-size: 100% 100%; /* 100% twice = ignore aspect ratio when scaling. */
 }
 
-.Page:last-of-type {
+/*.Page:last-of-type {
     clear: both;
-}
+}*/
 
 .PageRepresentation {
     height: 100%;
