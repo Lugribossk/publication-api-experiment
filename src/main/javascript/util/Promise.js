@@ -2,22 +2,41 @@ define(["jquery"],
     function ($) {
         "use strict";
 
-        // Create a fake Promise class to stop IntelliJ warning about it not being found.
-        // It is actually a part of jQuery.
         /**
-         * @see http://api.jquery.com/category/deferred-object/
+         * Utility class for Promises/Deferreds. Also defines the Promise class to stop IntelliJ warning about it not being found.
+         *
+         * The actual Promise/Deferred class is from jQuery, see <a href="http://api.jquery.com/category/deferred-object/">jQuery Deferred documentation</a>.
+         *
+         * @author Bo Gotthardt
          * @constructor
          */
         function Promise() {}
 
         /**
+         * See <a href="http://api.jquery.com/deferred.pipe/">deferred.pipe()</a>.
+         *
          * @param {Function} doneFilter
          * @param {Function} [failFilter]
          * @param {Function} [progressFilter]
          */
         Promise.prototype.then = function (doneFilter, failFilter, progressFilter) {};
+        /**
+         * See <a href="http://api.jquery.com/deferred.done/">deferred.done()</a>.
+         *
+         * @param {Function} callback
+         */
         Promise.prototype.done = function (callback) {};
+        /**
+         * See <a href="http://api.jquery.com/deferred.fail/">deferred.fail()</a>.
+         *
+         * @param {Function} callback
+         */
         Promise.prototype.fail = function (callback) {};
+        /**
+         * See <a href="http://api.jquery.com/deferred.progress/">deferred.progress()</a>.
+         *
+         * @param {Function} callback
+         */
         Promise.prototype.progress = function (callback) {};
 
         // TODO Fix these to work with any number of arguments.
@@ -25,7 +44,7 @@ define(["jquery"],
         /**
          * Create a rejected promise.
          *
-         * @param [arg]
+         * @param {*} [arg]
          * @return {Promise}
          */
         Promise.rejected = function (arg) {
@@ -35,7 +54,7 @@ define(["jquery"],
         /**
          * Create a resolved promise.
          *
-         * @param [arg]
+         * @param {*} [arg]
          * @return {Promise}
          */
         Promise.resolved = function (arg) {
@@ -55,7 +74,7 @@ define(["jquery"],
          * their own deferred, set up a progress handler and only then pass it as the combinedDeferred parameter.
          *
          * @param {Object[]} subordinates The list of subordinates, either Promises or arbitrary values.
-         * @param {$.Deferred} [combinedDeferred] The "combined" deferred (not Promise) to use, instead of creating it internally.
+         * @param {Deferred} [combinedDeferred] The "combined" deferred (not Promise) to use, instead of creating it internally.
          * @return {Promise} A promise for the list of the values of all the subordinates.
          *                   The promise interface of combinedDeferred if that was passed.
          */
