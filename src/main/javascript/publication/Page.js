@@ -75,7 +75,7 @@ define(["jquery", "publication/PageRepresentation", "internal/Reference", "enric
             }
 
             var references = this._pageEnrichments.map(function (enrichmentList) {
-                return new Reference(enrichmentList).getEachWith(EnrichmentParser.construct);
+                return new Reference(enrichmentList).getEachWith(new EnrichmentParser().construct);
             });
             // TODO combine the lists into one before returning them
             return $.when.apply(this, references);
@@ -122,6 +122,9 @@ define(["jquery", "publication/PageRepresentation", "internal/Reference", "enric
         /**
          * Reduce the size of one of the dimensions of the specified bounding box so that it has the specified aspect ratio.
          *
+         * @private
+         * @static
+         *
          * @param {Object} bounds The bounding box
          * @param {Number} ratio The aspect ratio
          * @return {{width: Number, height: Number}}
@@ -133,7 +136,7 @@ define(["jquery", "publication/PageRepresentation", "internal/Reference", "enric
                 width = Math.round(height * ratio);
             } else if (ratio > 1) {
                 width = bounds.width;
-                height = Math.round(width * ratio);
+                height = Math.round(width / ratio);
             } else {
                 width = Math.min(bounds.height, bounds.width);
                 height = Math.min(bounds.height, bounds.width);
