@@ -36,8 +36,7 @@ Open `src/main/javascript/example.html` or start reading `src/main/javascript/ex
 [JSDuck](https://github.com/senchalabs/jsduck) is used to generate documentation. It's designed for code using Sencha's frameworks but can be made to with pretty well with some extra tags:
 - @constructor after the class description but before the parameters makes the constructor function show up in the documentation.
 - @private and @static on all methods that are that, even though it is obvious.
-- No static objects on classes to group properties enum-like, they get detected as inner classes.
-- New live example iframe with RequireJS.
+- The live examples work due to a new live example iframe with RequireJS.
 - @class namespace.ClassName and @alternativeClassName ClassName seem to both allow the class to be referenced with it's short name, and be grouped under the namespace.
 
 ### Other
