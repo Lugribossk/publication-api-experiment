@@ -17,7 +17,7 @@ define(["jquery", "shape/RectangleShape", "shape/PolygonShape", "shape/Composite
          * @param {Object} data The raw API data.
          * @return {Shape}
          */
-        ShapeParser.prototype.construct = function (data) {
+        ShapeParser.prototype.construct = function ShapeParser_construct(data) {
             switch (data.type) {
             case RectangleShape.TYPE:
                 return new RectangleShape(data);
@@ -26,7 +26,7 @@ define(["jquery", "shape/RectangleShape", "shape/PolygonShape", "shape/Composite
             case CompositeShape.TYPE:
                 // We have to parse the composite shapes here as well, or CompositeShape will end up with a circular dependency on ShapeParser.
                 return new CompositeShape({
-                    shapes: data.shapes.map(ShapeParser.construct),
+                    shapes: data.shapes.map(ShapeParser_construct),
                     type: CompositeShape.TYPE
                 });
             default:
