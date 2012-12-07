@@ -1,5 +1,5 @@
-define(["jquery", "api/PublicationAPI", "util/Logger", "util/Promise"],
-    function ($, PublicationAPI, Logger, Promise) {
+define(["jquery", "api/PublicationAPI", "util/Logger", "util/Promise", "util/window"],
+    function ($, PublicationAPI, Logger, Promise, window) {
         "use strict";
         var log = new Logger("CustomerAPI");
 
@@ -19,7 +19,7 @@ define(["jquery", "api/PublicationAPI", "util/Logger", "util/Promise"],
          *                 })
          *                 .then(function () {
          *                     $.makeArray(arguments).forEach(function (page) {
-         *                         page.createDomElement({width: 180, height: 180}).appendTo("body");
+         *                         page.createDomElement({width: 180, height: 180}, null, true).appendTo("body");
          *                     });
          *                     $(".Page").css({float: "left"});
          *                 });
@@ -31,11 +31,13 @@ define(["jquery", "api/PublicationAPI", "util/Logger", "util/Promise"],
          * @constructor
          *
          * @param {String} key The API key.
-         * @param {String} [apiURL] The URL to the Customer Publication List service. Optional, defaults to the public HTTP version.
+         * @param {String} [apiURL] The URL to the Customer Publication List service.
+         *                          Optional, defaults to the same protocol as the current page.
          */
         function CustomerAPI(key, apiURL) {
             this._key = key;
-            this._apiURL = apiURL || CustomerAPI.HTTP_URL;
+            this._apiURL = apiURL ||
+                window.location.protocol === "https:" ? CustomerAPI.HTTPS_URL : CustomerAPI.HTTP_URL;
             this._publicationAPI = new PublicationAPI(key);
         }
 

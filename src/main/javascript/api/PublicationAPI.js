@@ -1,5 +1,5 @@
-define(["jquery", "internal/Reference", "publication/Publication", "util/Promise", "util/Logger"],
-    function ($, Reference, Publication, Promise, Logger) {
+define(["jquery", "internal/Reference", "publication/Publication", "util/Promise", "util/Logger", "util/window"],
+    function ($, Reference, Publication, Promise, Logger, window) {
         "use strict";
         var log = new Logger("PublicationAPI");
 
@@ -22,11 +22,13 @@ define(["jquery", "internal/Reference", "publication/Publication", "util/Promise
          * @constructor
          *
          * @param {String} key The API key.
-         * @param {String} [apiURL] The URL to the Publication Info service. Optional, defaults to the HTTP version.
+         * @param {String} [apiURL] The URL to the Publication Info service.
+         *                          Optional, defaults to the same protocol as the current page.
          */
         function PublicationAPI(key, apiURL) {
             this._key = key;
-            this._apiURL = apiURL || PublicationAPI.HTTP_URL;
+            this._apiURL = apiURL ||
+                window.location.protocol === "https:" ? PublicationAPI.HTTPS_URL : PublicationAPI.HTTP_URL;
         }
 
 
