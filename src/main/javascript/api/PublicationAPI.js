@@ -169,6 +169,21 @@ define(["jquery", "internal/Reference", "publication/Publication", "util/Promise
         };
 
         /**
+         * Get the specified publications.
+         * Note that publications that are not activated or are security restricted may not be available.
+         *
+         * @param {String[]} publicationIDs A list of the IDs of the publications.
+         * @return {Promise} A promise for the list of {@link Publication}s.
+         */
+        PublicationAPI.prototype.getPublications = function (publicationIDs) {
+            var publications = publicationIDs.map(function (publicationID) {
+                return this.getPublication(publicationID);
+            });
+
+            return Promise.any(publications);
+        };
+
+        /**
          * The URL to the HTTP version of the Publication Info service.
          * @static
          * @const
