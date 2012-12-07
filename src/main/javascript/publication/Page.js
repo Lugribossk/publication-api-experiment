@@ -153,9 +153,10 @@ define(["jquery", "publication/PageRepresentation", "internal/Reference", "enric
          *
          * @param {Object} pageBounds The maximum size of the page.
          * @param {Number} [aspectRatio] The aspect ratio the page should be. Optional
+         * @param {Boolean} [ignoreEnrichments=false] Whether to create a simple element that only shows the page, but not enrichments.
          * @return {jQuery} The element
          */
-        Page.prototype.createDomElement = function (pageBounds, aspectRatio) {
+        Page.prototype.createDomElement = function (pageBounds, aspectRatio, ignoreEnrichments) {
             if (!aspectRatio) {
                 var largestRep = this.getRepresentations()[this._pageRepresentationDescriptors.length - 1];
                 aspectRatio = largestRep.width / largestRep.height;
@@ -170,17 +171,19 @@ define(["jquery", "publication/PageRepresentation", "internal/Reference", "enric
                     "background-image": "url(" + this.getClosestRepresentation(pageSize).getImageURL() + ")"
                 });
 
-            this.getEnrichments()
-                .done(function (enrichments) {
-                    enrichments.forEach(function (enrichment) {
-                        enrichment.createDomElement().appendTo(page);
+            if (!ignoreEnrichments) {
+                this.getEnrichments()
+                    .done(function (enrichments) {
+                        enrichments.forEach(function (enrichment) {
+                            enrichment.createDomElement().appendTo(page);
+                        });
                     });
-                });
 
-            $("<span/>")
-                .addClass("Label")
-                .text(this.pageLabel)
-                .appendTo(page);
+                $("<span/>")
+                    .addClass("Label")
+                    .text(this.pageLabel)
+                    .appendTo(page);
+            }
 
             return page;
         };
