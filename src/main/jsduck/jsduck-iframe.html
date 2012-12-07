@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Publication API</title>
+    <title>Publication API RequireJS live preview</title>
     <script src="../../src/main/resources/require.js"></script>
     <link rel="stylesheet" type="text/css" href="../../src/main/css/styling.css" />
 
     <script>
+        /*global requirejs, document */
         requirejs.config({
             baseUrl: "../../src/main/javascript",
             paths: {
@@ -15,13 +16,19 @@
 
         // See https://github.com/senchalabs/jsduck/wiki/Inline-examples
         function loadInlineExample(code, options, callback) {
+            "use strict";
             try {
                 document.body.innerHTML = '';
+                /*jslint evil:true*/
                 eval(code);
-                callback && callback(true);
+                if (callback) {
+                    callback(true);
+                }
             } catch (e) {
                 document.body.innerHTML = e;
-                callback && callback(false, e);
+                if (callback) {
+                    callback(false, e);
+                }
             }
         }
     </script>
