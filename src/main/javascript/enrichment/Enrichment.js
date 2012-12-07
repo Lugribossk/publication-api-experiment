@@ -7,6 +7,8 @@ define(["jquery", "shape/ShapeParser", "util/Logger"],
          * Abstract base class for the different enrichment types.
          *
          * @abstract
+         * @class enrichment.Enrichment
+         * @alternateClassName Enrichment
          * @author Bo Gotthardt
          * @constructor
          *
@@ -30,20 +32,20 @@ define(["jquery", "shape/ShapeParser", "util/Logger"],
              */
             this.lastPageNumber = data.lastPageNumber;
 
-            // non-widget, non-video
+            // Only available on non-widget, non-video enrichments.
             /**
              * The enrichment's hex color, in base 10.
-             * @type {Number}
+             * @type {Number/undefined}
              */
             this.color = data.color;
             /**
              * The opacity, between 0 (transparent) and 100 (solid).
-             * @type {Number}
+             * @type {Number/undefined}
              */
             this.opacity = data.opacity;
             /**
              * The enrichment "effect", see {@link Enrichment.EffectTypes}
-             * @type {String}
+             * @type {String/undefined}
              */
             this.effect = data.effect;
 
@@ -61,11 +63,11 @@ define(["jquery", "shape/ShapeParser", "util/Logger"],
         /**
          * Get this enrichment's color as a CSS string (i.e. "#123abc").
          *
-         * @return {String} The color, or null if it does not have one.
+         * @return {String/undefined} The color, or undefined if it does not have one.
          */
         Enrichment.prototype.getCSSColor = function () {
             if (this.color === undefined) {
-                return null;
+                return undefined;
             }
             return "#" + this.color.toString(16);
         };
@@ -92,7 +94,8 @@ define(["jquery", "shape/ShapeParser", "util/Logger"],
          * The different types of enrichment effects.
          *
          * @static
-         * @enum
+         * @enum enrichment.Enrichment.EffectTypes
+         * @alternateClassName Enrichment.EffectTypes
          */
         Enrichment.EffectTypes = {
             NONE: "none",
