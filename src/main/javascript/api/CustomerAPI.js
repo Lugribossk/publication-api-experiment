@@ -10,7 +10,7 @@ define(["jquery", "api/PublicationAPI", "util/Logger", "util/Promise", "util/win
          *     @example
          *     require(["jquery", "api/CustomerAPI"],
          *         function ($, CustomerAPI) {
-         *             new CustomerAPI("2a39a9615b").getPublications("85d291bd")
+         *             new CustomerAPI("2a39a9615b").getAllPublications("85d291bd")
          *                 .then(function (publications) {
          *                     var pages = publications.map(function (publication) {
          *                         return publication.getPage(1);
@@ -49,7 +49,7 @@ define(["jquery", "api/PublicationAPI", "util/Logger", "util/Promise", "util/win
          * @param {String} customerID The ID of the customer, as seen in the Publicator under TODO.
          * @return {Promise} A promise for the list of {@link Publication}s.
          */
-        CustomerAPI.prototype.getPublications = function (customerID) {
+        CustomerAPI.prototype.getAllPublications = function (customerID) {
             var scope = this;
 
             return $.ajax({
@@ -62,14 +62,7 @@ define(["jquery", "api/PublicationAPI", "util/Logger", "util/Promise", "util/win
                     log.error("There was a problem retrieving the publication ID list.", xhr);
                 })
                 .then(function (data) {
-                    var deferreds = data.publicationIDs.map(function (publicationID) {
-                        return scope._publicationAPI.getPublication(publicationID)
-                            .fail(function () {
-                                log.warn("Unable to retrieve publication", publicationID);
-                            });
-                    });
-
-                    return Promise.any(deferreds);
+                    return scope._publicationAPI.getPublications(data.publicationIDs);
                 });
         };
 
