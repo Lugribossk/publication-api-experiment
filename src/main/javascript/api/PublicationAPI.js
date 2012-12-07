@@ -178,7 +178,7 @@ define(["jquery", "internal/Reference", "publication/Publication", "util/Promise
         PublicationAPI.prototype.getPublications = function (publicationIDs) {
             var publications = publicationIDs.map(function (publicationID) {
                 return this.getPublication(publicationID);
-            });
+            }, this);
 
             return Promise.any(publications);
         };
