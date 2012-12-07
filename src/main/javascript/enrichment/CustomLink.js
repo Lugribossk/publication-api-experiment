@@ -3,8 +3,8 @@ define(["jquery", "enrichment/Enrichment"],
         "use strict";
 
         /**
-         * A "custom" link, essentially just a link shape with arbitrary user-defined data.
-         * These are created in Enriched as External links, but with the URL in the following format: "{key1=value1&key2=value"...}".
+         * A "custom" link, essentially just a link shape with arbitrary user-defined key/value data.
+         * These are created in Enriched as external links, but with the URL in the following format: "{key1=value1&key2=value"...}".
          *
          * @extends Enrichment
          * @class enrichment.CustomLink
