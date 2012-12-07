@@ -1,6 +1,6 @@
 /*global requirejs, window*/
 /**
- * Archive demo.
+ * Archive demo using the Viewer API.
  *
  * @author Bo Gotthardt
  */
