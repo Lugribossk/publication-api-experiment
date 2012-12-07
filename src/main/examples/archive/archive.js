@@ -12,13 +12,13 @@ requirejs.config({
     }
 });
 
-requirejs(["jquery", "api/CustomerAPI", "util/Promise", "viewerAPI"],
-    function ($, CustomerAPI, Promise, Viewer) {
+requirejs(["jquery", "api/CustomerAPI", "api/PublicationAPI", "util/Promise", "viewerAPI"],
+    function ($, CustomerAPI, PublicationAPI, Promise, Viewer) {
         "use strict";
-        var currentPublication = null;
+        var currentPublicationID = null;
 
         function currentPageChanged(viewer, page) {
-            window.location.hash = currentPublication + "/" + page;
+            window.location.hash = currentPublicationID + "/" + page;
 
             // Set the viewer to share this website plus the current publication/page, rather than the publication URL itself.
             viewer.setSharePublicationURL(window.location.href);
@@ -31,22 +31,22 @@ requirejs(["jquery", "api/CustomerAPI", "util/Promise", "viewerAPI"],
          * @param {Number} [page=1]
          */
         function displayPublication(publicationID, page) {
-            if (currentPublication === publicationID) {
+            if (currentPublicationID === publicationID) {
                 return;
             }
-            currentPublication = publicationID;
+            currentPublicationID = publicationID;
             page = page || 1;
 
             // Add a class to distinguish the currently selected publication.
             $(".PageRepresentation").removeClass("current");
-            $("#" + publicationID).addClass("current");
+            $("#" + currentPublicationID).addClass("current");
 
             // Remove the viewer for the previous publication.
             $("#viewer").children().remove();
 
             // Use the viewer API to insert the new publication.
             var viewer = new Viewer();
-            viewer.setPublicationID(currentPublication);
+            viewer.setPublicationID(currentPublicationID);
             viewer.setParentElementID("viewer");
             viewer.gotoPage(page);
             viewer.show();
@@ -74,51 +74,48 @@ requirejs(["jquery", "api/CustomerAPI", "util/Promise", "viewerAPI"],
             displayPublication(hash[0], hash[1]);
         }
 
-        // Make sure the element with the coverpages has the same pixel height as its container so that it will show scrollbars.
-        $(window).on("load resize", function () {
-            $("#coverpages").height($("#archive").height());
-        });
-
         // Get all the activated publications the customer has.
+        // If we only wanted some specific ones we could do this instead:
+        // new PublicationAPI(key).getPublications(["8d738def", "88f2a97d", "a850b17d"])
         var key = "2a39a9615b";
         var customerID = "85d291bd";
-        new CustomerAPI(key).getPublications(customerID)
+        new CustomerAPI(key).getAllPublications(customerID)
             .then(function (publications) {
                 // Sort publications alphabetically.
                 publications.sort(function (a, b) {
                     return a.name.localeCompare(b.name);
                 });
 
+                // If we're not already displaying a publication (from the hash fragment), default to the first one.
+                if (!currentPublicationID) {
+                    displayPublication(publications[0].id);
+                }
+
                 // Create a archive object for each publication with the object and first page.
-                var archives = publications.map(function (publication) {
+                var coverPageElements = publications.map(function (publication) {
                     return publication.getPage(1)
-                        .then(function (coverPage) {
-                            return {
-                                publication: publication,
-                                // We only need an image of the cover page (and not all the enrichment data),
-                                // so use the page representation instead, which is just an image of the page.
-                                coverPage: coverPage.getClosestRepresentation({width: 200, height: 200})
-                            };
+                        .then(function (page) {
+                            // We only need an image of the cover page (and not all the enrichment data),
+                            // so use the page representation instead, which is just an image of the page.
+                            return page.getClosestRepresentation({width: 200, height: 200}).createDomElement()
+                                .attr("title", publication.name)
+                                .attr("id", publication.id)
+                                .on("click", function () {
+                                    // Display the clicked publication.
+                                    displayPublication(publication.id);
+                                });
                         });
                 });
-                return Promise.all(archives);
+                return Promise.all(coverPageElements);
             })
-            .then(function (archives) {
-                // Turn each coverpage into an element that can be clicked.
-                archives.forEach(function (archive) {
-                    archive.coverPage.createDomElement()
-                        .attr("title", archive.publication.name)
-                        .attr("id", archive.publication.id)
-                        .on("click", function () {
-                            // Display the clicked publication.
-                            displayPublication(archive.publication.id);
-                        })
-                        .appendTo("#coverpages");
+            .then(function (coverPageElements) {
+                // Place each element on the page.
+                // We're doing this here rather than above as the list we get here is in sorted other, while the
+                // individual promises generated by publication.getPage() can resolve in any order.
+                coverPageElements.forEach(function (element) {
+                    element.appendTo("#coverpages");
                 });
 
-                // If we're not already displaying a publication (from the hash fragment), default to the first one.
-                if (!currentPublication) {
-                    displayPublication(archives[0].publication.id);
-                }
+                $("#" + currentPublicationID).addClass("current");
             });
     });

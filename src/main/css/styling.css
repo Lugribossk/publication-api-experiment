@@ -1,3 +1,6 @@
+/*
+ * Core styling needed by the elements from createDomElement() to function correctly.
+ */
 body {
     margin: 0;
 }

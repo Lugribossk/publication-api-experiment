@@ -1,49 +1,15 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Archive demo</title>
+        <title>Archive example - Publication API</title>
         <script src="../../resources/require.js" data-main="archive"></script>
-        <style type="text/css">
-            body {
-                overflow: hidden;
-                margin: 0;
-            }
-
-            #archive {
-                overflow: hidden;
-            }
-
-            .PageRepresentation {
-                float: left;
-                cursor: pointer;
-                max-width: 100%;
-                height: auto;
-                outline-offset: -1px;
-            }
-            .PageRepresentation.current {
-                outline: 1px solid red;
-            }
-            .PageRepresentation:hover {
-                outline: 1px solid blue;
-            }
-
-            #coverpages {
-                float: left;
-                width: 20%;
-                overflow-y: auto;
-                overflow-x: hidden;
-            }
-            #viewer {
-                float: left;
-                width: 80%;
-                height: 100%;
-            }
-        </style>
+        <link rel="stylesheet" type="text/css" href="archive.css" />
     </head>
-    <body>
+    <body class="">
         <div id="archive">
             <div id="coverpages"></div>
             <div id="viewer"></div>
+            <div style="clear: both;"></div>
         </div>
     </body>
 </html>

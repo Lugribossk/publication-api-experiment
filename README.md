@@ -8,7 +8,7 @@ Note that while this superficially resembles the viewer webapp, it is very far f
 
 ## Getting started
 
-Open `src/main/javascript/example.html` or start reading `src/main/javascript/example.js`.
+Open `src/main/example/simple.html` or start reading `src/main/example/simple.js`.
 
 ## Technical notes
 
