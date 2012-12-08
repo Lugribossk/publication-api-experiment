@@ -47,7 +47,9 @@ define(["jquery", "internal/Reference", "publication/Publication", "util/Promise
                 url: scope._apiURL + publicationID,
                 data: {
                     key: scope._key
-                }
+                },
+                dataType: "json",
+                timeout: 20000
             })
                 .then(null, function (xhr) {
                     log.warn("There was a problem getting the cached publication descriptor.", xhr);
@@ -72,7 +74,8 @@ define(["jquery", "internal/Reference", "publication/Publication", "util/Promise
                     key: scope._key,
                     recent: true
                 },
-                // Set a timeout as the recent response may be slow due to not being cached as well.
+                dataType: "json",
+                // Set a low timeout as the recent response may be slow due to not being cached as well.
                 timeout: 2000
             })
                 .then(null, function (xhr, textStatus) {

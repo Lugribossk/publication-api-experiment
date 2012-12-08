@@ -39,6 +39,14 @@ Open `src/main/example/simple.html` or start reading `src/main/example/simple.js
 - The live examples work due to a new live example iframe with RequireJS.
 - @class namespace.ClassName and @alternativeClassName ClassName seem to both allow the class to be referenced with it's short name, and be grouped under the namespace.
 
+### Internet Explorer
+- The [jQuery-ajaxTransport-XDomainRequest](https://github.com/MoonScript/jQuery-ajaxTransport-XDomainRequest) plugin is used to enable non-JSONP cross-domain requests in IE 8 and 9.
+- For it to work reliably it seems that:
+   - dataType must be set to "json" explicitly for it to activate.
+   - timeout may be required for requests to not silently disappear without succeeding or failing.
+- It is set up as a dependency in the Reference class, which should cause it to always be loaded.
+- [es5-shim](https://github.com/kriskowal/es5-shim) TODO
+
 ### Other
 - Constructors explicitly copy properties from their data object parameter. This could be replaced with a
   simple $.extend(this, data) but then it would be quite cryptic which properties the class actually has. It also makes it

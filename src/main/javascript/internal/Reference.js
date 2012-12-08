@@ -1,5 +1,5 @@
-define(["jquery", "util/Promise", "util/Logger"],
-    function ($, Promise, Logger) {
+define(["jquery", "util/Promise", "util/Logger", "IEcors"],
+    function ($, Promise, Logger, IEcors) { // IEcors only included to force it being loaded
         "use strict";
         var log = new Logger("Reference");
 
@@ -84,7 +84,7 @@ define(["jquery", "util/Promise", "util/Logger"],
             if (cachedBundlePart) {
                 return Promise.resolved(cachedBundlePart);
             }
-            return $.get(baseURL + path)
+            return $.get(baseURL + path, null, null, "json")
                 .then(function (bundle) {
                     saveBundle(path, bundle);
                     return getBundlePart(path, part);
@@ -99,9 +99,9 @@ define(["jquery", "util/Promise", "util/Logger"],
         Reference.prototype.get = function () {
             var promise;
             if (this._resourcePath) {
-                promise = $.get(baseURL + this._resourcePath).promise();
+                promise = $.get(baseURL + this._resourcePath, null, null, "json").promise();
             } else if (this._resourceURL) {
-                promise = $.get(this._resourceURL).promise();
+                promise = $.get(this._resourceURL, null, null, "json").promise();
             } else if (this._bundlePath) {
                 promise = getBundleReference(this._bundlePath, this._bundlePart);
             } else {

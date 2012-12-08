@@ -56,7 +56,9 @@ define(["jquery", "api/PublicationAPI", "util/Logger", "util/Promise", "util/win
                 url: this._apiURL + customerID,
                 data: {
                     key: this._key
-                }
+                },
+                dataType: "json",
+                timeout: 20000
             })
                 .fail(function (xhr) {
                     log.error("There was a problem retrieving the publication ID list.", xhr);

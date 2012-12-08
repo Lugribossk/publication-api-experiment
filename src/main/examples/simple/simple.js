@@ -7,12 +7,18 @@
 requirejs.config({
     baseUrl: "../../javascript",
     paths: {
-        jquery: "http://ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min"
+        jquery: "http://ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min",
+        IEcors: "../resources/jQuery.XDomainRequest"
+    },
+    shim: {
+        IEcors: {
+            deps: ["jquery"]
+        }
     }
 });
 
-requirejs(["api/PublicationAPI"],
-    function (PublicationAPI) {
+requirejs(["jquery", "api/PublicationAPI"],
+    function (jQuery, PublicationAPI) {
         "use strict";
 
         var key = "2a39a9615b",
