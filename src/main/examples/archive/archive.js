@@ -1,18 +1,10 @@
-/*global requirejs, window*/
+/*global require, window*/
 /**
  * Archive demo using the Viewer API.
  *
  * @author Bo Gotthardt
  */
-requirejs.config({
-    baseUrl: "../../javascript",
-    paths: {
-        jquery: "http://ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min",
-        viewerAPI: "http://api.viewer.zmags.com/viewer/viewer"
-    }
-});
-
-requirejs(["jquery", "api/CustomerAPI", "api/PublicationAPI", "util/Promise", "viewerAPI"],
+require(["jquery", "api/CustomerAPI", "api/PublicationAPI", "util/Promise", "viewerAPI"],
     function ($, CustomerAPI, PublicationAPI, Promise, Viewer) {
         "use strict";
         var currentPublicationID = null;
