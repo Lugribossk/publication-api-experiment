@@ -4,7 +4,7 @@ module.exports = function (grunt) {
 
     grunt.initConfig({
         jslint: {
-            files: ["src/main/javascript/**/*.js", "src/main/examples/**/*.js"],
+            files: ["grunt.js", "src/main/javascript/**/*.js", "src/main/examples/**/*.js"],
             exclude: ["src/main/javascript/lib/*.js"],
             directives: {
                 plusplus: true,
@@ -28,11 +28,26 @@ module.exports = function (grunt) {
                     generateSourceMaps: true
                 }
             }
+        },
+        jsduck: {
+            main: {
+                src: [],
+                dest: "target/docs",
+                options: {
+                    "ignore-global": "",
+                    "eg-iframe": "jsduck/jsduck-iframe.html",
+                    "title": "Publication API Example",
+                    "welcome": "jsduck/jsduck-welcome.html",
+                    "footer": "blah",
+                    "external": ["jQuery", "Deferred"]
+                }
+            }
         }
     });
 
     grunt.loadNpmTasks('grunt-jslint');
     grunt.loadNpmTasks('grunt-requirejs');
+    grunt.loadNpmTasks('grunt-jsduck');
 
     grunt.registerTask('default', 'jslint requirejs');
 };
