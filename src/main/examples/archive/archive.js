@@ -4,7 +4,7 @@
  *
  * @author Bo Gotthardt
  */
-require(["jquery", "api/CustomerAPI", "api/PublicationAPI", "util/Promise", "viewerAPI"],
+require(["jquery", "api/CustomerAPI", "api/PublicationAPI", "util/Promise", "http://api.viewer.zmags.com/viewer/viewer"],
     function ($, CustomerAPI, PublicationAPI, Promise, Viewer) {
         "use strict";
         var currentPublicationID = null;

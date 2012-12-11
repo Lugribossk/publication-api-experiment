@@ -1,3 +1,6 @@
+define(["jquery"], function (jQuery) {
+// Original source from https://github.com/MoonScript/jQuery-ajaxTransport-XDomainRequest, modified to be inside an AMD module.
+
 // jQuery.XDomainRequest.js
 // Author: Jason Moon - @JSONMOON
 // IE8+
@@ -85,3 +88,4 @@ if (!jQuery.support.cors && window.XDomainRequest) {
     }
   });
 }
+});
