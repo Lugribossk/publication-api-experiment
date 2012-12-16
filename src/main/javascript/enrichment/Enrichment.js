@@ -7,8 +7,7 @@ define(["jquery", "shape/ShapeParser", "util/Logger"],
          * Abstract base class for the different enrichment types.
          *
          * @abstract
-         * @class enrichment.Enrichment
-         * @alternateClassName Enrichment
+         * @class Enrichment
          * @author Bo Gotthardt
          * @constructor
          *
@@ -94,8 +93,7 @@ define(["jquery", "shape/ShapeParser", "util/Logger"],
          * The different types of enrichment effects.
          *
          * @static
-         * @enum enrichment.Enrichment.EffectTypes
-         * @alternateClassName Enrichment.EffectTypes
+         * @enum Enrichment.EffectTypes
          */
         Enrichment.EffectTypes = {
             NONE: "none",
