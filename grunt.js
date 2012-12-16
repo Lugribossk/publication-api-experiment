@@ -31,14 +31,14 @@ module.exports = function (grunt) {
         },
         jsduck: {
             main: {
-                src: [],
+                src: ["src/main/javascript"],
                 dest: "target/docs",
                 options: {
                     "ignore-global": "",
                     "eg-iframe": "jsduck/jsduck-iframe.html",
                     "title": "Publication API Example",
-                    "welcome": "jsduck/jsduck-welcome.html",
-                    "footer": "blah",
+                    //"welcome": "jsduck/jsduck-welcome.html",
+                    //"footer": "blah",
                     "external": ["jQuery", "Deferred"]
                 }
             }
