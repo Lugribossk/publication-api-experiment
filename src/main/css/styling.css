@@ -13,7 +13,8 @@ body {
     position: absolute;
     overflow: hidden; /* To avoid .Label being too wide */
     outline: 1px solid;
-    background-color: rgba(0, 0, 200, 0.03);
+    background-color: rgba(0, 0, 200, 0.3);
+    -webkit-transform-origin: 0 0;
 }
 
 .RectangleShape:hover {
@@ -26,7 +27,7 @@ body {
     bottom: 0;
     left: 0;
     right: 0;
-    fill: rgba(0, 0, 200, 0.03);
+    fill: rgba(0, 0, 200, 0.3);
     stroke-width: 0.2;
     fill-rule: evenodd;
     pointer-events: none; /* The page-sized polygon positioning container should not capture events. */
