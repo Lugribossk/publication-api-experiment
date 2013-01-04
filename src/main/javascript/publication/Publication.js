@@ -93,6 +93,24 @@ define(["jquery", "internal/Reference", "publication/Page", "util/Promise", "uti
         };
 
         /**
+         * Get all the publication's enrichments.
+         *
+         * @return {Promise} A promise for the list of {@link Enrichment}s.
+         */
+        Publication.prototype.getEnrichments = function () {
+            return this.getPages()
+                .then(function (pages) {
+                    var deferreds = pages.map(function (page) {
+                        return page.getEnrichments();
+                    });
+                    return Promise.all(deferreds)
+                        .then(function (enrichmentLists) {
+                            return Array.prototype.concat.apply([], enrichmentLists);
+                        });
+                });
+        };
+
+        /**
          * Get the page number of the first page where the product with the specified ID is located.
          *
          * @param {String} productID The product ID.
