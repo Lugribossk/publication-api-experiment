@@ -13,12 +13,12 @@ body {
     position: absolute;
     overflow: hidden; /* To avoid .Label being too wide */
     outline: 1px solid;
-    background-color: rgba(0, 0, 200, 0.3);
-    -webkit-transform-origin: 0 0;
+    background-color: rgba(0, 0, 200, 0.2);
+    -webkit-transform-origin: 0 0; /* Rotate around the center. */
 }
 
 .RectangleShape:hover {
-    background-color: rgba(0, 0, 200, 0.1);
+    background-color: rgba(0, 0, 200, 0.3);
 }
 
 .PolygonShape {
@@ -27,14 +27,14 @@ body {
     bottom: 0;
     left: 0;
     right: 0;
-    fill: rgba(0, 0, 200, 0.3);
+    fill: rgba(0, 0, 200, 0.2);
     stroke-width: 0.2;
     fill-rule: evenodd;
     pointer-events: none; /* The page-sized polygon positioning container should not capture events. */
 }
 
 .PolygonShape:hover {
-    fill: rgba(0, 0, 200, 0.1);
+    fill: rgba(0, 0, 200, 0.3);
 }
 
 .PolygonShape polygon {
