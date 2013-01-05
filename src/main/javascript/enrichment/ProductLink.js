@@ -1,5 +1,5 @@
-define(["jquery", "internal/Reference", "publication/Product", "enrichment/Enrichment", "util/Promise", "util/Logger"],
-    function ($, Reference, Product, Enrichment, Promise, Logger) {
+define(["jquery", "internal/Reference", "publication/Product", "enrichment/Enrichment", "util/Promise", "util/Logger", "publication/MediaRepresentation"],
+    function ($, Reference, Product, Enrichment, Promise, Logger, MediaRepresentation) {
         "use strict";
         var log = new Logger("ProductLink");
 
@@ -61,6 +61,14 @@ define(["jquery", "internal/Reference", "publication/Product", "enrichment/Enric
                         log.info(product);
                     });
                 });
+
+
+            if (this.getMediaRepresentations().length > 0) {
+                // The media representation is a background image for the link.
+                element.css({
+                    "background-image": "url(" + this.getMediaRepresentations()[0].getBinaryURL() + ")"
+                });
+            }
 
             return element;
         };

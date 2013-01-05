@@ -43,17 +43,6 @@ define(["jquery", "enrichment/Enrichment", "publication/MediaRepresentation"],
         VideoEnrichment.prototype = Object.create(Enrichment.prototype);
 
         /**
-         * Get the media representations for the actual video.
-         *
-         * @return {MediaRepresentation[]}
-         */
-        VideoEnrichment.prototype.getVideoRepresentations = function () {
-            return this._mediaRepresentationDescriptors.map(function (rep) {
-                return new MediaRepresentation(rep);
-            });
-        };
-
-        /**
          * Get the media representations for the poster images.
          *
          * @return {MediaRepresentation[]}
@@ -71,7 +60,7 @@ define(["jquery", "enrichment/Enrichment", "publication/MediaRepresentation"],
 
         VideoEnrichment.prototype.createVideoElement = function () {
             var video = $("<video/>", {
-                src: this.getVideoRepresentations()[0].getBinaryURL(),
+                src: this.getMediaRepresentations()[0].getBinaryURL(),
                 controls: this.enableControls,
                 autoplay: this.playOnLoad,
                 loop: this.loop,

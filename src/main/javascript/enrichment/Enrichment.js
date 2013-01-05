@@ -1,5 +1,5 @@
-define(["jquery", "shape/ShapeParser", "util/Logger"],
-    function ($, ShapeParser, Logger) {
+define(["jquery", "shape/ShapeParser", "util/Logger", "publication/MediaRepresentation"],
+    function ($, ShapeParser, Logger, MediaRepresentation) {
         "use strict";
         var log = new Logger("Enrichment");
 
@@ -48,13 +48,17 @@ define(["jquery", "shape/ShapeParser", "util/Logger"],
              */
             this.effect = data.effect;
 
-            // optional
             this._mediaRepresentationDescriptors = data.mediaRepresentationDescriptors;
             this._tooltip = data.tooltip;
 
             this._shape = data.shape;
         }
 
+        /**
+         * Get this enrichment's shape.
+         *
+         * @return {Shape}
+         */
         Enrichment.prototype.getShape = function () {
             return new ShapeParser().construct(this._shape);
         };
@@ -69,6 +73,23 @@ define(["jquery", "shape/ShapeParser", "util/Logger"],
                 return undefined;
             }
             return "#" + this.color.toString(16);
+        };
+
+        /**
+         * Get this enrichment's media representations.
+         * What this is a media representation *of* depends on the kind of enrichment.
+         *
+         * @return {MediaRepresentation[]}
+         */
+        Enrichment.prototype.getMediaRepresentations = function () {
+            // The media representation descriptors property is optional.
+            if (!this._mediaRepresentationDescriptors) {
+                return [];
+            }
+
+            return this._mediaRepresentationDescriptors.map(function (rep) {
+                return new MediaRepresentation(rep);
+            });
         };
 
         Enrichment.prototype.createDomElement = function (label) {
