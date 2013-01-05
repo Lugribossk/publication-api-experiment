@@ -1,5 +1,5 @@
-define(["jquery", "enrichment/Enrichment"],
-    function ($, Enrichment) {
+define(["jquery", "enrichment/Enrichment", "util/window"],
+    function ($, Enrichment, window) {
         "use strict";
 
         /**
@@ -27,8 +27,14 @@ define(["jquery", "enrichment/Enrichment"],
         ExternalLink.prototype = Object.create(Enrichment.prototype);
 
         ExternalLink.prototype.createDomElement = function () {
-            return Enrichment.prototype.createDomElement.call(this, this.url + ", " + this.target)
+            var element = Enrichment.prototype.createDomElement.call(this, this.url + ", " + this.target)
                 .addClass("ExternalLink");
+
+            element.on("dblclick", function () {
+                window.open(this.url, "_blank");
+            }.bind(this));
+
+            return element;
         };
 
         /**

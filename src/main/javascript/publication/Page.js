@@ -164,6 +164,7 @@ define(["jquery", "publication/PageRepresentation", "internal/Reference", "enric
             var pageSize = reduceToAspectRatio(pageBounds, aspectRatio);
 
             var page = $("<div/>")
+                .attr("id", "page" + this.pageNumber)
                 .addClass("Page")
                 .css({
                     height: pageSize.height,
