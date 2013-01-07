@@ -26,7 +26,7 @@ define(["jquery", "internal/Reference", "publication/Publication", "util/Promise
         function PublicationAPI(key, apiURL) {
             this._key = key;
             this._apiURL = apiURL ||
-                window.location.protocol === "https:" ? PublicationAPI.HTTPS_URL : PublicationAPI.HTTP_URL;
+                (window.location.protocol === "https:" ? PublicationAPI.HTTPS_URL : PublicationAPI.HTTP_URL);
         }
 
 

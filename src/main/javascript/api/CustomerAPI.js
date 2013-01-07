@@ -35,7 +35,8 @@ define(["jquery", "api/PublicationAPI", "util/Logger", "util/Promise", "util/win
         function CustomerAPI(key, apiURL) {
             this._key = key;
             this._apiURL = apiURL ||
-                window.location.protocol === "https:" ? CustomerAPI.HTTPS_URL : CustomerAPI.HTTP_URL;
+                (window.location.protocol === "https:" ? CustomerAPI.HTTPS_URL : CustomerAPI.HTTP_URL);
+            // TODO Make this change together with apiURL.
             this._publicationAPI = new PublicationAPI(key);
         }
 
