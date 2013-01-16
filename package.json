@@ -1,0 +1,9 @@
+{
+    "name": "publication-api-experiment",
+    "version": "0.7.0",
+    "dependencies": {
+        "grunt-jslint": "",
+        "grunt-requirejs": "",
+        "grunt-jsduck": ""
+    }
+}
