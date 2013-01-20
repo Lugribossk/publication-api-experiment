@@ -7,6 +7,7 @@
       <sourceFolder url="file://$MODULE_DIR$/src/main/examples" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/main/css" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/main/jsduck" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/test/javascript" isTestSource="true" />
       <excludeFolder url="file://$MODULE_DIR$/target" />
     </content>
     <orderEntry type="inheritedJdk" />
