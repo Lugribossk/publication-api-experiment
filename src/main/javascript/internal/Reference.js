@@ -96,10 +96,8 @@ define(["jquery", "util/Promise", "util/Logger", "lib/XDomain"],
          */
         Reference.prototype.get = function () {
             var promise;
-            if (this._resourcePath) {
-                promise = $.get(baseURL + this._resourcePath, null, null, "json").promise();
-            } else if (this._resourceURL) {
-                promise = $.get(this._resourceURL, null, null, "json").promise();
+            if (this._resourcePath || this._resourceURL) {
+                promise = $.get(this.getBinaryURL(), null, null, "json").promise();
             } else if (this._bundlePath) {
                 promise = getBundleReference(this._bundlePath, this._bundlePart);
             } else {
@@ -171,6 +169,15 @@ define(["jquery", "util/Promise", "util/Logger", "lib/XDomain"],
             } else {
                 baseURL = url;
             }
+        };
+
+        /**
+         * Clear any cached reference data.
+         *
+         * @static
+         */
+        Reference.clearCache = function () {
+            bundleCache = {};
         };
 
         return Reference;

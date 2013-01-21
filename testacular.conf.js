@@ -17,6 +17,9 @@ files = [
     {pattern: "src/test/javascript/**/*.js", included: false}
 ];
 
+preprocessors = {
+    '**/src/main/javascript/**/*.js': 'coverage'
+};
 
 // list of files to exclude
 exclude = [];
@@ -24,7 +27,7 @@ exclude = [];
 
 // test results reporter to use
 // possible values: "dots", "progress", "junit"
-reporters = ["progress"];
+reporters = ["progress"/*, "coverage"*/];
 
 
 // web server port
@@ -66,3 +69,9 @@ captureTimeout = 60000;
 // Continuous Integration mode
 // if true, it capture browsers, run tests and exit
 singleRun = false;
+
+
+coverageReporter = {
+    type : 'html', // "cobertura"
+    dir : 'target/coverage/'
+};

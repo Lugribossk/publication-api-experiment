@@ -42,12 +42,23 @@ module.exports = function (grunt) {
                     "external": ["jQuery", "Deferred"]
                 }
             }
+        },
+        testacular: {
+            unit: {
+                configFile: "testacular.conf.js"
+            }/*,
+            ci: {
+                configFile: "testacular.conf.js",
+                singleRun: true,
+                browsers: ["PhantomJS"]
+            }*/
         }
     });
 
-    grunt.loadNpmTasks('grunt-jslint');
-    grunt.loadNpmTasks('grunt-requirejs');
-    grunt.loadNpmTasks('grunt-jsduck');
+    grunt.loadNpmTasks("grunt-jslint");
+    grunt.loadNpmTasks("grunt-requirejs");
+    grunt.loadNpmTasks("grunt-jsduck");
+    grunt.loadNpmTasks("gruntacular");
 
-    grunt.registerTask('default', 'jslint requirejs');
+    grunt.registerTask("default", "jslint requirejs");
 };
