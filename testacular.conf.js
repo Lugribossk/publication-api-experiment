@@ -18,7 +18,8 @@ files = [
 ];
 
 preprocessors = {
-    '**/src/main/javascript/**/*.js': 'coverage'
+    // Exclude files in the lib folder from code coverage calculations.
+    "**/src/main/javascript/!(lib)**/*.js": "coverage"
 };
 
 // list of files to exclude
@@ -27,7 +28,7 @@ exclude = [];
 
 // test results reporter to use
 // possible values: "dots", "progress", "junit"
-reporters = ["progress"/*, "coverage"*/];
+reporters = ["progress", "junit", "coverage"];
 
 
 // web server port
@@ -44,7 +45,7 @@ colors = true;
 
 // level of logging
 // possible values: LOG_DISABLE || LOG_ERROR || LOG_WARN || LOG_INFO || LOG_DEBUG
-logLevel = LOG_INFO;
+logLevel = LOG_DEBUG;
 
 
 // enable / disable watching file and executing tests whenever any file changes
@@ -59,19 +60,19 @@ autoWatch = false;
 // - Safari (only Mac)
 // - PhantomJS
 // - IE (only Windows)
-browsers = [];
+browsers = ["Chrome"];
 
 
 // If browser does not capture in given timeout [ms], kill it
-captureTimeout = 60000;
+captureTimeout = 6000;
 
 
 // Continuous Integration mode
 // if true, it capture browsers, run tests and exit
-singleRun = false;
+singleRun = true;
 
 
 coverageReporter = {
-    type : 'html', // "cobertura"
-    dir : 'target/coverage/'
+    type : "html", // "cobertura"
+    dir : "target/coverage/"
 };
