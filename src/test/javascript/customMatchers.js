@@ -17,6 +17,11 @@ define([],
             toHaveResolvedWith: function (expectedValue) {
                 var actualValue;
 
+                if (!this.actual.state || !this.actual.done || !this.actual.fail || !this.actual.then) {
+                    this.message = function () { return "Expected actual value to be a promise object."; };
+                    return false;
+                }
+
                 if (this.actual.state() !== "resolved") {
                     this.message = function () { return "Expected promise to have resolved."; };
                     return false;
