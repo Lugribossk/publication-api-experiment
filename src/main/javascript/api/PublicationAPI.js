@@ -1,10 +1,10 @@
-define(["jquery", "internal/Reference", "publication/Publication", "util/Promise", "util/Logger", "util/window"],
-    function ($, Reference, Publication, Promise, Logger, window) {
+define(["jquery", "internal/Reference", "publication/Publication", "util/Promise", "util/Logger", "util/Browser"],
+    function ($, Reference, Publication, Promise, Logger, Browser) {
         "use strict";
         var log = new Logger("PublicationAPI");
 
         /**
-         * Zmags Publication API client that can be used to retrieve publication data.
+         * Client for the Zmags Publication API that can be used to retrieve publication data.
          *
          *     @example
          *     require(["api/PublicationAPI"],
@@ -26,7 +26,7 @@ define(["jquery", "internal/Reference", "publication/Publication", "util/Promise
         function PublicationAPI(key, apiURL) {
             this._key = key;
             this._apiURL = apiURL ||
-                (window.location.protocol === "https:" ? PublicationAPI.HTTPS_URL : PublicationAPI.HTTP_URL);
+                (Browser.getWindow().location.protocol === "https:" ? PublicationAPI.HTTPS_URL : PublicationAPI.HTTP_URL);
         }
 
 

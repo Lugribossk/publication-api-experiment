@@ -1,5 +1,5 @@
-define(["jquery", "enrichment/Enrichment", "util/window"],
-    function ($, Enrichment, window) {
+define(["jquery", "enrichment/Enrichment", "util/Browser"],
+    function ($, Enrichment, Browser) {
         "use strict";
 
         /**
@@ -31,7 +31,7 @@ define(["jquery", "enrichment/Enrichment", "util/window"],
                 .addClass("ExternalLink");
 
             element.on("dblclick", function () {
-                window.open(this.url, "_blank");
+                Browser.getWindow().open(this.url, "_blank");
             }.bind(this));
 
             return element;

@@ -9,7 +9,7 @@ define([],
 
         return {
             /**
-             * Expect the actual value to be a Promise that has resolved with the specified value.
+             * Expect the actual value to be a Promise that has *already* resolved with the specified value.
              *
              * @param {*} expectedValue
              * @return {Boolean}

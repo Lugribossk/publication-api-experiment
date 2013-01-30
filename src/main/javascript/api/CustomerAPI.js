@@ -1,10 +1,10 @@
-define(["jquery", "api/PublicationAPI", "util/Logger", "util/Promise", "util/window"],
-    function ($, PublicationAPI, Logger, Promise, window) {
+define(["jquery", "api/PublicationAPI", "util/Logger", "util/Promise", "util/Browser"],
+    function ($, PublicationAPI, Logger, Promise, Browser) {
         "use strict";
         var log = new Logger("CustomerAPI");
 
         /**
-         * Zmags Customer API client that can be used to retrieve publications for specific customers.
+         * Client for the Zmags Customer API that can be used to retrieve publications for specific customers.
          * Also known as the "Publication<b>s</b> API".
          *
          *     @example
@@ -35,7 +35,7 @@ define(["jquery", "api/PublicationAPI", "util/Logger", "util/Promise", "util/win
         function CustomerAPI(key, apiURL) {
             this._key = key;
             this._apiURL = apiURL ||
-                (window.location.protocol === "https:" ? CustomerAPI.HTTPS_URL : CustomerAPI.HTTP_URL);
+                (Browser.getWindow().location.protocol === "https:" ? CustomerAPI.HTTPS_URL : CustomerAPI.HTTP_URL);
             // TODO Make this change together with apiURL.
             this._publicationAPI = new PublicationAPI(key);
         }
