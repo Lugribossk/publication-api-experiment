@@ -50,9 +50,8 @@ define(["jquery", "internal/Reference", "publication/Product", "enrichment/Enric
                 .then(function (product) {
                     return product.product_id;
                 });
-
-            var element = Enrichment.prototype.createDomElement.call(this, productIdPromise, this.getProduct())
-                    .addClass("ProductLink " + (this.usesProductDatabase ? "DatabaseProduct" : "ManualProduct"));
+            var cssClass = "ProductLink " + (this.usesProductDatabase ? "DatabaseProduct" : "ManualProduct");
+            var element = Enrichment.prototype.createDomElement.call(this, cssClass, productIdPromise, this.getProduct());
 
             if (this.getMediaRepresentations().length > 0) {
                 // The media representation is a background image for the link.

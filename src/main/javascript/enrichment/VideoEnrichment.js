@@ -54,8 +54,7 @@ define(["jquery", "enrichment/Enrichment", "publication/MediaRepresentation"],
         };
 
         VideoEnrichment.prototype.createDomElement = function () {
-            return Enrichment.prototype.createDomElement.call(this)
-                .addClass("VideoEnrichment");
+            return Enrichment.prototype.createDomElement.call(this, "VideoEnrichment");
         };
 
         VideoEnrichment.prototype.createVideoElement = function () {
@@ -71,8 +70,7 @@ define(["jquery", "enrichment/Enrichment", "publication/MediaRepresentation"],
                     height: "100%"
                 });
 
-            return Enrichment.prototype.createDomElement.call(this)
-                .addClass("VideoEnrichment")
+            return Enrichment.prototype.createDomElement.call(this, "VideoEnrichment")
                 .append(video);
         };
 

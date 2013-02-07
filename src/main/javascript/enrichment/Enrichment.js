@@ -92,10 +92,11 @@ define(["jquery", "shape/ShapeParser", "util/Logger", "publication/MediaRepresen
             });
         };
 
-        Enrichment.prototype.createDomElement = function (label, clickLog) {
+        Enrichment.prototype.createDomElement = function (cssClass, label, clickLog) {
             var scope = this,
                 element = this.getShape().createDomElement()
-                    .addClass("Enrichment");
+                    .addClass("Enrichment")
+                    .addClass(cssClass);
 
             if (label) {
                 $.when(label)

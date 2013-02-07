@@ -28,8 +28,7 @@ define(["jquery", "enrichment/Enrichment", "util/Browser"],
 
         ExternalLink.prototype.createDomElement = function () {
             var scope = this,
-                element = Enrichment.prototype.createDomElement.call(this, this.url + ", " + this.target)
-                    .addClass("ExternalLink");
+                element = Enrichment.prototype.createDomElement.call(this, "ExternalLink", this.url + ", " + this.target);
 
             element.on("dblclick", function () {
                 Browser.getWindow().open(scope.url, scope.target);

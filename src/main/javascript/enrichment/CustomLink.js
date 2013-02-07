@@ -23,8 +23,7 @@ define(["jquery", "enrichment/Enrichment"],
         CustomLink.prototype = Object.create(Enrichment.prototype);
 
         CustomLink.prototype.createDomElement = function () {
-            return Enrichment.prototype.createDomElement.call(this, JSON.stringify(this.value), this.value)
-                .addClass("CustomLink");
+            return Enrichment.prototype.createDomElement.call(this, "CustomLink", JSON.stringify(this.value), this.value);
         };
 
         /**
