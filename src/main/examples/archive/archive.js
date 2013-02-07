@@ -4,11 +4,17 @@
  *
  * @author Bo Gotthardt
  */
-require(["jquery", "api/CustomerAPI", "api/PublicationAPI", "util/Promise", "http://api.viewer.zmags.com/viewer/viewer"],
+require(["jquery", "api/CustomerAPI", "api/PublicationAPI", "util/Promise", "http://api.viewer.zmags.com/viewer/viewer.js"],
     function ($, CustomerAPI, PublicationAPI, Promise, Viewer) {
         "use strict";
         var currentPublicationID = null;
 
+        /**
+         * Handle the page being changed in the viewer.
+         *
+         * @param {Viewer} viewer
+         * @param {Number} page
+         */
         function currentPageChanged(viewer, page) {
             window.location.hash = currentPublicationID + "/" + page;
 
@@ -83,7 +89,7 @@ require(["jquery", "api/CustomerAPI", "api/PublicationAPI", "util/Promise", "htt
                     displayPublication(publications[0].id);
                 }
 
-                // Create a archive object for each publication with the object and first page.
+                // Create a cover page element for each publication.
                 var coverPageElements = publications.map(function (publication) {
                     return publication.getPage(1)
                         .then(function (page) {
