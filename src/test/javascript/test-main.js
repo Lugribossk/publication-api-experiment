@@ -8,7 +8,7 @@
         baseUrl: "/base/src/main/javascript",
         paths: {
             // Use a local copy of jQuery so we don't need an internet connection to run unit tests.
-            jquery: "lib/jquery-1.8.2"
+            jquery: "lib/jquery-1.9.1"
         }
     });
 
