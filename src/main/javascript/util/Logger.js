@@ -1,6 +1,6 @@
 /*global console*/
-define(["jquery"],
-    function ($) {
+define(["jquery", "util/BrowserCompatibility"],
+    function ($, BrowserCompatibility) { // BrowserCompatibility only to force it being loaded before its functionality is required, as this class is one of the earliest loaded.
         "use strict";
 
         var output;

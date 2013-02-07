@@ -1,5 +1,5 @@
-define(["jquery", "util/Promise", "util/Logger", "lib/XDomain"],
-    function ($, Promise, Logger) { // XDomain only included to force it being loaded
+define(["jquery", "util/Promise", "util/Logger"],
+    function ($, Promise, Logger) {
         "use strict";
         var log = new Logger("Reference");
 
