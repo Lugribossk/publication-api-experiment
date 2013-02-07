@@ -3,8 +3,8 @@
  *
  * @author Bo Gotthardt
  */
-define([],
-    function () {
+define(["util/Promise"],
+    function (Promise) {
         "use strict";
 
         return {
@@ -17,7 +17,7 @@ define([],
             toHaveResolvedWith: function (expectedValue) {
                 var actualValue;
 
-                if (!this.actual.state || !this.actual.done || !this.actual.fail || !this.actual.then) {
+                if (!Promise.isPromise(this.actual)) {
                     this.message = function () { return "Expected actual value to be a promise object."; };
                     return false;
                 }

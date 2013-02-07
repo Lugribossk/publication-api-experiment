@@ -82,7 +82,7 @@ define(["jquery", "shape/ShapeParser", "util/Logger", "publication/MediaRepresen
          * @return {MediaRepresentation[]}
          */
         Enrichment.prototype.getMediaRepresentations = function () {
-            // The media representation descriptors property is optional.
+            // The media representation descriptors property is optional rather than the empty list.
             if (!this._mediaRepresentationDescriptors) {
                 return [];
             }
@@ -92,20 +92,27 @@ define(["jquery", "shape/ShapeParser", "util/Logger", "publication/MediaRepresen
             });
         };
 
-        Enrichment.prototype.createDomElement = function (label) {
-            var element = this.getShape().createDomElement()
-                .addClass("Enrichment");
+        Enrichment.prototype.createDomElement = function (label, clickLog) {
+            var scope = this,
+                element = this.getShape().createDomElement()
+                    .addClass("Enrichment");
 
             if (label) {
-                $("<span/>")
-                    .addClass("Label")
-                    .text(label)
-                    .appendTo(element);
+                $.when(label)
+                    .done(function (value) {
+                        $("<span/>")
+                            .addClass("Label")
+                            .text(value)
+                            .appendTo(element);
+                    });
             }
 
             element.on("click", function () {
-                log.info(this);
-            }.bind(this));
+                log.info(scope);
+                if (clickLog) {
+                    log.info(clickLog);
+                }
+            });
 
             return element;
         };

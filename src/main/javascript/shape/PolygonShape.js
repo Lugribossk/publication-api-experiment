@@ -39,7 +39,7 @@ define(["jquery", "shape/Shape"],
             }).join(" ");
 
             // preserveAspectRatio=none to ensure that the svg can be rescaled freely, even if the square viewbox ends up on a non-square page.
-            // Wrap in div and insert polygon directly as string since jQuery has problems handling svgs.
+            // Wrap in shape div and insert polygon directly as string since jQuery has problems handling svgs.
             return Shape.prototype.createDomElement.call(this)
                 .addClass("PolygonShape")
                 .append("<svg xmlns='http://www.w3.org/2000/svg' version='1.1' viewBox='0 0 100 100' preserveAspectRatio='none'>" +

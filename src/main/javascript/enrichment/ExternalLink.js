@@ -27,12 +27,13 @@ define(["jquery", "enrichment/Enrichment", "util/Browser"],
         ExternalLink.prototype = Object.create(Enrichment.prototype);
 
         ExternalLink.prototype.createDomElement = function () {
-            var element = Enrichment.prototype.createDomElement.call(this, this.url + ", " + this.target)
-                .addClass("ExternalLink");
+            var scope = this,
+                element = Enrichment.prototype.createDomElement.call(this, this.url + ", " + this.target)
+                    .addClass("ExternalLink");
 
             element.on("dblclick", function () {
-                Browser.getWindow().open(this.url, "_blank");
-            }.bind(this));
+                Browser.getWindow().open(scope.url, scope.target);
+            });
 
             return element;
         };

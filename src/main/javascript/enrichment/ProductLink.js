@@ -47,21 +47,13 @@ define(["jquery", "internal/Reference", "publication/Product", "enrichment/Enric
         };
 
         ProductLink.prototype.createDomElement = function () {
-            var element = Enrichment.prototype.createDomElement.call(this)
-                    .addClass("ProductLink " + (this.usesProductDatabase ? "DatabaseProduct" : "ManualProduct"));
-
-            this.getProduct()
-                .done(function (product) {
-                    $("<span/>")
-                        .addClass("Label")
-                        .text(product.product_id)
-                        .appendTo(element);
-
-                    element.on("click", function () {
-                        log.info(product);
-                    });
+            var productIdPromise = this.getProduct()
+                .then(function (product) {
+                    return product.product_id;
                 });
 
+            var element = Enrichment.prototype.createDomElement.call(this, productIdPromise, this.getProduct())
+                    .addClass("ProductLink " + (this.usesProductDatabase ? "DatabaseProduct" : "ManualProduct"));
 
             if (this.getMediaRepresentations().length > 0) {
                 // The media representation is a background image for the link.

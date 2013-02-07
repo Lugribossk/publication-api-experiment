@@ -38,17 +38,8 @@ define(["jquery", "enrichment/Enrichment", "internal/Reference", "publication/Pr
         };
 
         BuyTheLookWidget.prototype.createDomElement = function () {
-            var element = Enrichment.prototype.createDomElement.call(this)
+            return Enrichment.prototype.createDomElement.call(this, null, this.getProducts())
                 .addClass("BuyTheLookWidget");
-
-            element.on("click", function () {
-                this.getProducts()
-                    .done(function (products) {
-                        log.info(products);
-                    });
-            }.bind(this));
-
-            return element;
         };
 
         /**

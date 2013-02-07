@@ -1,6 +1,6 @@
 /*global console*/
-define(["jquery", "util/BrowserCompatibility"],
-    function ($, BrowserCompatibility) { // BrowserCompatibility only to force it being loaded before its functionality is required, as this class is one of the earliest loaded.
+define(["jquery", "util/Promise", "util/BrowserCompatibility"],
+    function ($, Promise, BrowserCompatibility) { // BrowserCompatibility only to force it being loaded before its functionality is required, as this class is one of the earliest loaded.
         "use strict";
 
         var output;
@@ -29,36 +29,62 @@ define(["jquery", "util/BrowserCompatibility"],
         }
 
         /**
-         * Compose the message to log.
+         * Use the specified console function name to print the list of data.
          *
-         * @param {Logger} scope
-         * @param {Array} args
-         * @return {Array}
+         * @private
+         *
+         * @param {String} functionName
+         * @param {Arguments/ *[]} dataList
          */
-        function message(scope, args) {
-            return ["[" + scope._name + "]"].concat($.makeArray(args));
-        }
+        Logger.prototype._callPrintFunction = function (functionName, dataList) {
+            // Chrome requires the console as it's own context.
+            output[functionName].apply(output, ["[" + this._name + "]"].concat($.makeArray(dataList)));
+        };
+
+        /**
+         * Print the list of data to the console.
+         * If there is only one argument and it is a Promise, it's resolved value will be logged instead.
+         *
+         * @private
+         *
+         * @param {String} functionName
+         * @param {Arguments} dataList
+         */
+        Logger.prototype._print = function (functionName, dataList) {
+            var scope = this;
+            if (Promise.isPromise(dataList[0]) && dataList.length === 1) {
+                dataList[0]
+                    .done(function () {
+                        scope._callPrintFunction(functionName, arguments);
+                    })
+                    .fail(function () {
+                        scope._callPrintFunction(functionName, ["Promise failed."]);
+                    });
+            } else {
+                scope._callPrintFunction(functionName, dataList);
+            }
+
+        };
 
         /**
          * Log informational message.
          */
         Logger.prototype.info = function () {
-            // Chrome requires the console as it's own context.
-            output.info.apply(output, message(this, arguments));
+            this._print("info", arguments);
         };
 
         /**
          * Log warning about undesired behavior.
          */
         Logger.prototype.warn = function () {
-            output.warn.apply(output, message(this, arguments));
+            this._print("warn", arguments);
         };
 
         /**
          * Log error message.
          */
         Logger.prototype.error = function () {
-            output.error.apply(output, message(this, arguments));
+            this._print("error", arguments);
         };
 
         /**

@@ -13,7 +13,7 @@ define(["jquery"],
         function Promise() {}
 
         /**
-         * See <a href="http://api.jquery.com/deferred.pipe/">deferred.pipe()</a>.
+         * See <a href="http://api.jquery.com/deferred.then/">deferred.then()</a>.
          *
          * @param {Function} doneFilter
          * @param {Function} [failFilter]
@@ -44,6 +44,8 @@ define(["jquery"],
         /**
          * Create a rejected promise.
          *
+         * @static
+         *
          * @param {*} [arg]
          * @return {Promise}
          */
@@ -53,6 +55,8 @@ define(["jquery"],
 
         /**
          * Create a resolved promise.
+         *
+         * @static
          *
          * @param {*} [arg]
          * @return {Promise}
@@ -69,9 +73,11 @@ define(["jquery"],
          * Note that due to the way progress() behaves, this function has a rather subtle gotcha when one or more of
          * the subordinates are done already (i.e. non-Promises or already resolved Promises).
          * These will then trigger the progress events <b>synchronously</b> while inside this function call. And unlike
-         * done() and fail(), progress() handlers attached later are not called with a previously triggered events.
+         * done() and fail(), progress() handlers attached later are not called with previously triggered events.
          * So it is therefore not guaranteed how many progress events the caller will actually get, unless they create
          * their own deferred, set up a progress handler and only then pass it as the combinedDeferred parameter.
+         *
+         * @static
          *
          * @param {Object[]} subordinates The list of subordinates, either Promises or arbitrary values.
          * @param {Deferred} [combinedDeferred] The "combined" deferred (not Promise) to use, instead of creating it internally.
@@ -87,7 +93,7 @@ define(["jquery"],
             subordinates.forEach(function (subordinate) {
                 // The subordinates can be both promises and already computed synchronous values.
                 // This is the same check as in $.when().
-                if ($.isFunction(subordinate.promise)) {
+                if (Promise.isPromise(subordinate)) {
                     subordinate.done(function (arg) {
                         numDone++;
                         combinedDeferred.notify.call(this, arg, numDone / subordinates.length);
@@ -111,6 +117,8 @@ define(["jquery"],
         /**
          * Alternative version of $.when() that always resolves with a list of the return vales of the subordinates that resolved.
          *
+         * @static
+         *
          * @param {Object[]} subordinates The list of subordinates, either Promises or arbitrary values.
          * @return {Promise} A promise for a list of the values of the subordinates that resolved.
          */
@@ -118,7 +126,7 @@ define(["jquery"],
             var combinedDeferred = new $.Deferred();
 
             subordinates = subordinates.map(function (subordinate) {
-                if ($.isFunction(subordinate.promise)) {
+                if (Promise.isPromise(subordinate)) {
                     // Always resolve subordinates rather than reject so the when() deferred always resolves.
                     return subordinate.then(null, function () {
                         return Promise.resolved();
@@ -137,6 +145,19 @@ define(["jquery"],
                 });
 
             return combinedDeferred.promise();
+        };
+
+        /**
+         * Determine whether the specified argument is a Promise.
+         *
+         * @static
+         *
+         * @param {*} possiblePromise
+         * @return {Boolean}
+         */
+        Promise.isPromise = function (possiblePromise) {
+            // This is how jQuery#when() does it internally.
+            return $.isFunction(possiblePromise.promise);
         };
 
         return Promise;

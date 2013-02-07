@@ -22,15 +22,16 @@ define(["jquery", "enrichment/Enrichment"],
         InternalLink.prototype = Object.create(Enrichment.prototype);
 
         InternalLink.prototype.createDomElement = function () {
-            var element = Enrichment.prototype.createDomElement.call(this, "Page " + this.targetPageNumber)
-                .addClass("InternalLink");
+            var scope = this,
+                element = Enrichment.prototype.createDomElement.call(this, "Page " + this.targetPageNumber)
+                    .addClass("InternalLink");
 
             element.on("dblclick", function () {
                 // Since the pages are stacked vertically on top of each other, we can jump to to a particular page by scrolling up/down the right amount.
                 $("body").animate({
-                    scrollTop: $("#page" + this.targetPageNumber).offset().top
+                    scrollTop: $("#page" + scope.targetPageNumber).offset().top
                 }, 500);
-            }.bind(this));
+            });
 
             return element;
         };
