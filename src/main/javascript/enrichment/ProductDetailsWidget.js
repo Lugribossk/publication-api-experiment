@@ -1,7 +1,6 @@
-define(["jquery", "enrichment/Enrichment", "internal/Reference", "publication/Product", "util/Logger"],
-    function ($, Enrichment, Reference, Product, Logger) {
+define(["jquery", "enrichment/Enrichment", "internal/Reference", "publication/Product"],
+    function ($, Enrichment, Reference, Product) {
         "use strict";
-        var log = new Logger("ProductDetailsWidget");
 
         /**
          * A product details widget. Similar to a product link, but with more advanced settings.

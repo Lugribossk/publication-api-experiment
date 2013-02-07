@@ -31,20 +31,36 @@ define(["jquery", "internal/Reference", "publication/Publication", "util/Promise
 
 
         /**
-         * Get the cached publication info.
+         * Get the specified publication info's publication descriptor.
          *
          * @private
          * @static
          *
-         * @param {PublicationAPI} scope
-         * @param {String} publicationID
+         * @param {Object} publicationInfo The publication info.
+         * @return {Promise} A promise for the publication descriptor.
+         */
+        function getPublicationDescriptor(publicationInfo) {
+            if (!publicationInfo.publicationDescriptor) {
+                log.error("No publication descriptor, perhaps the publication is not activated?");
+                return Promise.rejected();
+            }
+            return new Reference(publicationInfo.publicationDescriptor).get();
+        }
+
+
+        /**
+         * Get the cached publication info.
+         *
+         * @private
+         *
+         * @param {String} publicationID The publication ID.
          * @return {Promise} A promise for the info. Will resolve with null instead of reject.
          */
-        function getPublicationInfoCached(scope, publicationID) {
+        PublicationAPI.prototype._getPublicationInfoCached = function (publicationID) {
             return $.ajax({
-                url: scope._apiURL + publicationID,
+                url: this._apiURL + publicationID,
                 data: {
-                    key: scope._key
+                    key: this._key
                 },
                 dataType: "json",
                 timeout: 20000
@@ -53,23 +69,21 @@ define(["jquery", "internal/Reference", "publication/Publication", "util/Promise
                     log.warn("There was a problem getting the cached publication descriptor.", xhr);
                     return Promise.resolved(null);
                 });
-        }
+        };
 
         /**
          * Get the recent publication info.
          *
          * @private
-         * @static
          *
-         * @param {PublicationAPI} scope
-         * @param {String} publicationID
+         * @param {String} publicationID The publication ID.
          * @return {Promise} A promise for the info. Will resolve with null instead of reject.
          */
-        function getPublicationInfoRecent(scope, publicationID) {
+        PublicationAPI.prototype._getPublicationInfoRecent = function (publicationID) {
             return $.ajax({
-                url: scope._apiURL + publicationID,
+                url: this._apiURL + publicationID,
                 data: {
-                    key: scope._key,
+                    key: this._key,
                     recent: true
                 },
                 dataType: "json",
@@ -84,21 +98,19 @@ define(["jquery", "internal/Reference", "publication/Publication", "util/Promise
                     }
                     return Promise.resolved(null);
                 });
-        }
+        };
 
         /**
          * Get the specified publication's "publication info", respecting the rule about firing off two requests.
          *
          * @private
-         * @static
          *
-         * @param {PublicationAPI} scope
          * @param {String} publicationID The publication ID.
          * @return {Promise} A promise for the publication info.
          */
-        function getPublicationInfo(scope, publicationID) {
-            return $.when(getPublicationInfoCached(scope, publicationID),
-                          getPublicationInfoRecent(scope, publicationID))
+        PublicationAPI.prototype._getPublicationInfo = function (publicationID) {
+            return $.when(this._getPublicationInfoCached(publicationID),
+                          this._getPublicationInfoRecent(publicationID))
                 .then(function (infoResponse, infoRecentResponse) {
                     var info,
                         infoRecent;
@@ -126,26 +138,7 @@ define(["jquery", "internal/Reference", "publication/Publication", "util/Promise
                 .fail(function () {
                     log.error("Unable to retrieve any publication info.");
                 });
-        }
-
-        /**
-         * Get the specified publication info's publication descriptor.
-         *
-         * @private
-         * @static
-         *
-         * @param {Object} publicationInfo The publication info.
-         * @return {Promise} A promise for the publication descriptor.
-         */
-        function getPublicationDescriptor(publicationInfo) {
-            if (!publicationInfo.publicationDescriptor) {
-                log.error("No publication descriptor, perhaps the publication is not activated?");
-                return Promise.rejected();
-            }
-            return new Reference(publicationInfo.publicationDescriptor).get();
-        }
-
-
+        };
 
         /**
          * Get the specified publication.
@@ -157,7 +150,7 @@ define(["jquery", "internal/Reference", "publication/Publication", "util/Promise
         PublicationAPI.prototype.getPublication = function (publicationID) {
             var publicationInfo;
 
-            return getPublicationInfo(this, publicationID)
+            return this._getPublicationInfo(publicationID)
                 .done(function (info) {
                     publicationInfo = info;
                 })

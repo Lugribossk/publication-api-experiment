@@ -1,7 +1,6 @@
-define(["jquery", "internal/Reference", "publication/Product", "enrichment/Enrichment", "util/Promise", "util/Logger", "publication/MediaRepresentation"],
-    function ($, Reference, Product, Enrichment, Promise, Logger, MediaRepresentation) {
+define(["jquery", "internal/Reference", "publication/Product", "enrichment/Enrichment", "util/Promise"],
+    function ($, Reference, Product, Enrichment, Promise) {
         "use strict";
-        var log = new Logger("ProductLink");
 
         /**
          * A product link, either with manually entered data or from the product database.

@@ -11,7 +11,7 @@ define(["jquery", "util/Promise", "util/Logger"],
          * Resolving references correctly then lets us reuse this "bonus" data to avoid requesting it from the server.
          * This is a little complicated, but allows for much better usage of the Content Delivery Network caching.
          *
-         * <b>There should be no need to use this class when simply working with the objects returned by PublicationAPI.</b>
+         * <b>There should be no need to use this class when simply working with the objects returned by {@link PublicationAPI}.</b>
          *
          * @author Bo Gotthardt
          * @constructor

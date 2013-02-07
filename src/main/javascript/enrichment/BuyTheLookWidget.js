@@ -1,7 +1,6 @@
-define(["jquery", "enrichment/Enrichment", "internal/Reference", "publication/Product", "util/Promise", "util/Logger"],
-    function ($, Enrichment, Reference, Product, Promise, Logger) {
+define(["jquery", "enrichment/Enrichment", "internal/Reference", "publication/Product", "util/Promise"],
+    function ($, Enrichment, Reference, Product, Promise) {
         "use strict";
-        var log = new Logger("BuyTheLookWidget");
 
         /**
          * A "buy the look" widget. Also known as "shop the look" and several other similar names.
