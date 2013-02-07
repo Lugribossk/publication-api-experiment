@@ -8,7 +8,7 @@ Note that while this superficially resembles the viewer webapp, it is very far f
 
 ## Getting started
 
-Open [src/main/examples/simple.html](src/main/examples/simple.html) or start reading [src/main/examples/simple.js](src/main/examples/simple.js).
+Open [src/main/examples/simple/simple.html](src/main/examples/simple/simple.html) or start reading [src/main/examples/simple/simple.js](src/main/examples/simple/simple.js).
 
 ## Technical notes
 
