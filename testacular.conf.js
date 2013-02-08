@@ -64,7 +64,7 @@ browsers = ["Chrome"];
 
 
 // If browser does not capture in given timeout [ms], kill it
-captureTimeout = 6000;
+captureTimeout = 200000;
 
 
 // Continuous Integration mode

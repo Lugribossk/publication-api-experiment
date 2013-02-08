@@ -4,6 +4,7 @@ define(["jquery", "enrichment/Enrichment", "internal/Reference", "publication/Pr
 
         /**
          * A "buy the look" widget. Also known as "shop the look" and several other similar names.
+         * Has a list of {@link Product}s, rather than a single one like the {@link ProductDetailsWidget}.
          *
          * @extends Enrichment
          * @author Bo Gotthardt

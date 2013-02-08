@@ -3,7 +3,7 @@ define(["jquery", "internal/Reference", "publication/Product", "enrichment/Enric
         "use strict";
 
         /**
-         * A product link, either with manually entered data or from the product database.
+         * A link to a {@link Product}, either with manually entered data or from the product database.
          *
          * @extends Enrichment
          * @author Bo Gotthardt
@@ -37,10 +37,10 @@ define(["jquery", "internal/Reference", "publication/Product", "enrichment/Enric
             // Mimic the format for a database product so we can reuse the constructor logic.
             return Promise.resolved(new Product({
                 properties: {
-                    product_id: this._manualProduct.productID,
-                    name: this._manualProduct.productName,
+                    product_id:  this._manualProduct.productID,
+                    name:        this._manualProduct.productName,
                     description: this._manualProduct.productDescription,
-                    price: this._manualProduct.productPrice
+                    price:       this._manualProduct.productPrice
                 }
             }));
         };

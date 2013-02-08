@@ -3,7 +3,7 @@ define(["jquery", "enrichment/Enrichment", "internal/Reference", "publication/Pr
         "use strict";
 
         /**
-         * A product details widget. Similar to a product link, but with more advanced settings.
+         * A widget with details about a {@link Product}. Similar to a {@link ProductLink}, but with more advanced settings.
          *
          * @extends Enrichment
          * @author Bo Gotthardt
