@@ -15,9 +15,8 @@ define(["jquery", "internal/Reference", "util/Logger"],
          * but all other properties are optional and can have any name.
          * Variant products that do not have a a value for a particular property inherit it from their master product.
          *
-         * Note that products returned by traversing the master property of a product retrieved from an enrichment may
-         * not have all their defined properties. Therefore the above rule regarding property inheritance can only be
-         * properly applied if enrichments link to root products.
+         * If an enrichment links to a variant product, that product will itself have any inherited properties placed
+         * directly on it, and its master product(s) will only have product_id and possibly name properties.
          *
          * @property {String} product_id Special property whose value is always the product ID (i.e. the value entered when creating product links/widgets).
          * @property {Product[]} variants The variant products.
@@ -34,10 +33,9 @@ define(["jquery", "internal/Reference", "util/Logger"],
         function Product(data, existingMaster) {
             var output = this,
                 master = existingMaster;
-            function VariantProduct() {}
 
             if (data.ancestor) {
-                // The master described in data.ancestor does not have a variants property.
+                // The master described in data.ancestor does not have a variants property, so this will not cause an infinite loop.
                 master = new Product(data.ancestor);
             }
 
@@ -45,8 +43,7 @@ define(["jquery", "internal/Reference", "util/Logger"],
                 // Set the master product as this product's prototype by recreating it.
                 // This causes Javascript's prototypal inheritance to look up properties that are not found on this
                 // object in its prototype chain, which is exactly what we need for inheriting property values.
-                VariantProduct.prototype = master;
-                output = new VariantProduct();
+                output = Object.create(master);
                 output.master = master;
             }
 
@@ -67,7 +64,7 @@ define(["jquery", "internal/Reference", "util/Logger"],
                     return new Product(variant, output);
                 });
             } else {
-                // TODO Causes product.master.variants[0] to break for masters above the linked product.
+                // TODO Causes product.master.variants[0] to behave inconsistently for masters above the linked product.
                 output.variants = [];
             }
 
