@@ -15,6 +15,8 @@ define([],
         /**
          * Get the window object.
          *
+         * @static
+         *
          * @return {Window}
          */
         Browser.getWindow = function () {
@@ -23,6 +25,8 @@ define([],
 
         /**
          * Whether the current page is loaded over HTTPS.
+         *
+         * @static
          *
          * @return {Boolean}
          */

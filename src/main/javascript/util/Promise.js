@@ -79,7 +79,7 @@ define(["jquery"],
          *
          * @static
          *
-         * @param {Object[]} subordinates The list of subordinates, either Promises or arbitrary values.
+         * @param {*[]} subordinates The list of subordinates, either Promises or arbitrary values.
          * @param {Deferred} [combinedDeferred] The "combined" deferred (not Promise) to use, instead of creating it internally.
          * @return {Promise} A promise for the list of the values of all the subordinates.
          *                   The promise interface of combinedDeferred if that was passed.
@@ -119,7 +119,7 @@ define(["jquery"],
          *
          * @static
          *
-         * @param {Object[]} subordinates The list of subordinates, either Promises or arbitrary values.
+         * @param {*[]} subordinates The list of subordinates, either Promises or arbitrary values.
          * @return {Promise} A promise for a list of the values of the subordinates that resolved.
          */
         Promise.any = function (subordinates) {

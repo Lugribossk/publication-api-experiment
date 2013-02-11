@@ -31,12 +31,13 @@ define(["jquery", "api/PublicationAPI", "util/Logger", "util/Promise", "util/Bro
          * @param {String} key The API key.
          * @param {String} [apiURL] The URL to the Customer Publication List service.
          *                          Optional, defaults to the same protocol as the current page.
+         * @param {String} [publicationApiURL] The URL to the Publication Info service.
+         *                          Optional, defaults to the same protocol as the current page.
          */
-        function CustomerAPI(key, apiURL) {
+        function CustomerAPI(key, apiURL, publicationApiURL) {
             this._key = key;
             this._apiURL = apiURL || (Browser.isSecure() ? CustomerAPI.HTTPS_URL : CustomerAPI.HTTP_URL);
-            // TODO Make this change together with apiURL.
-            this._publicationAPI = new PublicationAPI(key);
+            this._publicationAPI = new PublicationAPI(key, publicationApiURL);
         }
 
 
