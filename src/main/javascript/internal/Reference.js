@@ -82,7 +82,7 @@ define(["jquery", "util/Promise", "util/Logger"],
             if (cachedBundlePart) {
                 return Promise.resolved(cachedBundlePart);
             }
-            return $.get(baseURL + path, null, null, "json")
+            return $.get(baseURL + path)
                 .then(function (bundle) {
                     saveBundle(path, bundle);
                     return getBundlePart(path, part);
@@ -97,7 +97,7 @@ define(["jquery", "util/Promise", "util/Logger"],
         Reference.prototype.get = function () {
             var promise;
             if (this._resourcePath || this._resourceURL) {
-                promise = $.get(this.getBinaryURL(), null, null, "json").promise();
+                promise = $.get(this.getBinaryURL()).promise();
             } else if (this._bundlePath) {
                 promise = getBundleReference(this._bundlePath, this._bundlePart);
             } else {

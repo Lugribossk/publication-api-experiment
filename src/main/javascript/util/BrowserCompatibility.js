@@ -1,5 +1,5 @@
 define(["jquery", "lib/XDomain", "lib/es5-shim.min", "lib/es5-sham.min"],
-    function () {
+    function ($) {
         "use strict";
 
         /**
@@ -11,4 +11,9 @@ define(["jquery", "lib/XDomain", "lib/es5-shim.min", "lib/es5-sham.min"],
          *
          * @author Bo Gotthardt
          */
+
+        $.ajaxSetup({
+            dataType: "json",
+            timeout: 20000
+        });
     });

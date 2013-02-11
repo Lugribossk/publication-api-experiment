@@ -33,7 +33,7 @@ define(["jquery", "internal/Reference", "util/Logger", "util/Promise"],
 
                         var promise = ref.get();
 
-                        expect($.get).toHaveBeenCalledWith(ref.getBinaryURL(), null, null, "json");
+                        expect($.get).toHaveBeenCalledWith(ref.getBinaryURL());
                     });
 
                     it("should return the response value.", function () {
@@ -70,7 +70,7 @@ define(["jquery", "internal/Reference", "util/Logger", "util/Promise"],
 
                         var promise = ref.get();
 
-                        expect($.get).toHaveBeenCalledWith(ref.getBinaryURL(), null, null, "json");
+                        expect($.get).toHaveBeenCalledWith(ref.getBinaryURL());
                     });
 
                     it("should return the response value.", function () {
@@ -122,7 +122,7 @@ define(["jquery", "internal/Reference", "util/Logger", "util/Promise"],
                             z: "ZZZ"
                         });
 
-                        expect($.get).toHaveBeenCalledWith(baseURL + path, null, null, "json");
+                        expect($.get).toHaveBeenCalledWith(baseURL + path);
                         expect(promise).toHaveResolvedWith("YYY");
                     });
 

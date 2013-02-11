@@ -21,5 +21,14 @@ define([],
             return window;
         };
 
+        /**
+         * Whether the current page is loaded over HTTPS.
+         *
+         * @return {Boolean}
+         */
+        Browser.isSecure = function () {
+            return window.location.protocol === "https:";
+        };
+
         return Browser;
     });

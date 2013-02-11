@@ -25,8 +25,7 @@ define(["jquery", "internal/Reference", "publication/Publication", "util/Promise
          */
         function PublicationAPI(key, apiURL) {
             this._key = key;
-            this._apiURL = apiURL ||
-                (Browser.getWindow().location.protocol === "https:" ? PublicationAPI.HTTPS_URL : PublicationAPI.HTTP_URL);
+            this._apiURL = apiURL || (Browser.isSecure() ? PublicationAPI.HTTPS_URL : PublicationAPI.HTTP_URL);
         }
 
 
@@ -61,9 +60,7 @@ define(["jquery", "internal/Reference", "publication/Publication", "util/Promise
                 url: this._apiURL + publicationID,
                 data: {
                     key: this._key
-                },
-                dataType: "json",
-                timeout: 20000
+                }
             })
                 .then(null, function (xhr) {
                     log.warn("There was a problem getting the cached publication descriptor.", xhr);
@@ -86,7 +83,6 @@ define(["jquery", "internal/Reference", "publication/Publication", "util/Promise
                     key: this._key,
                     recent: true
                 },
-                dataType: "json",
                 // Set a low timeout as the recent response may be slow due to not being cached as well.
                 timeout: 2000
             })

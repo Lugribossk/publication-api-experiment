@@ -10,18 +10,15 @@ define(["jquery", "api/PublicationAPI", "util/Browser"],
 
         describe("PublicationAPI", function () {
             describe("Publication Info service URL", function () {
-                it("defaults to HTTP.", function () {
+                it("should default to HTTP.", function () {
+                    spyOn(Browser, "isSecure").andReturn(false);
                     var api = new PublicationAPI("1234abcd");
 
                     expect(api._apiURL).toBe(PublicationAPI.HTTP_URL);
                 });
 
-                it("uses HTTPS when on a secure location.", function () {
-                    spyOn(Browser, "getWindow").andReturn({
-                        location: {
-                            protocol: "https:"
-                        }
-                    });
+                it("should use HTTPS when on a secure location.", function () {
+                    spyOn(Browser, "isSecure").andReturn(true);
                     var api = new PublicationAPI("1234abcd");
 
                     expect(api._apiURL).toBe(PublicationAPI.HTTPS_URL);

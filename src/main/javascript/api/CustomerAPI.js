@@ -34,8 +34,7 @@ define(["jquery", "api/PublicationAPI", "util/Logger", "util/Promise", "util/Bro
          */
         function CustomerAPI(key, apiURL) {
             this._key = key;
-            this._apiURL = apiURL ||
-                (Browser.getWindow().location.protocol === "https:" ? CustomerAPI.HTTPS_URL : CustomerAPI.HTTP_URL);
+            this._apiURL = apiURL || (Browser.isSecure() ? CustomerAPI.HTTPS_URL : CustomerAPI.HTTP_URL);
             // TODO Make this change together with apiURL.
             this._publicationAPI = new PublicationAPI(key);
         }
@@ -55,9 +54,7 @@ define(["jquery", "api/PublicationAPI", "util/Logger", "util/Promise", "util/Bro
                 url: this._apiURL + customerID,
                 data: {
                     key: this._key
-                },
-                dataType: "json",
-                timeout: 20000
+                }
             })
                 .fail(function (xhr) {
                     log.error("There was a problem retrieving the publication ID list.", xhr);
