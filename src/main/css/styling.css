@@ -15,6 +15,7 @@ body {
     outline: 1px solid;
     background-color: rgba(0, 0, 200, 0.2);
     -webkit-transform-origin: 0 0; /* Rotate around the center. */
+    z-index: 2;
 }
 
 .RectangleShape:hover {
@@ -31,6 +32,7 @@ body {
     stroke-width: 0.2;
     fill-rule: evenodd;
     pointer-events: none; /* The page-sized polygon positioning container should not capture events. */
+    z-index: 1;
 }
 
 .PolygonShape:hover {

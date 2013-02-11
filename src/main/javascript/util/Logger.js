@@ -38,7 +38,10 @@ define(["jquery", "util/Promise", "util/BrowserCompatibility"],
          */
         Logger.prototype._callPrintFunction = function (functionName, dataList) {
             // Chrome requires the console as it's own context.
-            output[functionName].apply(output, ["[" + this._name + "]"].concat($.makeArray(dataList)));
+            // IE doesn't inherit the logging functions from Function.
+            var func = Function.prototype.bind.call(output[functionName], output);
+            var messages = ["[" + this._name + "]"].concat($.makeArray(dataList));
+            func.apply(output, messages);
         };
 
         /**
