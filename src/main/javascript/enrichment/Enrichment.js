@@ -1,5 +1,5 @@
-define(["jquery", "shape/ShapeParser", "util/Logger", "publication/MediaRepresentation"],
-    function ($, ShapeParser, Logger, MediaRepresentation) {
+define(["jquery", "shape/ShapeParser", "util/Logger", "publication/MediaRepresentation", "enrichment/Tooltip"],
+    function ($, ShapeParser, Logger, MediaRepresentation, Tooltip) {
         "use strict";
         var log = new Logger("Enrichment");
 
@@ -43,7 +43,7 @@ define(["jquery", "shape/ShapeParser", "util/Logger", "publication/MediaRepresen
              */
             this.opacity = data.opacity;
             /**
-             * The enrichment "effect", see {@link Enrichment.EffectTypes}
+             * The enrichment "effect", see {@link Enrichment.EffectType}
              * @type {String/undefined}
              */
             this.effect = data.effect;
@@ -92,6 +92,14 @@ define(["jquery", "shape/ShapeParser", "util/Logger", "publication/MediaRepresen
             });
         };
 
+        /**
+         *
+         * @return {Tooltip}
+         */
+        Enrichment.prototype.getTooltip = function () {
+            return new Tooltip(this._tooltip);
+        };
+
         Enrichment.prototype.createDomElement = function (cssClass, label, clickLog) {
             var scope = this,
                 element = this.getShape().createDomElement()
@@ -122,9 +130,9 @@ define(["jquery", "shape/ShapeParser", "util/Logger", "publication/MediaRepresen
          * The different types of enrichment effects.
          *
          * @static
-         * @enum Enrichment.EffectTypes
+         * @enum Enrichment.EffectType
          */
-        Enrichment.EffectTypes = {
+        Enrichment.EffectType = {
             NONE: "none",
             FADE: "fadeInOut",
             FRAME: "frame",
