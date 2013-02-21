@@ -8,7 +8,7 @@ define(["jquery", "api/PublicationAPI", "util/Logger", "util/Promise", "util/Bro
          * Also known as the "Publication<b>s</b> API".
          *
          *     @example
-         *     require(["jquery", "api/CustomerAPI"],
+         *     require(["jquery", "api/CustomerAPI", "view/SimplePublicationView"],
          *         function ($, CustomerAPI) {
          *             new CustomerAPI("2a39a9615b").getAllPublications("85d291bd")
          *                 .then(function (publications) {

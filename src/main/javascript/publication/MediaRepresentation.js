@@ -45,7 +45,7 @@ define(["internal/Reference"],
          * The different types of media representations.
          *
          * @static
-         * @enum
+         * @enum MediaRepresentation.Type
          */
         MediaRepresentation.Type = {
             /**

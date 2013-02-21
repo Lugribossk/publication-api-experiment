@@ -7,7 +7,7 @@ define(["jquery", "internal/Reference", "publication/Publication", "util/Promise
          * Client for the Zmags Publication API that can be used to retrieve publication data.
          *
          *     @example
-         *     require(["api/PublicationAPI"],
+         *     require(["api/PublicationAPI", "view/SimplePublicationView"],
          *         function (PublicationAPI) {
          *             new PublicationAPI("2a39a9615b").getPublication("952ac7ea")
          *                 .done(function (publication) {

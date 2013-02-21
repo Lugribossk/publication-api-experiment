@@ -49,7 +49,7 @@ define(["internal/Reference"],
          * The different kinds of page representations.
          *
          * @static
-         * @enum
+         * @enum PageRepresentation.Type
          */
         PageRepresentation.Type = {
             /**

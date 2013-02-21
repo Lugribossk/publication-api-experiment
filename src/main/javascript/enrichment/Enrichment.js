@@ -66,11 +66,11 @@ define(["shape/ShapeParser", "util/Logger", "publication/MediaRepresentation", "
         /**
          * Get this enrichment's color as a CSS string (i.e. "#123abc").
          *
-         * @return {String/undefined} The color, or undefined if it does not have one.
+         * @return {String/undefined} The color, or null if it does not have one.
          */
         Enrichment.prototype.getCSSColor = function () {
             if (this.color === undefined) {
-                return undefined;
+                return null;
             }
             return "#" + this.color.toString(16);
         };
@@ -93,6 +93,7 @@ define(["shape/ShapeParser", "util/Logger", "publication/MediaRepresentation", "
         };
 
         /**
+         * Get this enrichment's tooltip.
          *
          * @return {Tooltip}
          */
@@ -107,10 +108,25 @@ define(["shape/ShapeParser", "util/Logger", "publication/MediaRepresentation", "
          * @enum Enrichment.EffectType
          */
         Enrichment.EffectType = {
+            /**
+             * No effect.
+             */
             NONE: "none",
+            /**
+             * Start out transparent, become solid, then transparent again.
+             */
             FADE: "fadeInOut",
+            /**
+             * Magnify and highlight the linked area.
+             */
             FRAME: "frame",
+            /**
+             * Repeatedly cycle the opacity.
+             */
             PULSATING: "pulsating",
+            /**
+             * TODO
+             */
             SHADOW_FRAME: "shadowFrame"
         };
 

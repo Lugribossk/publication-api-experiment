@@ -3,6 +3,10 @@ define(["jquery", "util/Promise", "util/Logger"],
         "use strict";
         var log = new Logger("Reference");
 
+        /**
+         * The base URL for references.
+         * @type {String}
+         */
         var baseURL = null;
 
         /**

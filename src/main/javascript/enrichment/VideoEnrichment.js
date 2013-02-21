@@ -14,26 +14,32 @@ define(["jquery", "enrichment/Enrichment", "publication/MediaRepresentation"],
         function VideoEnrichment(data) {
             Enrichment.call(this, data);
             /**
+             * Whether the video should autoplay.
              * @type {Boolean}
              */
             this.playOnLoad = data.playOnLoad;
             /**
+             * Whether player controls are enabled.
              * @type {Boolean}
              */
             this.enableControls = data.enableControls;
             /**
+             * TODO
              * @type {Boolean}
              */
             this.showWhenHovering = data.showWhenHovering;
             /**
+             * Whether the video should restart when it reaches the end.
              * @type {Boolean}
              */
             this.loop = data.loop;
             /**
+             * TODO
              * @type {Boolean}
              */
             this.usesExternalSource = data.usesExternalSource;
             /**
+             * TODO
              * @type {String}
              */
             this.externalSource = data.externalSource;
