@@ -1,5 +1,5 @@
-define(["jquery", "enrichment/Enrichment"],
-    function ($, Enrichment) {
+define(["enrichment/Enrichment"],
+    function (Enrichment) {
         "use strict";
 
         /**
@@ -21,10 +21,6 @@ define(["jquery", "enrichment/Enrichment"],
             this.value = data.value;
         }
         CustomLink.prototype = Object.create(Enrichment.prototype);
-
-        CustomLink.prototype.createDomElement = function () {
-            return Enrichment.prototype.createDomElement.call(this, "CustomLink", JSON.stringify(this.value), this.value);
-        };
 
         /**
          * The API type value for this kind of enrichment.

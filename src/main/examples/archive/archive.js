@@ -95,9 +95,11 @@ require(["jquery", "api/CustomerAPI", "api/PublicationAPI", "util/Promise", "htt
                         .then(function (page) {
                             // We only need an image of the cover page (and not all the enrichment data),
                             // so use the page representation instead, which is just an image of the page.
-                            return page.getClosestRepresentation({width: 200, height: 200}).createDomElement()
-                                .attr("title", publication.name)
-                                .attr("id", publication.id)
+                            return $("<img/>", {
+                                src: page.getClosestRepresentation({width: 200, height: 200}).getImageURL(),
+                                "class": "PageRepresentation",
+                                title: publication.name,
+                                id: publication.id})
                                 .on("click", function () {
                                     // Display the clicked publication.
                                     displayPublication(publication.id);

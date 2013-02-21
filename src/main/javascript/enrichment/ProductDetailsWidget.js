@@ -1,5 +1,5 @@
-define(["jquery", "enrichment/Enrichment", "internal/Reference", "publication/Product"],
-    function ($, Enrichment, Reference, Product) {
+define(["enrichment/Enrichment", "internal/Reference", "publication/Product"],
+    function (Enrichment, Reference, Product) {
         "use strict";
 
         /**
@@ -29,10 +29,6 @@ define(["jquery", "enrichment/Enrichment", "internal/Reference", "publication/Pr
          */
         ProductDetailsWidget.prototype.getProduct = function () {
             return new Reference(this._productDescriptor).getAs(Product);
-        };
-
-        ProductDetailsWidget.prototype.createDomElement = function () {
-            return Enrichment.prototype.createDomElement.call(this, "ProductDetailsWidget", null, this.getProduct());
         };
 
         /**

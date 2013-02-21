@@ -1,5 +1,5 @@
-define(["jquery", "shape/Shape"],
-    function ($, Shape) {
+define(["shape/Shape"],
+    function (Shape) {
         "use strict";
 
         /**
@@ -40,18 +40,6 @@ define(["jquery", "shape/Shape"],
             this.rotation = data.rotation;
         }
         RectangleShape.prototype = Object.create(Shape.prototype);
-
-        RectangleShape.prototype.createDomElement = function () {
-            return Shape.prototype.createDomElement.call(this)
-                .addClass("RectangleShape")
-                .css({
-                    top: this.y * 100 + "%",
-                    left: this.x * 100 + "%",
-                    height: this.height * 100 + "%",
-                    width: this.width * 100 + "%",
-                    transform: this.rotation ? "rotate(" + this.rotation + "deg)" : undefined
-                });
-        };
 
         /**
          * The API type value for this kind of enrichment.

@@ -1,5 +1,5 @@
-define(["jquery", "internal/Reference"],
-    function ($, Reference) {
+define(["internal/Reference"],
+    function (Reference) {
         "use strict";
 
         /**

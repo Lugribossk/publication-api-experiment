@@ -4,7 +4,7 @@
  *
  * @author Bo Gotthardt
  */
-require(["api/PublicationAPI"],
+require(["api/PublicationAPI", "view/SimplePublicationView"],
     function (PublicationAPI) {
         "use strict";
 

@@ -1,5 +1,5 @@
-define(["jquery", "shape/Shape"],
-    function ($, Shape) {
+define(["shape/Shape"],
+    function (Shape) {
         "use strict";
 
         /**
@@ -20,14 +20,6 @@ define(["jquery", "shape/Shape"],
             this.shapes = data.shapes;
         }
         CompositeShape.prototype = Object.create(Shape.prototype);
-
-        CompositeShape.prototype.createDomElement = function () {
-            return $("<div/>")
-                .addClass("CompositeShape")
-                .append(this.shapes.map(function (shape) {
-                    return shape.createDomElement();
-                }));
-        };
 
         /**
          * The API type value for this kind of shape.

@@ -1,5 +1,5 @@
-define(["jquery", "shape/RectangleShape", "shape/PolygonShape", "shape/CompositeShape", "util/Logger"],
-    function ($, RectangleShape, PolygonShape, CompositeShape, Logger) {
+define(["shape/RectangleShape", "shape/PolygonShape", "shape/CompositeShape", "util/Logger"],
+    function (RectangleShape, PolygonShape, CompositeShape, Logger) {
         "use strict";
         var log = new Logger("ShapeParser");
 

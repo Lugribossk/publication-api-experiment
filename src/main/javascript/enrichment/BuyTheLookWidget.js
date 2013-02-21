@@ -1,5 +1,5 @@
-define(["jquery", "enrichment/Enrichment", "internal/Reference", "publication/Product", "util/Promise"],
-    function ($, Enrichment, Reference, Product, Promise) {
+define(["enrichment/Enrichment", "internal/Reference", "publication/Product", "util/Promise"],
+    function (Enrichment, Reference, Product, Promise) {
         "use strict";
 
         /**
@@ -35,10 +35,6 @@ define(["jquery", "enrichment/Enrichment", "internal/Reference", "publication/Pr
             });
 
             return Promise.all(deferreds);
-        };
-
-        BuyTheLookWidget.prototype.createDomElement = function () {
-            return Enrichment.prototype.createDomElement.call(this, "BuyTheLookWidget", null, this.getProducts());
         };
 
         /**

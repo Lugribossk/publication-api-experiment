@@ -166,31 +166,5 @@ define(["jquery", "internal/Reference", "publication/Page", "util/Promise", "uti
                 });
         };
 
-        Publication.prototype.createDomElement = function (pageBounds) {
-            var i,
-                scope = this,
-                publicationElement = $("<div/>")
-                    .addClass("Publication");
-
-            // Extra function so that pageElement is scoped inside the loop = recreated rather than reassigned on each iteration.
-            function createPageElement(pageNumber) {
-                // Create and insert a placeholder element for the page immediately.
-                var pageElement = $("<div/>").appendTo(publicationElement);
-
-                // And then have the page promise insert the real page element into it, so that pages start rendering as
-                // soon as they are done, rather than wait for us to retrieve all the pages and then loop through them.
-                scope.getPage(pageNumber)
-                    .done(function (page) {
-                        page.createDomElement(pageBounds, scope.pageAspectRatio).appendTo(pageElement);
-                    });
-            }
-
-            for (i = 1; i <= this.numberOfPages; i++) {
-                createPageElement(i);
-            }
-
-            return publicationElement;
-        };
-
         return Publication;
     });

@@ -1,5 +1,5 @@
-define(["jquery", "shape/ShapeParser", "util/Logger", "publication/MediaRepresentation", "enrichment/Tooltip"],
-    function ($, ShapeParser, Logger, MediaRepresentation, Tooltip) {
+define(["shape/ShapeParser", "util/Logger", "publication/MediaRepresentation", "enrichment/Tooltip"],
+    function (ShapeParser, Logger, MediaRepresentation, Tooltip) {
         "use strict";
         var log = new Logger("Enrichment");
 
@@ -98,32 +98,6 @@ define(["jquery", "shape/ShapeParser", "util/Logger", "publication/MediaRepresen
          */
         Enrichment.prototype.getTooltip = function () {
             return new Tooltip(this._tooltip);
-        };
-
-        Enrichment.prototype.createDomElement = function (cssClass, label, clickLog) {
-            var scope = this,
-                element = this.getShape().createDomElement()
-                    .addClass("Enrichment")
-                    .addClass(cssClass);
-
-            if (label) {
-                $.when(label)
-                    .done(function (value) {
-                        $("<span/>")
-                            .addClass("Label")
-                            .text(value)
-                            .appendTo(element);
-                    });
-            }
-
-            element.on("click", function () {
-                log.info(scope);
-                if (clickLog) {
-                    log.info(clickLog);
-                }
-            });
-
-            return element;
         };
 
         /**

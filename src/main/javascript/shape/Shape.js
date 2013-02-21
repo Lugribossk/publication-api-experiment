@@ -1,7 +1,6 @@
-define(["jquery", "util/Logger"],
-    function ($, Logger) {
+define([],
+    function () {
         "use strict";
-        var log = new Logger("Shape");
 
         /**
          * The shape of something relative to the page it is placed on.
@@ -21,15 +20,6 @@ define(["jquery", "util/Logger"],
              */
             this.type = data.type;
         }
-
-        Shape.prototype.createDomElement = function () {
-            var scope = this;
-            return $("<div/>")
-                .addClass("Shape")
-                .on("click", function () {
-                    log.info(scope);
-                });
-        };
 
         return Shape;
     });

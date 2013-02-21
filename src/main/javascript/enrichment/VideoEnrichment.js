@@ -53,10 +53,6 @@ define(["jquery", "enrichment/Enrichment", "publication/MediaRepresentation"],
             });
         };
 
-        VideoEnrichment.prototype.createDomElement = function () {
-            return Enrichment.prototype.createDomElement.call(this, "VideoEnrichment");
-        };
-
         VideoEnrichment.prototype.createVideoElement = function () {
             var video = $("<video/>", {
                 src: this.getMediaRepresentations()[0].getBinaryURL(),

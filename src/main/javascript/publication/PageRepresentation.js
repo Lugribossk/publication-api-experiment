@@ -1,7 +1,6 @@
-define(["jquery", "internal/Reference", "util/Logger"],
-    function ($, Reference, Logger) {
+define(["internal/Reference"],
+    function (Reference) {
         "use strict";
-        var log = new Logger("PageRepresentation");
 
         /**
          * The data for a visual representation of a page, i.e. the size and URL of an image of it.
@@ -44,15 +43,6 @@ define(["jquery", "internal/Reference", "util/Logger"],
          */
         PageRepresentation.prototype.getImageURL = function () {
             return new Reference(this._pageRepresentation).getBinaryURL();
-        };
-
-        PageRepresentation.prototype.createDomElement = function () {
-            if (this.type !== PageRepresentation.Type.IMAGE) {
-                log.error("Trying to create DOM element for non-image page representation.", this);
-            }
-            return $("<img/>", {
-                src: this.getImageURL()
-            }).addClass("PageRepresentation");
         };
 
         /**

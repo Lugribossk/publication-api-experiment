@@ -1,5 +1,12 @@
-define(["jquery", "enrichment/ProductLink", "enrichment/ExternalLink", "enrichment/InternalLink", "enrichment/CustomLink", "enrichment/ProductDetailsWidget", "enrichment/BuyTheLookWidget", "enrichment/VideoEnrichment", "util/Logger"],
-    function ($, ProductLink, ExternalLink, InternalLink, CustomLink, ProductDetailsWidget, BuyTheLookWidget, VideoEnrichment, Logger) {
+define(["enrichment/ProductLink",
+        "enrichment/ExternalLink",
+        "enrichment/InternalLink",
+        "enrichment/CustomLink",
+        "enrichment/ProductDetailsWidget",
+        "enrichment/BuyTheLookWidget",
+        "enrichment/VideoEnrichment",
+        "util/Logger"],
+    function (ProductLink, ExternalLink, InternalLink, CustomLink, ProductDetailsWidget, BuyTheLookWidget, VideoEnrichment, Logger) {
         "use strict";
         var log = new Logger("EnrichmentParser");
 

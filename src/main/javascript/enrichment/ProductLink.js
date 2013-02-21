@@ -1,5 +1,5 @@
-define(["jquery", "internal/Reference", "publication/Product", "enrichment/Enrichment", "util/Promise"],
-    function ($, Reference, Product, Enrichment, Promise) {
+define(["internal/Reference", "publication/Product", "enrichment/Enrichment", "util/Promise"],
+    function (Reference, Product, Enrichment, Promise) {
         "use strict";
 
         /**
@@ -43,24 +43,6 @@ define(["jquery", "internal/Reference", "publication/Product", "enrichment/Enric
                     price:       this._manualProduct.productPrice
                 }
             }));
-        };
-
-        ProductLink.prototype.createDomElement = function () {
-            var productIdPromise = this.getProduct()
-                .then(function (product) {
-                    return product.product_id;
-                });
-            var cssClass = "ProductLink " + (this.usesProductDatabase ? "DatabaseProduct" : "ManualProduct");
-            var element = Enrichment.prototype.createDomElement.call(this, cssClass, productIdPromise, this.getProduct());
-
-            if (this.getMediaRepresentations().length > 0) {
-                // The media representation is a background image for the link.
-                element.css({
-                    "background-image": "url(" + this.getMediaRepresentations()[0].getBinaryURL() + ")"
-                });
-            }
-
-            return element;
         };
 
         /**
