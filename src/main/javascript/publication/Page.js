@@ -92,23 +92,23 @@ define(["jquery", "publication/PageRepresentation", "internal/Reference", "enric
             // Get all the enrichments on the page.
             return this.getEnrichments()
                 .then(function (enrichments) {
+                    var products = [];
                     // Then get the products for those of the enrichments that have them.
-                    var deferreds = $.map(enrichments, function (enrichment) {
+                    enrichments.forEach(function (enrichment) {
                         if (enrichment.getProduct) {
-                            return enrichment.getProduct();
+                            products.push(enrichment.getProduct());
                         }
                         // TODO BTL widgets?
                     });
 
-                    return $.when.apply(this, deferreds);
+                    return Promise.all(products);
                 })
-                .then(function () {
+                .then(function (products) {
                     // Then see if one of them matches the specified ID.
                     var foundProduct = null;
-                    $.each(arguments, function (i, product) {
+                    products.forEach(function (product) {
                         if (product.product_id === productID) {
                             foundProduct = product;
-                            return false;
                         }
                     });
 

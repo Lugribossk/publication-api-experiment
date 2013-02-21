@@ -1,5 +1,5 @@
-define(["jquery", "internal/Reference", "publication/Page", "util/Promise", "util/Logger"],
-    function ($, Reference, Page, Promise, Logger) {
+define(["internal/Reference", "publication/Page", "util/Promise", "util/Logger"],
+    function (Reference, Page, Promise, Logger) {
         "use strict";
         var log = new Logger("Publication");
 
@@ -23,7 +23,7 @@ define(["jquery", "internal/Reference", "publication/Page", "util/Promise", "uti
              */
             this.id = id;
             /**
-             * The version number.
+             * The version number. This increases when the publication is changed.
              * @type {Number}
              */
             this.version = info.version;
@@ -125,10 +125,9 @@ define(["jquery", "internal/Reference", "publication/Page", "util/Promise", "uti
                 .then(function (partIndex) {
                     // We then use this to look up which part the product is in.
                     var correctPart = null;
-                    $.each(partIndex, function (i, part) {
+                    partIndex.forEach(function (part) {
                         if (productID >= part.from && productID <= part.to) {
                             correctPart = part;
-                            return false;
                         }
                     });
                     if (!correctPart) {
