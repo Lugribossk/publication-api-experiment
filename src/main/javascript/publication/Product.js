@@ -24,12 +24,14 @@ define(["jquery", "internal/Reference", "util/Logger"],
          * @property {String/undefined} master_product_id Special property whose value is the product ID of the master product. Optional.
          * @property {Boolean/undefined} enabled Special property that blocks the product from being sent client-side if false. Optional.
          *
+         * @author Bo Gotthardt
          * @class Product
          * @constructor
          *
          * @param {Object} data The raw API data.
          * @param {Product} [existingMaster] For internal use only.
          */
+        // TODO Fix @class/@property to work correctly in IntelliJ
         function Product(data, existingMaster) {
             var output = this,
                 master = existingMaster;
