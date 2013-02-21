@@ -4,8 +4,8 @@
  *
  * @author Bo Gotthardt
  */
-define(["jquery", "publication/Product"],
-    function ($, Product) {
+define(["publication/Product"],
+    function (Product) {
         "use strict";
 
         describe("Product", function () {

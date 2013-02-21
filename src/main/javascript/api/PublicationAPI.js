@@ -1,5 +1,5 @@
-define(["jquery", "internal/Reference", "publication/Publication", "util/Promise", "util/Logger", "util/Browser"],
-    function ($, Reference, Publication, Promise, Logger, Browser) {
+define(["jquery", "internal/Reference", "publication/Publication", "util/Promise", "util/Logger", "util/Browser", "util/Ajax"],
+    function ($, Reference, Publication, Promise, Logger, Browser, Ajax) {
         "use strict";
         var log = new Logger("PublicationAPI");
 
@@ -7,8 +7,8 @@ define(["jquery", "internal/Reference", "publication/Publication", "util/Promise
          * Client for the Zmags Publication API that can be used to retrieve publication data.
          *
          *     @example
-         *     require(["api/PublicationAPI", "view/SimplePublicationView"],
-         *         function (PublicationAPI) {
+         *     require(["jquery", "api/PublicationAPI", "view/SimplePublicationView"],
+         *         function ($, PublicationAPI) {
          *             new PublicationAPI("2a39a9615b").getPublication("952ac7ea")
          *                 .done(function (publication) {
          *                     publication.createDomElement({width: 180, height: 180}).appendTo("body");
@@ -56,7 +56,7 @@ define(["jquery", "internal/Reference", "publication/Publication", "util/Promise
          * @return {Promise} A promise for the info. Will resolve with null instead of reject.
          */
         PublicationAPI.prototype._getPublicationInfoCached = function (publicationID) {
-            return $.ajax({
+            return Ajax.get({
                 url: this._apiURL + publicationID,
                 data: {
                     key: this._key
@@ -77,7 +77,7 @@ define(["jquery", "internal/Reference", "publication/Publication", "util/Promise
          * @return {Promise} A promise for the info. Will resolve with null instead of reject.
          */
         PublicationAPI.prototype._getPublicationInfoRecent = function (publicationID) {
-            return $.ajax({
+            return Ajax.get({
                 url: this._apiURL + publicationID,
                 data: {
                     key: this._key,

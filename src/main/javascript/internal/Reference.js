@@ -1,5 +1,5 @@
-define(["jquery", "util/Promise", "util/Logger"],
-    function ($, Promise, Logger) {
+define(["util/Promise", "util/Logger", "util/Ajax"],
+    function (Promise, Logger, Ajax) {
         "use strict";
         var log = new Logger("Reference");
 
@@ -86,7 +86,7 @@ define(["jquery", "util/Promise", "util/Logger"],
             if (cachedBundlePart) {
                 return Promise.resolved(cachedBundlePart);
             }
-            return $.get(baseURL + path)
+            return Ajax.get({url: baseURL + path})
                 .then(function (bundle) {
                     saveBundle(path, bundle);
                     return getBundlePart(path, part);
@@ -101,7 +101,7 @@ define(["jquery", "util/Promise", "util/Logger"],
         Reference.prototype.get = function () {
             var promise;
             if (this._resourcePath || this._resourceURL) {
-                promise = $.get(this.getBinaryURL()).promise();
+                promise = Ajax.get({url: this.getBinaryURL()});
             } else if (this._bundlePath) {
                 promise = getBundleReference(this._bundlePath, this._bundlePart);
             } else {

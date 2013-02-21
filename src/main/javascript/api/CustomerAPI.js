@@ -1,5 +1,5 @@
-define(["jquery", "api/PublicationAPI", "util/Logger", "util/Promise", "util/Browser"],
-    function ($, PublicationAPI, Logger, Promise, Browser) {
+define(["api/PublicationAPI", "util/Logger", "util/Browser", "util/Ajax"],
+    function (PublicationAPI, Logger, Browser, Ajax) {
         "use strict";
         var log = new Logger("CustomerAPI");
 
@@ -51,7 +51,7 @@ define(["jquery", "api/PublicationAPI", "util/Logger", "util/Promise", "util/Bro
         CustomerAPI.prototype.getAllPublications = function (customerID) {
             var scope = this;
 
-            return $.ajax({
+            return Ajax.get({
                 url: this._apiURL + customerID,
                 data: {
                     key: this._key

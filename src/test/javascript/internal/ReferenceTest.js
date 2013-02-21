@@ -4,8 +4,8 @@
  *
  * @author Bo Gotthardt
  */
-define(["jquery", "internal/Reference", "util/Logger", "util/Promise"],
-    function ($, Reference, Logger, Promise) {
+define(["jquery", "internal/Reference", "util/Logger", "util/Promise", "util/Ajax"],
+    function ($, Reference, Logger, Promise, Ajax) {
         "use strict";
 
         describe("Reference", function () {
@@ -29,17 +29,17 @@ define(["jquery", "internal/Reference", "util/Logger", "util/Promise"],
 
                 describe("resolution", function () {
                     it("should GET the URL as JSON.", function () {
-                        spyOn($, "get").andReturn(new $.Deferred());
+                        spyOn(Ajax, "get").andReturn(new $.Deferred());
 
                         var promise = ref.get();
 
-                        expect($.get).toHaveBeenCalledWith(ref.getBinaryURL());
+                        expect(Ajax.get).toHaveBeenCalledWith({url: ref.getBinaryURL()});
                     });
 
                     it("should return the response value.", function () {
                         var deferred = new $.Deferred(),
                             response = "12345";
-                        spyOn($, "get").andReturn(deferred);
+                        spyOn(Ajax, "get").andReturn(deferred);
 
                         var promise = ref.get();
                         deferred.resolve(response);
@@ -66,17 +66,17 @@ define(["jquery", "internal/Reference", "util/Logger", "util/Promise"],
 
                 describe("resolution", function () {
                     it("should GET the URL as JSON.", function () {
-                        spyOn($, "get").andReturn(new $.Deferred());
+                        spyOn(Ajax, "get").andReturn(new $.Deferred());
 
                         var promise = ref.get();
 
-                        expect($.get).toHaveBeenCalledWith(ref.getBinaryURL());
+                        expect(Ajax.get).toHaveBeenCalledWith({url: ref.getBinaryURL()});
                     });
 
                     it("should return the response value.", function () {
                         var deferred = new $.Deferred(),
                             response = "12345";
-                        spyOn($, "get").andReturn(deferred);
+                        spyOn(Ajax, "get").andReturn(deferred);
 
                         var promise = ref.get();
                         deferred.resolve(response);
@@ -114,7 +114,7 @@ define(["jquery", "internal/Reference", "util/Logger", "util/Promise"],
 
                     it("should GET the path appended to the base URL as JSON if not cached.", function () {
                         var deferred = new $.Deferred();
-                        spyOn($, "get").andReturn(deferred);
+                        spyOn(Ajax, "get").andReturn(deferred);
 
                         var promise = ref.get();
                         deferred.resolve({
@@ -122,13 +122,13 @@ define(["jquery", "internal/Reference", "util/Logger", "util/Promise"],
                             z: "ZZZ"
                         });
 
-                        expect($.get).toHaveBeenCalledWith(baseURL + path);
+                        expect(Ajax.get).toHaveBeenCalledWith({url: baseURL + path});
                         expect(promise).toHaveResolvedWith("YYY");
                     });
 
                     it("should return the cached value if cached.", function () {
                         var deferred = new $.Deferred();
-                        spyOn($, "get").andReturn(deferred);
+                        spyOn(Ajax, "get").andReturn(deferred);
 
                         var promise1 = ref.get();
                         deferred.resolve({
@@ -141,13 +141,13 @@ define(["jquery", "internal/Reference", "util/Logger", "util/Promise"],
                             bundlePart: ref._bundlePart
                         }).get();
 
-                        expect($.get.callCount).toBe(1);
+                        expect(Ajax.get.callCount).toBe(1);
                         expect(promise2).toHaveResolvedWith("YYY");
                     });
 
                     it("should return other bundle parts cached from previous response.", function () {
                         var deferred = new $.Deferred();
-                        spyOn($, "get").andReturn(deferred);
+                        spyOn(Ajax, "get").andReturn(deferred);
 
                         var promise1 = ref.get();
                         deferred.resolve({
@@ -159,7 +159,7 @@ define(["jquery", "internal/Reference", "util/Logger", "util/Promise"],
                             bundlePart: "z"
                         }).get();
 
-                        expect($.get.callCount).toBe(1);
+                        expect(Ajax.get.callCount).toBe(1);
                         expect(promise2).toHaveResolvedWith("ZZZ");
                     });
                 });
@@ -169,7 +169,7 @@ define(["jquery", "internal/Reference", "util/Logger", "util/Promise"],
                 var response = "12345",
                     deferred = Promise.resolved(response),
                     constructorOutput = {};
-                spyOn($, "get").andReturn(deferred);
+                spyOn(Ajax, "get").andReturn(deferred);
 
                 function TestClass(input) {
                     expect(input).toBe(response);
@@ -186,7 +186,7 @@ define(["jquery", "internal/Reference", "util/Logger", "util/Promise"],
             it("resolution as list should return parsed list.", function () {
                 var response = [1, 2, 3],
                     deferred = Promise.resolved(response);
-                spyOn($, "get").andReturn(deferred);
+                spyOn(Ajax, "get").andReturn(deferred);
 
                 function parser(x) {
                     return x + 10;
