@@ -11,7 +11,7 @@ define(["jquery", "internal/Reference", "publication/Publication", "util/Promise
          *         function ($, PublicationAPI) {
          *             new PublicationAPI("2a39a9615b").getPublication("952ac7ea")
          *                 .done(function (publication) {
-         *                     publication.createDomElement({width: 180, height: 180}).appendTo("body");
+         *                     publication.createDomElement({width: 150, height: 150}).appendTo("body");
          *                     $(".Page").css({float: "left"});
          *                 });
          *         });

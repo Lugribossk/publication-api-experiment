@@ -1,1 +1,1 @@
-jsduck-4.4.1.exe ../javascript --out ../../../target/docs --ignore-global --eg-iframe jsduck-iframe.html --title "Zmags Publication API Example" --welcome jsduck-welcome.html --footer blah --external=jQuery,Deferred
+jsduck-4.4.1.exe ../javascript --out ../../../docs --ignore-global --eg-iframe jsduck-iframe.html --title "Publication API Example" --welcome jsduck-welcome.html --footer . --external=jQuery,Deferred,Window
