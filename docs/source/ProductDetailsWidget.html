@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js">define([&quot;enrichment/Enrichment&quot;, &quot;internal/Reference&quot;, &quot;publication/Product&quot;],
+    function (Enrichment, Reference, Product) {
+        &quot;use strict&quot;;
+
+<span id='ProductDetailsWidget-method-constructor'><span id='ProductDetailsWidget'>        /**
+</span></span>         * A widget with details about a {@link Product}. Similar to a {@link ProductLink}, but with more advanced settings.
+         *
+         * @extends Enrichment
+         * @author Bo Gotthardt
+         * @constructor
+         *
+         * @param {Object} data The raw API data.
+         */
+        function ProductDetailsWidget(data) {
+            Enrichment.call(this, data);
+            this.windowLocationHint = data.windowLocationHint;
+            this.label = data.label;
+            this.button = data.button;
+            this.shapeEnabled = data.shapeEnabled;
+
+            this._productDescriptor = data.productDescriptor;
+        }
+        ProductDetailsWidget.prototype = Object.create(Enrichment.prototype);
+
+<span id='ProductDetailsWidget-method-getProduct'>        /**
+</span>         * Get the product this widget has.
+         *
+         * @return {Promise} A promise for the {@link Product}.
+         */
+        ProductDetailsWidget.prototype.getProduct = function () {
+            return new Reference(this._productDescriptor).getAs(Product);
+        };
+
+<span id='ProductDetailsWidget-static-property-TYPE'>        /**
+</span>         * The API type value for this kind of enrichment.
+         * @static
+         * @const
+         * @type {String}
+         */
+        ProductDetailsWidget.TYPE = &quot;productDetailsWidget&quot;;
+
+        return ProductDetailsWidget;
+    });</pre>
+</body>
+</html>

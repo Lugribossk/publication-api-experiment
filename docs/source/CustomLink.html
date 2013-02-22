@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js">define([&quot;enrichment/Enrichment&quot;],
+    function (Enrichment) {
+        &quot;use strict&quot;;
+
+<span id='CustomLink-method-constructor'><span id='CustomLink'>        /**
+</span></span>         * A &quot;custom&quot; link, essentially just a link shape with arbitrary user-defined key/value data.
+         * These are created in Enriched as external links, but with the URL in the following format: &quot;{key1=value1&amp;key2=value&quot;...}&quot;.
+         *
+         * @extends Enrichment
+         * @author Bo Gotthardt
+         * @constructor
+         *
+         * @param {Object} data The raw API data.
+         */
+        function CustomLink(data) {
+            Enrichment.call(this, data);
+<span id='CustomLink-property-value'>            /**
+</span>             * The custom value as a plain object.
+             * @type {Object}
+             */
+            this.value = data.value;
+        }
+        CustomLink.prototype = Object.create(Enrichment.prototype);
+
+<span id='CustomLink-static-property-TYPE'>        /**
+</span>         * The API type value for this kind of enrichment.
+         * @static
+         * @const
+         * @type {String}
+         */
+        CustomLink.TYPE = &quot;customLink&quot;;
+
+        return CustomLink;
+    });</pre>
+</body>
+</html>

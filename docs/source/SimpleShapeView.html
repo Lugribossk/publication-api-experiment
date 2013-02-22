@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js">define([&quot;jquery&quot;, &quot;shape/CompositeShape&quot;, &quot;shape/PolygonShape&quot;, &quot;shape/RectangleShape&quot;, &quot;shape/Shape&quot;, &quot;util/Logger&quot;],
+    function ($, CompositeShape, PolygonShape, RectangleShape, Shape, Logger) {
+        &quot;use strict&quot;;
+        var log = new Logger(&quot;SimpleShapeView&quot;);
+
+<span id='SimpleShapeView-method-constructor'><span id='SimpleShapeView'>        /**
+</span></span>         * Simple views for the shape classes.
+         *
+         * @author Bo Gotthardt
+         * @constructor
+         */
+        function SimpleShapeView() {}
+
+<span id='SimpleShapeView-method-createDomElement'>        /**
+</span>         * @inheritDoc
+         */
+        CompositeShape.prototype.createDomElement = function () {
+            return Shape.prototype.createDomElement.call(this)
+                .addClass(&quot;CompositeShape&quot;)
+                .append(this.shapes.map(function (shape) {
+                    return shape.createDomElement();
+                }));
+        };
+
+<span id='SimpleShapeView-method-createDomElement'>        /**
+</span>         * @inheritDoc
+         */
+        PolygonShape.prototype.createDomElement = function () {
+            // Multiply the coordinates by 100 since the viewBox is set to 100 x 100.
+            // Setting the viewBox to 1 x 1 scales the line strokes up to monstrous size.
+            var points = this.coordinates.map(function (coord) {
+                return (coord.x * 100) + &quot;,&quot; + (coord.y * 100);
+            }).join(&quot; &quot;);
+
+            // preserveAspectRatio=none to ensure that the svg can be rescaled freely, even if the square viewbox ends up on a non-square page.
+            // Wrap in shape div and insert polygon directly as string since jQuery has problems handling svgs.
+            return Shape.prototype.createDomElement.call(this)
+                .addClass(&quot;PolygonShape&quot;)
+                .append(&quot;&lt;svg xmlns='http://www.w3.org/2000/svg' version='1.1' viewBox='0 0 100 100' preserveAspectRatio='none'&gt;&quot; +
+                    &quot;&lt;polygon points='&quot; + points + &quot;'/&gt;&quot; +
+                    &quot;&lt;/svg&gt;&quot;);
+        };
+
+<span id='SimpleShapeView-method-createDomElement'>        /**
+</span>         * @inheritDoc
+         */
+        RectangleShape.prototype.createDomElement = function () {
+            return Shape.prototype.createDomElement.call(this)
+                .addClass(&quot;RectangleShape&quot;)
+                .css({
+                    top: this.y * 100 + &quot;%&quot;,
+                    left: this.x * 100 + &quot;%&quot;,
+                    height: this.height * 100 + &quot;%&quot;,
+                    width: this.width * 100 + &quot;%&quot;,
+                    transform: this.rotation ? &quot;rotate(&quot; + this.rotation + &quot;deg)&quot; : undefined
+                });
+        };
+
+<span id='SimpleShapeView-method-createDomElement'>        /**
+</span>         * Create a DOM element that visualizes this shape.
+         *
+         * @return {jQuery} The element
+         */
+        Shape.prototype.createDomElement = function () {
+            var scope = this;
+            return $(&quot;&lt;div/&gt;&quot;)
+                .addClass(&quot;Shape&quot;)
+                .on(&quot;click&quot;, function () {
+                    log.info(scope);
+                });
+        };
+    });</pre>
+</body>
+</html>

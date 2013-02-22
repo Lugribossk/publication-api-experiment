@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js">define([&quot;shape/ShapeParser&quot;, &quot;util/Logger&quot;, &quot;publication/MediaRepresentation&quot;, &quot;enrichment/Tooltip&quot;],
+    function (ShapeParser, Logger, MediaRepresentation, Tooltip) {
+        &quot;use strict&quot;;
+        var log = new Logger(&quot;Enrichment&quot;);
+
+<span id='Enrichment-method-constructor'><span id='Enrichment'>        /**
+</span></span>         * Abstract base class for the different enrichment types.
+         *
+         * @abstract
+         * @class Enrichment
+         * @author Bo Gotthardt
+         * @constructor
+         *
+         * @param {Object} data The raw API data.
+         */
+        function Enrichment(data) {
+<span id='Enrichment-property-type'>            /**
+</span>             * The type of enrichment.
+             * @type {String}
+             */
+            this.type = data.type;
+<span id='Enrichment-property-firstPageNumber'>            /**
+</span>             * The first page the enrichment is on.
+             * @type {Number}
+             */
+            this.firstPageNumber = data.firstPageNumber;
+<span id='Enrichment-property-lastPageNumber'>            /**
+</span>             * The last page the enrichment is on.
+             * This will only be different from firstPageNumber for &quot;page-spanning&quot; enrichments.
+             * @type {Number}
+             */
+            this.lastPageNumber = data.lastPageNumber;
+
+            // Only available on non-widget, non-video enrichments.
+<span id='Enrichment-property-color'>            /**
+</span>             * The enrichment's hex color, in base 10.
+             * @type {Number/undefined}
+             */
+            this.color = data.color;
+<span id='Enrichment-property-opacity'>            /**
+</span>             * The opacity, between 0 (transparent) and 100 (solid).
+             * @type {Number/undefined}
+             */
+            this.opacity = data.opacity;
+<span id='Enrichment-property-effect'>            /**
+</span>             * The enrichment &quot;effect&quot;, see {@link Enrichment.EffectType}
+             * @type {String/undefined}
+             */
+            this.effect = data.effect;
+
+            this._mediaRepresentationDescriptors = data.mediaRepresentationDescriptors;
+            this._tooltip = data.tooltip;
+
+            this._shape = data.shape;
+        }
+
+<span id='Enrichment-method-getShape'>        /**
+</span>         * Get this enrichment's shape.
+         *
+         * @return {Shape}
+         */
+        Enrichment.prototype.getShape = function () {
+            return new ShapeParser().construct(this._shape);
+        };
+
+<span id='Enrichment-method-getCSSColor'>        /**
+</span>         * Get this enrichment's color as a CSS string (i.e. &quot;#123abc&quot;).
+         *
+         * @return {String/undefined} The color, or null if it does not have one.
+         */
+        Enrichment.prototype.getCSSColor = function () {
+            if (this.color === undefined) {
+                return null;
+            }
+            return &quot;#&quot; + this.color.toString(16);
+        };
+
+<span id='Enrichment-method-getMediaRepresentations'>        /**
+</span>         * Get this enrichment's media representations.
+         * What this is a media representation *of* depends on the kind of enrichment.
+         *
+         * @return {MediaRepresentation[]}
+         */
+        Enrichment.prototype.getMediaRepresentations = function () {
+            // The media representation descriptors property is optional rather than the empty list.
+            if (!this._mediaRepresentationDescriptors) {
+                return [];
+            }
+
+            return this._mediaRepresentationDescriptors.map(function (rep) {
+                return new MediaRepresentation(rep);
+            });
+        };
+
+<span id='Enrichment-method-getTooltip'>        /**
+</span>         * Get this enrichment's tooltip.
+         *
+         * @return {Tooltip}
+         */
+        Enrichment.prototype.getTooltip = function () {
+            return new Tooltip(this._tooltip);
+        };
+
+<span id='Enrichment-EffectType'>        /**
+</span>         * The different types of enrichment effects.
+         *
+         * @static
+         * @enum Enrichment.EffectType
+         */
+        Enrichment.EffectType = {
+<span id='Enrichment-EffectType-property-NONE'>            /**
+</span>             * No effect.
+             */
+            NONE: &quot;none&quot;,
+<span id='Enrichment-EffectType-property-FADE'>            /**
+</span>             * Start out transparent, become solid, then transparent again.
+             */
+            FADE: &quot;fadeInOut&quot;,
+<span id='Enrichment-EffectType-property-FRAME'>            /**
+</span>             * Magnify and highlight the linked area.
+             */
+            FRAME: &quot;frame&quot;,
+<span id='Enrichment-EffectType-property-PULSATING'>            /**
+</span>             * Repeatedly cycle the opacity.
+             */
+            PULSATING: &quot;pulsating&quot;,
+<span id='Enrichment-EffectType-property-SHADOW_FRAME'>            /**
+</span>             * TODO
+             */
+            SHADOW_FRAME: &quot;shadowFrame&quot;
+        };
+
+        return Enrichment;
+    });</pre>
+</body>
+</html>

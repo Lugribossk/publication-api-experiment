@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js">define([&quot;shape/RectangleShape&quot;, &quot;shape/PolygonShape&quot;, &quot;shape/CompositeShape&quot;, &quot;util/Logger&quot;],
+    function (RectangleShape, PolygonShape, CompositeShape, Logger) {
+        &quot;use strict&quot;;
+        var log = new Logger(&quot;ShapeParser&quot;);
+
+<span id='ShapeParser-method-constructor'><span id='ShapeParser'>        /**
+</span></span>         * Utility class for converting untyped objects into Shape subclass instances.
+         *
+         * @author Bo Gotthardt
+         * @constructor
+         */
+        function ShapeParser() {}
+
+<span id='ShapeParser-method-construct'>        /**
+</span>         * Construct an appropriately subclassed Shape instance from the specified data.
+         *
+         * @param {Object} data The raw API data.
+         * @return {Shape}
+         */
+        ShapeParser.prototype.construct = function ShapeParser_construct(data) {
+            switch (data.type) {
+            case RectangleShape.TYPE:
+                return new RectangleShape(data);
+            case PolygonShape.TYPE:
+                return new PolygonShape(data);
+            case CompositeShape.TYPE:
+                // We have to parse the composite shapes here as well, or CompositeShape will end up with a circular dependency on ShapeParser.
+                return new CompositeShape({
+                    shapes: data.shapes.map(ShapeParser_construct),
+                    type: CompositeShape.TYPE
+                });
+            default:
+                log.warn(&quot;Unknown shape type&quot;, data.type);
+                return null;
+            }
+        };
+
+        return ShapeParser;
+    });</pre>
+</body>
+</html>

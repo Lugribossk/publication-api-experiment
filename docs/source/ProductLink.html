@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js">define([&quot;internal/Reference&quot;, &quot;publication/Product&quot;, &quot;enrichment/Enrichment&quot;, &quot;util/Promise&quot;],
+    function (Reference, Product, Enrichment, Promise) {
+        &quot;use strict&quot;;
+
+<span id='ProductLink-method-constructor'><span id='ProductLink'>        /**
+</span></span>         * A link to a {@link Product}, either with manually entered data or from the product database.
+         *
+         * @extends Enrichment
+         * @author Bo Gotthardt
+         * @constructor
+         *
+         * @param {Object} data The raw API data.
+         */
+        function ProductLink(data) {
+            Enrichment.call(this, data);
+<span id='ProductLink-property-usesProductDatabase'>            /**
+</span>             * Whether this link's data comes from the product database, rather than being manually entered.
+             * @type {Boolean}
+             */
+            this.usesProductDatabase = data.usesProductDatabase;
+
+            this._productDescriptor = data.productDescriptor;
+            this._manualProduct = data.manualProduct;
+        }
+        ProductLink.prototype = Object.create(Enrichment.prototype);
+
+<span id='ProductLink-method-getProduct'>        /**
+</span>         * Get the product this link points to.
+         *
+         * @return {Promise} A promise for the {@link Product}.
+         */
+        ProductLink.prototype.getProduct = function () {
+            if (this.usesProductDatabase) {
+                // productDescriptor seems to be a reference and not an object.
+                return new Reference(this._productDescriptor).getAs(Product);
+            }
+            // Mimic the format for a database product so we can reuse the constructor logic.
+            return Promise.resolved(new Product({
+                properties: {
+                    product_id:  this._manualProduct.productID,
+                    name:        this._manualProduct.productName,
+                    description: this._manualProduct.productDescription,
+                    price:       this._manualProduct.productPrice
+                }
+            }));
+        };
+
+<span id='ProductLink-static-property-TYPE'>        /**
+</span>         * The API type value for this kind of enrichment.
+         * @static
+         * @const
+         * @type {String}
+         */
+        ProductLink.TYPE = &quot;productLink&quot;;
+
+        return ProductLink;
+    });</pre>
+</body>
+</html>

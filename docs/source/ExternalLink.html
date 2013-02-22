@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js">define([&quot;enrichment/Enrichment&quot;],
+    function (Enrichment) {
+        &quot;use strict&quot;;
+
+<span id='ExternalLink-method-constructor'><span id='ExternalLink'>        /**
+</span></span>         * A link to an external website.
+         *
+         * @extends Enrichment
+         * @author Bo Gotthardt
+         * @constructor
+         *
+         * @param {Object} data The raw API data.
+         */
+        function ExternalLink(data) {
+            Enrichment.call(this, data);
+<span id='ExternalLink-property-target'>            /**
+</span>             * The window to open the URL in.
+             * @type {String}
+             */
+            this.target = data.target;
+<span id='ExternalLink-property-url'>            /**
+</span>             * The external link URL.
+             * @type {String}
+             */
+            this.url = data.url;
+        }
+        ExternalLink.prototype = Object.create(Enrichment.prototype);
+
+<span id='ExternalLink-static-property-TYPE'>        /**
+</span>         * The API type value for this kind of enrichment.
+         * @static
+         * @const
+         * @type {String}
+         */
+        ExternalLink.TYPE =  &quot;externalLink&quot;;
+
+        return ExternalLink;
+    });</pre>
+</body>
+</html>

@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js">define([&quot;jquery&quot;, &quot;publication/Publication&quot;, &quot;publication/Page&quot;, &quot;publication/PageRepresentation&quot;, &quot;util/Logger&quot;, &quot;view/SimpleEnrichmentView&quot;],
+    function ($, Publication, Page, PageRepresentation, Logger, SimpleEnrichmentView) {
+        &quot;use strict&quot;;
+        var log = new Logger(&quot;SimplePublicationView&quot;);
+
+<span id='SimplePublicationView-method-constructor'><span id='SimplePublicationView'>        /**
+</span></span>         * Simple views for the publication data classes.
+         *
+         * @author Bo Gotthardt
+         * @constructor
+         */
+        function SimplePublicationView() {}
+
+<span id='SimplePublicationView-method-createDomElement'>        /**
+</span>         * Create a DOM element that visualizes this publication.
+         *
+         * @param {Object} pageBounds
+         * @return {jQuery} The element
+         */
+        Publication.prototype.createDomElement = function (pageBounds) {
+            var i,
+                scope = this,
+                publicationElement = $(&quot;&lt;div/&gt;&quot;)
+                    .addClass(&quot;Publication&quot;);
+
+            // Extra function so that pageElement is scoped inside the loop = recreated rather than reassigned on each iteration.
+            function createPageElement(pageNumber) {
+                // Create and insert a placeholder element for the page immediately.
+                var pageElement = $(&quot;&lt;div/&gt;&quot;).appendTo(publicationElement);
+
+                // And then have the page promise insert the real page element into it, so that pages start rendering as
+                // soon as they are done, rather than wait for us to retrieve all the pages and then loop through them.
+                scope.getPage(pageNumber)
+                    .done(function (page) {
+                        page.createDomElement(pageBounds, scope.pageAspectRatio).appendTo(pageElement);
+                    });
+            }
+
+            for (i = 1; i &lt;= this.numberOfPages; i++) {
+                createPageElement(i);
+            }
+
+            return publicationElement;
+        };
+
+<span id='SimplePublicationView-static-method-reduceToAspectRatio'>        /**
+</span>         * Reduce the size of one of the dimensions of the specified bounding box so that it has the specified aspect ratio.
+         *
+         * @private
+         * @static
+         *
+         * @param {Object} bounds The bounding box
+         * @param {Number} ratio The aspect ratio
+         * @return {{width: Number, height: Number}}
+         */
+        function reduceToAspectRatio(bounds, ratio) {
+            var width, height;
+            if (ratio &lt; 1) {
+                height = bounds.height;
+                width = Math.round(height * ratio);
+            } else if (ratio &gt; 1) {
+                width = bounds.width;
+                height = Math.round(width / ratio);
+            } else {
+                width = Math.min(bounds.height, bounds.width);
+                height = Math.min(bounds.height, bounds.width);
+            }
+
+            return {
+                width: width,
+                height: height
+            };
+        }
+
+<span id='SimplePublicationView-method-createDomElement'>        /**
+</span>         * Create a DOM element that visualises this page.
+         *
+         * @param {Object} pageBounds The maximum size of the page.
+         * @param {Number} [aspectRatio] The aspect ratio the page should be. Optional
+         * @param {Boolean} [ignoreEnrichments=false] Whether to create a simple element that only shows the page, but not enrichments.
+         * @return {jQuery} The element
+         */
+        Page.prototype.createDomElement = function (pageBounds, aspectRatio, ignoreEnrichments) {
+            if (!aspectRatio) {
+                var largestRep = this.getRepresentations()[this._pageRepresentationDescriptors.length - 1];
+                aspectRatio = largestRep.width / largestRep.height;
+            }
+            var pageSize = reduceToAspectRatio(pageBounds, aspectRatio);
+
+            var page = $(&quot;&lt;div/&gt;&quot;)
+                .attr(&quot;id&quot;, &quot;page&quot; + this.pageNumber)
+                .addClass(&quot;Page&quot;)
+                .css({
+                    height: pageSize.height,
+                    width: pageSize.width,
+                    &quot;background-image&quot;: &quot;url(&quot; + this.getClosestRepresentation(pageSize).getImageURL() + &quot;)&quot;
+                });
+
+            if (!ignoreEnrichments) {
+                this.getEnrichments()
+                    .done(function (enrichments) {
+                        enrichments.forEach(function (enrichment) {
+                            enrichment.createDomElement().appendTo(page);
+                        });
+                    });
+
+                $(&quot;&lt;span/&gt;&quot;)
+                    .addClass(&quot;Label&quot;)
+                    .text(this.pageLabel)
+                    .appendTo(page);
+            }
+
+            return page;
+        };
+
+<span id='SimplePublicationView-method-createDomElement'>        /**
+</span>         * Create a DOM element that visualizes this page representation.
+         *
+         * @return {jQuery} The element
+         */
+        PageRepresentation.prototype.createDomElement = function () {
+            if (this.type !== PageRepresentation.Type.IMAGE) {
+                log.error(&quot;Trying to create DOM element for non-image page representation.&quot;, this);
+            }
+            return $(&quot;&lt;img/&gt;&quot;, {
+                src: this.getImageURL()
+            }).addClass(&quot;PageRepresentation&quot;);
+        };
+    });</pre>
+</body>
+</html>

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js">define([&quot;enrichment/ProductLink&quot;,
+        &quot;enrichment/ExternalLink&quot;,
+        &quot;enrichment/InternalLink&quot;,
+        &quot;enrichment/CustomLink&quot;,
+        &quot;enrichment/ProductDetailsWidget&quot;,
+        &quot;enrichment/BuyTheLookWidget&quot;,
+        &quot;enrichment/VideoEnrichment&quot;,
+        &quot;util/Logger&quot;],
+    function (ProductLink, ExternalLink, InternalLink, CustomLink, ProductDetailsWidget, BuyTheLookWidget, VideoEnrichment, Logger) {
+        &quot;use strict&quot;;
+        var log = new Logger(&quot;EnrichmentParser&quot;);
+
+<span id='EnrichmentParser-method-constructor'><span id='EnrichmentParser'>        /**
+</span></span>         * Utility class for converting untyped objects into Enrichment subclass instances.
+         *
+         * @author Bo Gotthardt
+         * @constructor
+         */
+        function EnrichmentParser() {}
+
+<span id='EnrichmentParser-method-construct'>        /**
+</span>         * Construct an appropriately subclassed Enrichment instance from the specified data.
+         *
+         * @param {Object} data The raw API data.
+         * @return {Enrichment}
+         */
+        EnrichmentParser.prototype.construct = function (data) {
+            switch (data.type) {
+            case ProductLink.TYPE:
+                return new ProductLink(data);
+            case ExternalLink.TYPE:
+                return new ExternalLink(data);
+            case InternalLink.TYPE:
+                return new InternalLink(data);
+            case CustomLink.TYPE:
+                return new CustomLink(data);
+            case ProductDetailsWidget.TYPE:
+                return new ProductDetailsWidget(data);
+            case BuyTheLookWidget.TYPE:
+                return new BuyTheLookWidget(data);
+            case VideoEnrichment.TYPE:
+                return new VideoEnrichment(data);
+            default:
+                log.error(&quot;Unknown enrichment type&quot;, data.type);
+                return null;
+            }
+        };
+
+        return EnrichmentParser;
+    });</pre>
+</body>
+</html>

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js">define([&quot;jquery&quot;, &quot;internal/Reference&quot;, &quot;util/Logger&quot;],
+    function ($, Reference, Logger) {
+        &quot;use strict&quot;;
+        var log = new Logger(&quot;Product&quot;);
+
+<span id='Product-method-constructor'><span id='Product'>        /**
+</span></span>         * A product.
+         *
+         * Products can have &quot;master&quot; products that they are more specific &quot;variants&quot; of. E.g. an iPad master product
+         * with 16 Gb and 32 Gb size variants.
+         * A master product with no master itself is a &quot;root&quot; product, and a variant product without variants itself is
+         * a &quot;leaf variant&quot;.
+         *
+         * Products have properties, named attributes with a specific value. The &quot;product_id&quot; property always exists,
+         * but all other properties are optional and can have any name.
+         * Variant products that do not have a a value for a particular property inherit it from their master product.
+         *
+         * If an enrichment links to a variant product, that product will itself have any inherited properties placed
+         * directly on it, and its master product(s) will only have product_id and possibly name properties.
+         *
+         * @property {String} product_id Special property whose value is always the product ID (i.e. the value entered when creating product links/widgets).
+         * @property {Product[]} variants The variant products.
+         * @property {Product/undefined} master The master product. Optional.
+         * @property {String/undefined} master_product_id Special property whose value is the product ID of the master product. Optional.
+         * @property {Boolean/undefined} enabled Special property that blocks the product from being sent client-side if false. Optional.
+         *
+         * @author Bo Gotthardt
+         * @class Product
+         * @constructor
+         *
+         * @param {Object} data The raw API data.
+         * @param {Product} [existingMaster] For internal use only.
+         */
+        // TODO Fix @class/@property to work correctly in IntelliJ
+        function Product(data, existingMaster) {
+            var output = this,
+                master = existingMaster;
+
+            if (data.ancestor) {
+                // The master described in data.ancestor does not have a variants property, so this will not cause an infinite loop.
+                master = new Product(data.ancestor);
+            }
+
+            if (master) {
+                // Set the master product as this product's prototype by recreating it.
+                // This causes Javascript's prototypal inheritance to look up properties that are not found on this
+                // object in its prototype chain, which is exactly what we need for inheriting property values.
+                output = Object.create(master);
+                output.master = master;
+            }
+
+            // Place the properties directly on the object so they are easier to work with and can be inherited individually.
+            $.extend(output, data.properties);
+
+            // Hopefully no one will end up creating a property called &quot;variants&quot; or &quot;master&quot;.
+            if (data.properties &amp;&amp; data.properties.variants !== undefined) {
+                log.warn(&quot;Properties named 'variants' not supported, may cause unexpected behavior.&quot;);
+            }
+            if (data.properties &amp;&amp; data.properties.master !== undefined) {
+                log.warn(&quot;Properties named 'master' not supported, may cause unexpected behavior.&quot;);
+            }
+
+            if (data.variants) {
+                output.variants = data.variants.map(function (variant) {
+                    // The variants described in data.variants do not have an ancestor property, as that is implicitly the current product.
+                    return new Product(variant, output);
+                });
+            } else {
+                // TODO Causes product.master.variants[0] to behave inconsistently for masters above the linked product.
+                output.variants = [];
+            }
+
+            return output;
+        }
+
+//        Product.prototype.getImages = function () {
+//            if (this.images) {
+//                return $.map(this.images, function (image) {
+//                    return new Reference(image).getBinaryURL();
+//                });
+//            } else {
+//                return [];
+//            }
+//        };
+
+        return Product;
+    });</pre>
+</body>
+</html>

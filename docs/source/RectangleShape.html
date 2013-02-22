@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js">define([&quot;shape/Shape&quot;],
+    function (Shape) {
+        &quot;use strict&quot;;
+
+<span id='RectangleShape-method-constructor'><span id='RectangleShape'>        /**
+</span></span>         * A rectangular shape.
+         *
+         * @extends Shape
+         * @author Bo Gotthardt
+         * @constructor
+         *
+         * @param {Object} data The raw API data.
+         */
+        function RectangleShape(data) {
+            Shape.call(this, data);
+<span id='RectangleShape-property-x'>            /**
+</span>             * Top left corner x-coordinate, between 0 and 1.
+             * @type {Number}
+             */
+            this.x = data.x;
+<span id='RectangleShape-property-y'>            /**
+</span>             * Top left corner y-coordinate, between 0 and 1.
+             * @type {Number}
+             */
+            this.y = data.y;
+<span id='RectangleShape-property-height'>            /**
+</span>             * Height, between 0 and 1.
+             * @type {Number}
+             */
+            this.height = data.height;
+<span id='RectangleShape-property-width'>            /**
+</span>             * Width, between 0 and 1.
+             * @type {Number}
+             */
+            this.width = data.width;
+<span id='RectangleShape-property-rotation'>            /**
+</span>             * Rotation in degrees, between -180 and 180.
+             * @type {Number}
+             */
+            this.rotation = data.rotation;
+        }
+        RectangleShape.prototype = Object.create(Shape.prototype);
+
+<span id='RectangleShape-static-property-TYPE'>        /**
+</span>         * The API type value for this kind of enrichment.
+         * @static
+         * @const
+         * @type {String}
+         */
+        RectangleShape.TYPE = &quot;rectangle&quot;;
+
+        return RectangleShape;
+    });</pre>
+</body>
+</html>

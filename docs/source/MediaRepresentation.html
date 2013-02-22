@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js">define([&quot;internal/Reference&quot;],
+    function (Reference) {
+        &quot;use strict&quot;;
+
+<span id='MediaRepresentation-method-constructor'><span id='MediaRepresentation'>        /**
+</span></span>         * The data for a piece of media, such as an image or a video.
+         *
+         * @author Bo Gotthardt
+         * @constructor
+         *
+         * @param {Object} data The raw API data.
+         */
+        function MediaRepresentation(data) {
+<span id='MediaRepresentation-property-type'>            /**
+</span>             * The media representation type, see {@link MediaRepresentation.Type}.
+             * @type {String}
+             */
+            this.type = data.type;
+<span id='MediaRepresentation-property-contentType'>            /**
+</span>             * The file MIME type.
+             * @type {String}
+             */
+            this.contentType = data.contentType;
+<span id='MediaRepresentation-property-size'>            /**
+</span>             * The file size in bytes.
+             * @type {Number}
+             */
+            this.size = data.size;
+
+            this._mediaSource = data.mediaSource;
+        }
+
+<span id='MediaRepresentation-method-getBinaryURL'>        /**
+</span>         * Get the URL to this media's binary file.
+         * What kind of file it is depends on the type and contentType.
+         *
+         * @return {String}
+         */
+        MediaRepresentation.prototype.getBinaryURL = function () {
+            return new Reference(this._mediaSource).getBinaryURL();
+        };
+
+
+<span id='MediaRepresentation-Type'>        /**
+</span>         * The different types of media representations.
+         *
+         * @static
+         * @enum MediaRepresentation.Type
+         */
+        MediaRepresentation.Type = {
+<span id='MediaRepresentation-Type-static-property-IMAGE'>            /**
+</span>             * An image.
+             * @static
+             * @const
+             */
+            IMAGE: &quot;image&quot;,
+<span id='MediaRepresentation-Type-static-property-LOW_RESOLUTION_MP4'>            /**
+</span>             * Low resolution m4v format video. MIME-type: &quot;video/mp4&quot;.
+             * @static
+             * @const
+             */
+            LOW_RESOLUTION_MP4: &quot;low_resolution_mp4&quot;,
+<span id='MediaRepresentation-Type-static-property-MEDIUM_RESOLUTION_MP4'>            /**
+</span>             * Medium resolution m4v format video. MIME-type: &quot;video/mp4&quot;.
+             * @static
+             * @const
+             */
+            MEDIUM_RESOLUTION_MP4: &quot;medium_resolution_mp4&quot;,
+<span id='MediaRepresentation-Type-static-property-HIGH_RESOLUTION_MP4'>            /**
+</span>             * High resolution m4v format video. MIME-type: &quot;video/mp4&quot;.
+             * @static
+             * @const
+             */
+            HIGH_RESOLUTION_MP4: &quot;high_resolution_mp4&quot;,
+<span id='MediaRepresentation-Type-static-property-LOW_RESOLUTION_WEBM'>            /**
+</span>             * Low resolution webm format video. MIME-type: &quot;video/webm&quot;.
+             * @static
+             * @const
+             */
+            LOW_RESOLUTION_WEBM: &quot;low_resolution_webm&quot;,
+<span id='MediaRepresentation-Type-static-property-MEDIUM_RESOLUTION_WEBM'>            /**
+</span>             * Medium resolution webm format video. MIME-type: &quot;video/webm&quot;.
+             * @static
+             * @const
+             */
+            MEDIUM_RESOLUTION_WEBM: &quot;medium_resolution_webm&quot;,
+<span id='MediaRepresentation-Type-static-property-HIGH_RESOLUTION_WEBM'>            /**
+</span>             * High resolution webm format video. MIME-type: &quot;video/webm&quot;.
+             * @static
+             * @const
+             */
+            HIGH_RESOLUTION_WEBM: &quot;high_resolution_webm&quot;
+        };
+
+        return MediaRepresentation;
+    });</pre>
+</body>
+</html>

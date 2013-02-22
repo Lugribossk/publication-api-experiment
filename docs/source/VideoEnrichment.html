@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js">define([&quot;jquery&quot;, &quot;enrichment/Enrichment&quot;, &quot;publication/MediaRepresentation&quot;],
+    function ($, Enrichment, MediaRepresentation) {
+        &quot;use strict&quot;;
+
+<span id='VideoEnrichment-method-constructor'><span id='VideoEnrichment'>        /**
+</span></span>         * A video enrichment.
+         *
+         * @extends Enrichment
+         * @author Bo Gotthardt
+         * @constructor
+         *
+         * @param {Object} data The raw API data.
+         */
+        function VideoEnrichment(data) {
+            Enrichment.call(this, data);
+<span id='VideoEnrichment-property-playOnLoad'>            /**
+</span>             * Whether the video should autoplay.
+             * @type {Boolean}
+             */
+            this.playOnLoad = data.playOnLoad;
+<span id='VideoEnrichment-property-enableControls'>            /**
+</span>             * Whether player controls are enabled.
+             * @type {Boolean}
+             */
+            this.enableControls = data.enableControls;
+<span id='VideoEnrichment-property-showWhenHovering'>            /**
+</span>             * TODO
+             * @type {Boolean}
+             */
+            this.showWhenHovering = data.showWhenHovering;
+<span id='VideoEnrichment-property-loop'>            /**
+</span>             * Whether the video should restart when it reaches the end.
+             * @type {Boolean}
+             */
+            this.loop = data.loop;
+<span id='VideoEnrichment-property-usesExternalSource'>            /**
+</span>             * TODO
+             * @type {Boolean}
+             */
+            this.usesExternalSource = data.usesExternalSource;
+<span id='VideoEnrichment-property-externalSource'>            /**
+</span>             * TODO
+             * @type {String}
+             */
+            this.externalSource = data.externalSource;
+
+            this._posterImageRepresentationDescriptors = data.posterImageRepresentationDescriptors;
+        }
+        VideoEnrichment.prototype = Object.create(Enrichment.prototype);
+
+<span id='VideoEnrichment-method-getPosterImages'>        /**
+</span>         * Get the media representations for the poster images.
+         *
+         * @return {MediaRepresentation[]}
+         */
+        VideoEnrichment.prototype.getPosterImages = function () {
+            return this._posterImageRepresentationDescriptors.map(function (poster) {
+                return new MediaRepresentation(poster);
+            });
+        };
+
+        VideoEnrichment.prototype.createVideoElement = function () {
+            var video = $(&quot;&lt;video/&gt;&quot;, {
+                src: this.getMediaRepresentations()[0].getBinaryURL(),
+                controls: this.enableControls,
+                autoplay: this.playOnLoad,
+                loop: this.loop,
+                poster: this.getPosterImages()[0].getBinaryURL()
+            })
+                .css({
+                    width: &quot;100%&quot;,
+                    height: &quot;100%&quot;
+                });
+
+            return Enrichment.prototype.createDomElement.call(this, &quot;VideoEnrichment&quot;)
+                .append(video);
+        };
+
+<span id='VideoEnrichment-static-property-TYPE'>        /**
+</span>         * The API type value for this kind of enrichment.
+         * @static
+         * @const
+         * @type {String}
+         */
+        VideoEnrichment.TYPE = &quot;videoEnrichment&quot;;
+
+        return VideoEnrichment;
+    });</pre>
+</body>
+</html>

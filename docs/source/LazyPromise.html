@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js">define([&quot;jquery&quot;, &quot;util/Promise&quot;],
+    function ($, Promise) {
+        &quot;use strict&quot;;
+
+<span id='LazyPromise-method-constructor'><span id='LazyPromise'>        /**
+</span></span>         * A &quot;lazy&quot; Promise that does not start calculating its value until the first handler is added to it.
+         * Useful to set up Ajax requests that are not actually fired until needed.
+         *
+         * @implements Promise
+         * @author Bo Gotthardt
+         * @constructor
+         *
+         * @param {Function} valueGenerator A function that generates the promised value.
+         *                                  If it returns a {@link Promise}, it's resolution/rejection/progress will be used for the lazy promise.
+         *                                  If it returns any other kind of value, the lazy promise will resolve with this.
+         */
+        function LazyPromise(valueGenerator) {
+            this._valueGenerator = valueGenerator;
+            this._deferred = new $.Deferred();
+            this._triggered = false;
+        }
+
+<span id='LazyPromise-method-_trigger'>        /**
+</span>         * Trigger the value generation if this has not already been done.
+         *
+         * @private
+         */
+        LazyPromise.prototype._trigger = function () {
+            if (!this._triggered) {
+                this._triggered = true;
+
+                var value = this._valueGenerator();
+                if (Promise.isPromise(value)) {
+                    value
+                        .done(this._deferred.resolve)
+                        .fail(this._deferred.reject)
+                        .progress(this._deferred.notify);
+                } else {
+                    this._deferred.resolve(value);
+                }
+            }
+        };
+
+<span id='LazyPromise-method-then'>        /**
+</span>         * See &lt;a href=&quot;http://api.jquery.com/deferred.then/&quot;&gt;deferred.then()&lt;/a&gt;.
+         *
+         * @param {Function} doneFilter
+         * @param {Function} [failFilter]
+         * @param {Function} [progressFilter]
+         */
+        LazyPromise.prototype.then = function (doneFilter, failFilter, progressFilter) {
+            this._trigger();
+            this._deferred.then(doneFilter, failFilter, progressFilter);
+        };
+
+<span id='LazyPromise-method-done'>        /**
+</span>         * See &lt;a href=&quot;http://api.jquery.com/deferred.done/&quot;&gt;deferred.done()&lt;/a&gt;.
+         *
+         * @param {Function} callback
+         */
+        LazyPromise.prototype.done = function (callback) {
+            this._trigger();
+            this._deferred.done(callback);
+        };
+
+<span id='LazyPromise-method-fail'>        /**
+</span>         * See &lt;a href=&quot;http://api.jquery.com/deferred.fail/&quot;&gt;deferred.fail()&lt;/a&gt;.
+         *
+         * @param {Function} callback
+         */
+        LazyPromise.prototype.fail = function (callback) {
+            this._trigger();
+            this._deferred.fail(callback);
+        };
+
+<span id='LazyPromise-method-progress'>        /**
+</span>         * See &lt;a href=&quot;http://api.jquery.com/deferred.progress/&quot;&gt;deferred.progress()&lt;/a&gt;.
+         *
+         * @param {Function} callback
+         */
+        LazyPromise.prototype.progress = function (callback) {
+            this._trigger();
+            this._deferred.progress(callback);
+        };
+
+        return LazyPromise;
+    });</pre>
+</body>
+</html>

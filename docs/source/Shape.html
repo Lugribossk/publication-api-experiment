@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js">define([],
+    function () {
+        &quot;use strict&quot;;
+
+<span id='Shape-method-constructor'><span id='Shape'>        /**
+</span></span>         * The shape of something relative to the page it is placed on.
+         * Properties related to size and positioning are expressed as number between 0 and 1, which should be
+         * interpreted as a percentage relative to the page.
+         *
+         * @abstract
+         * @author Bo Gotthardt
+         * @constructor
+         *
+         * @param {Object} data The raw API data.
+         */
+        function Shape(data) {
+<span id='Shape-property-type'>            /**
+</span>             * The type of shape.
+             * @type {String}
+             */
+            this.type = data.type;
+        }
+
+        return Shape;
+    });</pre>
+</body>
+</html>

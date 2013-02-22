@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js">define([&quot;jquery&quot;,
+        &quot;enrichment/BuyTheLookWidget&quot;,
+        &quot;enrichment/CustomLink&quot;,
+        &quot;enrichment/Enrichment&quot;,
+        &quot;enrichment/ExternalLink&quot;,
+        &quot;enrichment/InternalLink&quot;,
+        &quot;enrichment/ProductDetailsWidget&quot;,
+        &quot;enrichment/ProductLink&quot;,
+        &quot;enrichment/VideoEnrichment&quot;,
+        &quot;util/Logger&quot;,
+        &quot;util/Browser&quot;,
+        &quot;view/SimpleShapeView&quot;],
+    function ($, BuyTheLookWidget, CustomLink, Enrichment, ExternalLink, InternalLink, ProductDetailsWidget, ProductLink, VideoEnrichment, Logger, Browser, SimpleShapeView) {
+        &quot;use strict&quot;;
+        var log = new Logger(&quot;SimpleEnrichmentView&quot;);
+
+<span id='SimpleEnrichmentView-method-constructor'><span id='SimpleEnrichmentView'>        /**
+</span></span>         * Simple views for all the enrichment classes.
+         *
+         * @author Bo Gotthardt
+         * @constructor
+         */
+        function SimpleEnrichmentView() {}
+
+<span id='SimpleEnrichmentView-method-createDomElement'>        /**
+</span>         * @inheritDoc
+         */
+        BuyTheLookWidget.prototype.createDomElement = function () {
+            return Enrichment.prototype.createDomElement.call(this, &quot;BuyTheLookWidget&quot;, null, this.getProducts());
+        };
+
+<span id='SimpleEnrichmentView-method-createDomElement'>        /**
+</span>         * @inheritDoc
+         */
+        CustomLink.prototype.createDomElement = function () {
+            return Enrichment.prototype.createDomElement.call(this, &quot;CustomLink&quot;, JSON.stringify(this.value), this.value);
+        };
+
+<span id='SimpleEnrichmentView-method-createDomElement'>        /**
+</span>         * Create a DOM element that visualizes this enrichment.
+         *
+         * @param {String} cssClass CSS class to add to the element.
+         * @param {*|Promise} [label] Label to annotate the element with, optional. If a Promise, uses the promised value.
+         * @param {*|Promise} [clickLog] Additional information to log when the element is clicked, optional. If a Promise, uses the promised value.
+         * @return {jQuery} The element
+         */
+        Enrichment.prototype.createDomElement = function (cssClass, label, clickLog) {
+            var scope = this,
+                element = this.getShape().createDomElement()
+                    .addClass(&quot;Enrichment&quot;)
+                    .addClass(cssClass); // If only there was a reliable way to get the current object's class name so we could use that directly.
+
+            if (label) {
+                $.when(label)
+                    .done(function (value) {
+                        $(&quot;&lt;span/&gt;&quot;)
+                            .addClass(&quot;Label&quot;)
+                            .text(value)
+                            .appendTo(element);
+                    });
+            }
+
+            element.on(&quot;click&quot;, function () {
+                log.info(scope);
+                if (clickLog) {
+                    log.info(clickLog);
+                }
+            });
+
+            return element;
+        };
+
+<span id='SimpleEnrichmentView-method-createDomElement'>        /**
+</span>         * @inheritDoc
+         */
+        ExternalLink.prototype.createDomElement = function () {
+            var scope = this,
+                element = Enrichment.prototype.createDomElement.call(this, &quot;ExternalLink&quot;, this.url + &quot;, &quot; + this.target);
+
+            element.on(&quot;dblclick&quot;, function () {
+                Browser.getWindow().open(scope.url, scope.target);
+            });
+
+            return element;
+        };
+
+<span id='SimpleEnrichmentView-method-createDomElement'>        /**
+</span>         * @inheritDoc
+         */
+        InternalLink.prototype.createDomElement = function () {
+            var scope = this,
+                element = Enrichment.prototype.createDomElement.call(this, &quot;InternalLink&quot;, &quot;Page &quot; + this.targetPageNumber);
+
+            element.on(&quot;dblclick&quot;, function () {
+                // Since the pages are stacked vertically on top of each other, we can jump to to a particular page by scrolling up/down the right amount.
+                $(&quot;body&quot;).animate({
+                    scrollTop: $(&quot;#page&quot; + scope.targetPageNumber).offset().top
+                }, 500);
+            });
+
+            return element;
+        };
+
+<span id='SimpleEnrichmentView-method-createDomElement'>        /**
+</span>         * @inheritDoc
+         */
+        ProductDetailsWidget.prototype.createDomElement = function () {
+            return Enrichment.prototype.createDomElement.call(this, &quot;ProductDetailsWidget&quot;, null, this.getProduct());
+        };
+
+<span id='SimpleEnrichmentView-method-createDomElement'>        /**
+</span>         * @inheritDoc
+         */
+        ProductLink.prototype.createDomElement = function () {
+            var productIdPromise = this.getProduct()
+                .then(function (product) {
+                    return product.product_id;
+                });
+            var cssClass = &quot;ProductLink &quot; + (this.usesProductDatabase ? &quot;DatabaseProduct&quot; : &quot;ManualProduct&quot;);
+            var element = Enrichment.prototype.createDomElement.call(this, cssClass, productIdPromise, this.getProduct());
+
+            // TODO this applies to internal and external links as well.
+            if (this.getMediaRepresentations().length &gt; 0) {
+                // The media representation is a background image for the link.
+                element.css({
+                    &quot;background-image&quot;: &quot;url(&quot; + this.getMediaRepresentations()[0].getBinaryURL() + &quot;)&quot;
+                });
+            }
+
+            return element;
+        };
+
+<span id='SimpleEnrichmentView-method-createDomElement'>        /**
+</span>         * @inheritDoc
+         */
+        VideoEnrichment.prototype.createDomElement = function () {
+            return Enrichment.prototype.createDomElement.call(this, &quot;VideoEnrichment&quot;);
+        };
+    });</pre>
+</body>
+</html>

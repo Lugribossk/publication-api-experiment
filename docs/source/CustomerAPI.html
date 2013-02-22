@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js">define([&quot;api/PublicationAPI&quot;, &quot;util/Logger&quot;, &quot;util/Browser&quot;, &quot;util/Ajax&quot;],
+    function (PublicationAPI, Logger, Browser, Ajax) {
+        &quot;use strict&quot;;
+        var log = new Logger(&quot;CustomerAPI&quot;);
+
+<span id='CustomerAPI-method-constructor'><span id='CustomerAPI'>        /**
+</span></span>         * Client for the Zmags Customer API that can be used to retrieve publications for specific customers.
+         * Also known as the &quot;Publication&lt;b&gt;s&lt;/b&gt; API&quot;.
+         *
+         *     @example
+         *     require([&quot;jquery&quot;, &quot;api/CustomerAPI&quot;, &quot;view/SimplePublicationView&quot;],
+         *         function ($, CustomerAPI) {
+         *             new CustomerAPI(&quot;2a39a9615b&quot;).getAllPublications(&quot;85d291bd&quot;)
+         *                 .then(function (publications) {
+         *                     var pages = publications.map(function (publication) {
+         *                         return publication.getPage(1);
+         *                     });
+         *                     return $.when.apply(this, pages);
+         *                 })
+         *                 .then(function () {
+         *                     $.makeArray(arguments).forEach(function (page) {
+         *                         page.createDomElement({width: 180, height: 180}, null, true).appendTo(&quot;body&quot;);
+         *                     });
+         *                     $(&quot;.Page&quot;).css({float: &quot;left&quot;});
+         *                 });
+         *         });
+         *
+         * @author Bo Gotthardt
+         * @constructor
+         *
+         * @param {String} key The API key.
+         * @param {String} [apiURL] The URL to the Customer Publication List service.
+         *                          Optional, defaults to the same protocol as the current page.
+         * @param {String} [publicationApiURL] The URL to the Publication Info service.
+         *                          Optional, defaults to the same protocol as the current page.
+         */
+        function CustomerAPI(key, apiURL, publicationApiURL) {
+            this._key = key;
+            this._apiURL = apiURL || (Browser.isSecure() ? CustomerAPI.HTTPS_URL : CustomerAPI.HTTP_URL);
+            this._publicationAPI = new PublicationAPI(key, publicationApiURL);
+        }
+
+
+<span id='CustomerAPI-method-getAllPublications'>        /**
+</span>         * Get all of the specified customer's publications.
+         * Note that publications that are not activated or are security restricted may not be available.
+         *
+         * @param {String} customerID The ID of the customer, as seen in the Publicator under TODO.
+         * @return {Promise} A promise for the list of {@link Publication}s.
+         */
+        CustomerAPI.prototype.getAllPublications = function (customerID) {
+            var scope = this;
+
+            return Ajax.get({
+                url: this._apiURL + customerID,
+                data: {
+                    key: this._key
+                }
+            })
+                .fail(function (xhr) {
+                    log.error(&quot;There was a problem retrieving the publication ID list.&quot;, xhr);
+                })
+                .then(function (data) {
+                    return scope._publicationAPI.getPublications(data.publicationIDs);
+                });
+        };
+
+<span id='CustomerAPI-static-property-HTTP_URL'>        /**
+</span>         * The URL to the HTTP version of the Customer Publication List service.
+         * @static
+         * @const
+         * @type {String}
+         */
+        CustomerAPI.HTTP_URL = &quot;http://api.viewer.zmags.com/publications/&quot;;
+
+<span id='CustomerAPI-static-property-HTTPS_URL'>        /**
+</span>         * The URL to the HTTPS version of the Customer Publication List service.
+         * @static
+         * @const
+         * @type {String}
+         */
+        CustomerAPI.HTTPS_URL = &quot;https://secure.api.viewer.zmags.com/publications/&quot;;
+
+        return CustomerAPI;
+    });
+</pre>
+</body>
+</html>

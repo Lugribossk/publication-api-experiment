@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js">define([&quot;util/Promise&quot;, &quot;util/Logger&quot;, &quot;util/Ajax&quot;],
+    function (Promise, Logger, Ajax) {
+        &quot;use strict&quot;;
+        var log = new Logger(&quot;Reference&quot;);
+
+<span id='global-property-baseURL'>        /**
+</span>         * The base URL for references.
+         * @type {String}
+         */
+        var baseURL = null;
+
+<span id='Reference-method-constructor'><span id='Reference'>        /**
+</span></span>         * A Publication API &quot;reference&quot;.
+         * These are used to encapsulate detailed data into separate requests, while allowing responses to return more data than requested.
+         * Resolving references correctly then lets us reuse this &quot;bonus&quot; data to avoid requesting it from the server.
+         * This is a little complicated, but allows for much better usage of the Content Delivery Network caching.
+         *
+         * &lt;b&gt;There should be no need to use this class when simply working with the objects returned by {@link PublicationAPI}.&lt;/b&gt;
+         *
+         * @author Bo Gotthardt
+         * @constructor
+         *
+         * @param {Object} data The raw object to convert to a Reference object.
+         */
+        function Reference(data) {
+            if (data.resourcePath) {
+                this._resourcePath = data.resourcePath;
+            } else if (data.resourceURL) {
+                this._resourceURL = data.resourceURL;
+            } else if (data.bundlePath) {
+                this._bundlePath = data.bundlePath;
+                this._bundlePart = data.bundlePart;
+            } else {
+                log.error(&quot;Unknown reference type&quot;, data);
+            }
+        }
+
+<span id='Reference-static-property-bundleCache'>        /**
+</span>         * A map of bundle paths to their bundles.
+         * A bundle is then a map of bundle parts to their data.
+         * @private
+         * @static
+         * @type {Object}
+         */
+        var bundleCache = {};
+
+<span id='Reference-static-method-getBundlePart'>        /**
+</span>         * Get a bundle part's data from the cache.
+         *
+         * @private
+         * @static
+         *
+         * @param {String} path The bundle path.
+         * @param {String} part The bundle part.
+         * @return {Object} The data, or null if it was not cached.
+         */
+        function getBundlePart(path, part) {
+            return bundleCache[path] &amp;&amp; bundleCache[path][part];
+        }
+
+<span id='Reference-static-method-saveBundle'>        /**
+</span>         * Cache a bundle so its parts can be reused later.
+         *
+         * @private
+         * @static
+         *
+         * @param {String} path The bundle path it was retrieved from.
+         * @param {Object} bundle The bundle object that maps bundle parts to their data.
+         */
+        function saveBundle(path, bundle) {
+            bundleCache[path] = bundle;
+        }
+
+<span id='Reference-static-method-getBundleReference'>        /**
+</span>         * Get the data for a &quot;bundle&quot; reference type.
+         *
+         * @private
+         * @static
+         *
+         * @param {String} path The bundle path.
+         * @param {String} part The bundle part.
+         * @return {Promise} A promise for the data.
+         */
+        function getBundleReference(path, part) {
+            var cachedBundlePart = getBundlePart(path, part);
+            if (cachedBundlePart) {
+                return Promise.resolved(cachedBundlePart);
+            }
+            return Ajax.get({url: baseURL + path})
+                .then(function (bundle) {
+                    saveBundle(path, bundle);
+                    return getBundlePart(path, part);
+                });
+        }
+
+<span id='Reference-method-get'>        /**
+</span>         * Get the data that this reference points to.
+         *
+         * @return {Promise} A promise for the reference data as an Object.
+         */
+        Reference.prototype.get = function () {
+            var promise;
+            if (this._resourcePath || this._resourceURL) {
+                promise = Ajax.get({url: this.getBinaryURL()});
+            } else if (this._bundlePath) {
+                promise = getBundleReference(this._bundlePath, this._bundlePart);
+            } else {
+                promise = Promise.rejected();
+            }
+
+            return promise
+                .fail(function () {
+                    log.error(&quot;Unable to resolve reference&quot;, this);
+                }.bind(this));
+        };
+
+<span id='Reference-method-getAs'>        /**
+</span>         * Get the data that this reference points to, as an instance of the specified class.
+         *
+         * @param {Function} Class The constructor function of the class to use. Must take a single parameter with the reference data as input.
+         * @return {Promise} A promise for the reference data as an instance of Class.
+         */
+        Reference.prototype.getAs = function (Class) {
+            return this.get()
+                .then(function (data) {
+                    return new Class(data);
+                });
+        };
+
+<span id='Reference-method-getEachWith'>        /**
+</span>         * Get the data that this reference points to, as a list of instances constructed by the specified function.
+         * Assumes that the raw data returned is a list.
+         *
+         * @param {Function} parserFunction The function to call with each item of raw data to parse them into some kind of object.
+         *                                  Must take a single parameter with the reference data as input.
+         * @return {Promise} A promise for the reference data as a list of objects created by the parsing function.
+         */
+        Reference.prototype.getEachWith = function (parserFunction) {
+            return this.get()
+                .then(function (data) {
+                    log.assert(Array.isArray(data), &quot;Reference must resolve to a list, was&quot;, data);
+                    return data.map(parserFunction);
+                });
+        };
+
+<span id='Reference-method-getBinaryURL'>        /**
+</span>         * Get the URL to a binary file that this reference points to.
+         * Only call this on references you know point to binary URLs, such as page representation references.
+         *
+         * @return {String}
+         */
+        Reference.prototype.getBinaryURL = function () {
+            if (this._resourcePath) {
+                return baseURL + this._resourcePath;
+            }
+            if (this._resourceURL) {
+                return this._resourceURL;
+            }
+            log.error(&quot;Unable to get binary URL for bundle path/part reference type.&quot;);
+            return null;
+        };
+
+<span id='Reference-static-method-setBaseURL'>        /**
+</span>         * Set the base URL used to resolve &quot;resourcePath&quot; and &quot;bundlePath&quot; references.
+         * &lt;b&gt;Must&lt;/b&gt; be set after publication info has been retrieved.
+         *
+         * @static
+         * @param {String} url The base URL
+         */
+        Reference.setBaseURL = function (url) {
+            if (baseURL &amp;&amp; baseURL !== url) {
+                log.error(&quot;Inconsistent publication base URLs. This use case is not supported by the current implementation.&quot;);
+            } else {
+                baseURL = url;
+            }
+        };
+
+<span id='Reference-static-method-clearCache'>        /**
+</span>         * Clear any cached reference data.
+         *
+         * @static
+         */
+        Reference.clearCache = function () {
+            bundleCache = {};
+        };
+
+        return Reference;
+    });</pre>
+</body>
+</html>

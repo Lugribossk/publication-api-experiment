@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js">define([&quot;internal/Reference&quot;, &quot;publication/Page&quot;, &quot;util/Promise&quot;, &quot;util/Logger&quot;],
+    function (Reference, Page, Promise, Logger) {
+        &quot;use strict&quot;;
+        var log = new Logger(&quot;Publication&quot;);
+
+<span id='Publication-method-constructor'><span id='Publication'>        /**
+</span></span>         * A Zmags publication.
+         *
+         * @author Bo Gotthardt
+         * @constructor
+         *
+         * Note that this constructor is only useful with internal data from {@link PublicationAPI}.
+         * Instead use {@link PublicationAPI#getPublication}.
+         *
+         * @param {String} id The publication ID
+         * @param {Object} info The publication info
+         * @param {Object} descriptor The publication descriptor
+         */
+        function Publication(id, info, descriptor) {
+<span id='Publication-property-id'>            /**
+</span>             * The ID of the publication.
+             * @type {String}
+             */
+            this.id = id;
+<span id='Publication-property-version'>            /**
+</span>             * The version number. This increases when the publication is changed.
+             * @type {Number}
+             */
+            this.version = info.version;
+<span id='Publication-property-expired'>            /**
+</span>             * Whether the publication has expired.
+             * @type {Boolean}
+             */
+            this.expired = info.expired;
+<span id='Publication-property-activated'>            /**
+</span>             * Whether the publication is activated.
+             * @type {Boolean}
+             */
+            this.activated = info.activated;
+<span id='Publication-property-name'>            /**
+</span>             * The name of the publication.
+             * @type {String}
+             */
+            this.name = descriptor.name;
+<span id='Publication-property-numberOfPages'>            /**
+</span>             * The number of pages in the publication.
+             * @type {Number}
+             */
+            this.numberOfPages = descriptor.numberOfPages;
+<span id='Publication-property-pageAspectRatio'>            /**
+</span>             * The aspect ratio of the pages in the publication, as width / height.
+             * @type {Number}
+             */
+            this.pageAspectRatio = descriptor.pageAspectRatio;
+<span id='Publication-property-firstPageIsCoverPage'>            /**
+</span>             * Whether the first page is a cover page.
+             * For publications where two pages are displayed in a magazine-like spread, this determines if
+             * the first page stands alone on the right, rather than being together with page 2.
+             * @type {Boolean}
+             */
+            this.firstPageIsCoverPage = descriptor.firstPageIsCoverPage;
+
+            this._pageDescriptors = descriptor.pageDescriptors;
+            this._productIndex = descriptor.productIndex;
+        }
+
+<span id='Publication-method-getPage'>        /**
+</span>         * Get the specified page.
+         *
+         * @param {Number} pageNumber The page number, starts at &lt;b&gt;1&lt;/b&gt;.
+         * @return {Promise} A promise for the {@link Page}.
+         */
+        Publication.prototype.getPage = function (pageNumber) {
+            if (pageNumber &lt; 1 || pageNumber &gt; this.numberOfPages) {
+                log.error(&quot;Page number&quot;, pageNumber, &quot;out of range.&quot;);
+                return Promise.rejected();
+            }
+            // The pageDescriptors list has the pages in sorted order.
+            return new Reference(this._pageDescriptors[pageNumber - 1]).getAs(Page);
+        };
+
+<span id='Publication-method-getPages'>        /**
+</span>         * Get all the publication's pages, in ascending order.
+         *
+         * @return {Promise} A promise for the list of {@link Page}s.
+         */
+        Publication.prototype.getPages = function () {
+            var deferreds = this._pageDescriptors.map(function (descriptor) {
+                return new Reference(descriptor).getAs(Page);
+            });
+
+            return Promise.all(deferreds);
+        };
+
+<span id='Publication-method-getEnrichments'>        /**
+</span>         * Get all the publication's enrichments.
+         *
+         * @return {Promise} A promise for the list of {@link Enrichment}s.
+         */
+        Publication.prototype.getEnrichments = function () {
+            return this.getPages()
+                .then(function (pages) {
+                    var deferreds = pages.map(function (page) {
+                        return page.getEnrichments();
+                    });
+                    return Promise.all(deferreds)
+                        .then(function (enrichmentLists) {
+                            return Array.prototype.concat.apply([], enrichmentLists);
+                        });
+                });
+        };
+
+<span id='Publication-method-getPageNumberWithProduct'>        /**
+</span>         * Get the page number of the first page where the product with the specified ID is located.
+         *
+         * @param {String} productID The product ID.
+         * @return {Promise} A promise for the page number.
+         */
+        Publication.prototype.getPageNumberWithProduct = function (productID) {
+            if (!this._productIndex) {
+                return Promise.rejected();
+            }
+            // productIndex actually points to a &quot;part index&quot;.
+            return new Reference(this._productIndex).get()
+                .then(function (partIndex) {
+                    // We then use this to look up which part the product is in.
+                    var correctPart = null;
+                    partIndex.forEach(function (part) {
+                        if (productID &gt;= part.from &amp;&amp; productID &lt;= part.to) {
+                            correctPart = part;
+                        }
+                    });
+                    if (!correctPart) {
+                        // The product ID does not exist in the publication.
+                        return Promise.rejected();
+                    }
+
+                    // Which has a reference pointing to an &quot;index part&quot;.
+                    return new Reference(correctPart.indexPart).get();
+                })
+                .then(function (indexPart) {
+                    // Where we can finally look up the product ID.
+                    var pageNumber = indexPart[productID];
+                    if (!pageNumber) {
+                        // It should have been found since the index said it was on that page.
+                        log.warn(&quot;Inconsistent product index behavior for product ID&quot;, productID);
+                        return Promise.rejected();
+                    }
+                    return pageNumber;
+                });
+        };
+
+<span id='Publication-method-getProduct'>        /**
+</span>         * Get the specified product.
+         * Only works for products that are actually in the publication.
+         *
+         * @param {String} productID The product ID.
+         * @return {Promise} A promise for the {@link Product}.
+         */
+        Publication.prototype.getProduct = function (productID) {
+            return this.getPageNumberWithProduct(productID)
+                .then(this.getPage)
+                .then(function (page) {
+                    return page.getProduct(productID);
+                });
+        };
+
+        return Publication;
+    });</pre>
+</body>
+</html>

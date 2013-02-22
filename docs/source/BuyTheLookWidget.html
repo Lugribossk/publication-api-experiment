@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js">define([&quot;enrichment/Enrichment&quot;, &quot;internal/Reference&quot;, &quot;publication/Product&quot;, &quot;util/Promise&quot;],
+    function (Enrichment, Reference, Product, Promise) {
+        &quot;use strict&quot;;
+
+<span id='BuyTheLookWidget-method-constructor'><span id='BuyTheLookWidget'>        /**
+</span></span>         * A &quot;buy the look&quot; widget. Also known as &quot;shop the look&quot; and several other similar names.
+         * Has a list of {@link Product}s, rather than a single one like the {@link ProductDetailsWidget}.
+         *
+         * @extends Enrichment
+         * @author Bo Gotthardt
+         * @constructor
+         *
+         * @param {Object} data The raw API data.
+         */
+        function BuyTheLookWidget(data) {
+            Enrichment.call(this, data);
+            this.title = data.title;
+            this.description = data.description;
+            this.statisticsID = data.statisticsID;
+            this.button = data.button;
+            this.shapeEnabled = data.shapeEnabled;
+
+            this._productDescriptors = data.productDescriptors;
+        }
+        BuyTheLookWidget.prototype = Object.create(Enrichment.prototype);
+
+<span id='BuyTheLookWidget-method-getProducts'>        /**
+</span>         * Get the products this widget has.
+         *
+         * @return {Promise} A promise for the list of {@link Product}s.
+         */
+        BuyTheLookWidget.prototype.getProducts = function () {
+            var deferreds = this._productDescriptors.map(function (descriptor) {
+                return new Reference(descriptor).getAs(Product);
+            });
+
+            return Promise.all(deferreds);
+        };
+
+<span id='BuyTheLookWidget-static-property-TYPE'>        /**
+</span>         * The API type value for this kind of enrichment.
+         * @static
+         * @const
+         * @type {String}
+         */
+        BuyTheLookWidget.TYPE = &quot;buyTheLookWidget&quot;;
+
+        return BuyTheLookWidget;
+    });</pre>
+</body>
+</html>

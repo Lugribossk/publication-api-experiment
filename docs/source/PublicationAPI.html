@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js">define([&quot;jquery&quot;, &quot;internal/Reference&quot;, &quot;publication/Publication&quot;, &quot;util/Promise&quot;, &quot;util/Logger&quot;, &quot;util/Browser&quot;, &quot;util/Ajax&quot;],
+    function ($, Reference, Publication, Promise, Logger, Browser, Ajax) {
+        &quot;use strict&quot;;
+        var log = new Logger(&quot;PublicationAPI&quot;);
+
+<span id='PublicationAPI-method-constructor'><span id='PublicationAPI'>        /**
+</span></span>         * Client for the Zmags Publication API that can be used to retrieve publication data.
+         *
+         *     @example
+         *     require([&quot;jquery&quot;, &quot;api/PublicationAPI&quot;, &quot;view/SimplePublicationView&quot;],
+         *         function ($, PublicationAPI) {
+         *             new PublicationAPI(&quot;2a39a9615b&quot;).getPublication(&quot;952ac7ea&quot;)
+         *                 .done(function (publication) {
+         *                     publication.createDomElement({width: 150, height: 150}).appendTo(&quot;body&quot;);
+         *                     $(&quot;.Page&quot;).css({float: &quot;left&quot;});
+         *                 });
+         *         });
+         *
+         * @author Bo Gotthardt
+         * @constructor
+         *
+         * @param {String} key The API key.
+         * @param {String} [apiURL] The URL to the Publication Info service.
+         *                          Optional, defaults to the same protocol as the current page.
+         */
+        function PublicationAPI(key, apiURL) {
+            this._key = key;
+            this._apiURL = apiURL || (Browser.isSecure() ? PublicationAPI.HTTPS_URL : PublicationAPI.HTTP_URL);
+        }
+
+
+<span id='PublicationAPI-static-method-getPublicationDescriptor'>        /**
+</span>         * Get the specified publication info's publication descriptor.
+         *
+         * @private
+         * @static
+         *
+         * @param {Object} publicationInfo The publication info.
+         * @return {Promise} A promise for the publication descriptor.
+         */
+        function getPublicationDescriptor(publicationInfo) {
+            if (!publicationInfo.publicationDescriptor) {
+                log.error(&quot;No publication descriptor, perhaps the publication is not activated?&quot;);
+                return Promise.rejected();
+            }
+            return new Reference(publicationInfo.publicationDescriptor).get();
+        }
+
+
+<span id='PublicationAPI-method-_getAjaxParameters'>        /**
+</span>         * Get the Ajax settings used for retrieving publication info.
+         *
+         * @private
+         *
+         * @param {String} publicationID The publication ID.
+         * @param {Boolean} [preview=false] Whether to use preview mode.
+         * @return {Object}
+         */
+        PublicationAPI.prototype._getAjaxParameters = function (publicationID, preview) {
+            var params = {
+                url: this._apiURL + publicationID,
+                data: {
+                    key: this._key
+                }
+            };
+
+            if (preview) {
+                params.data.viewType = &quot;pubPreview&quot;;
+            }
+
+            return params;
+        };
+
+<span id='PublicationAPI-method-_getPublicationInfoCached'>        /**
+</span>         * Get the cached publication info.
+         *
+         * @private
+         *
+         * @param {String} publicationID The publication ID.
+         * @param {Boolean} [preview=false] Whether to use preview mode.
+         * @return {Promise} A promise for the info. Will resolve with null instead of reject.
+         */
+        PublicationAPI.prototype._getPublicationInfoCached = function (publicationID, preview) {
+            return Ajax.get(this._getAjaxParameters(publicationID, preview))
+                .then(null, function (xhr) {
+                    log.warn(&quot;There was a problem getting the cached publication descriptor.&quot;, xhr);
+                    return Promise.resolved(null);
+                });
+        };
+
+<span id='PublicationAPI-method-_getPublicationInfoRecent'>        /**
+</span>         * Get the recent publication info.
+         *
+         * @private
+         *
+         * @param {String} publicationID The publication ID.
+         * @param {Boolean} [preview=false] Whether to use preview mode.
+         * @return {Promise} A promise for the info. Will resolve with null instead of reject.
+         */
+        PublicationAPI.prototype._getPublicationInfoRecent = function (publicationID, preview) {
+            var params = this._getAjaxParameters(publicationID, preview);
+            params.data.recent = true;
+            // Set a low timeout as the recent response may be slow due to not being cached as well.
+            params.timeout = 2000;
+
+            return Ajax.get(params)
+                .then(null, function (xhr, textStatus) {
+                    if (textStatus === &quot;timeout&quot;) {
+                        log.warn(&quot;Timeout while getting the recent publication descriptor.&quot;);
+                    } else {
+                        log.warn(&quot;There was a non-timeout problem getting the recent publication descriptor.&quot;, xhr);
+                    }
+                    return Promise.resolved(null);
+                });
+        };
+
+<span id='PublicationAPI-method-_getPublicationInfo'>        /**
+</span>         * Get the specified publication's &quot;publication info&quot;, respecting the rule about firing off two requests.
+         *
+         * @private
+         *
+         * @param {String} publicationID The publication ID.
+         * @param {Boolean} [preview=false] Whether to use preview mode. &lt;b&gt;Note that this is potentially a lot slower&lt;/b&gt;, but
+         * @return {Promise} A promise for the publication info.
+         */
+        PublicationAPI.prototype._getPublicationInfo = function (publicationID, preview) {
+            return $.when(this._getPublicationInfoCached(publicationID, preview),
+                          this._getPublicationInfoRecent(publicationID, preview))
+                .then(function (infoResponse, infoRecentResponse) {
+                    var info,
+                        infoRecent;
+                    // Both requests have been set to always resolve, so we can continue if one of them fails.
+                    // The parameters are lists of the arguments returned by $.ajax, but we're only interested in the first one.
+                    if (infoResponse) {
+                        info = infoResponse[0];
+                    }
+                    if (infoRecentResponse) {
+                        infoRecent = infoRecentResponse[0];
+                    }
+
+                    // TODO Can activation status change without version being bumped?
+
+                    // If we got both, use the recent publication info if it is newer.
+                    if (infoRecent &amp;&amp; info &amp;&amp; infoRecent.version &gt; info.version) {
+                        return infoRecent;
+                    }
+                    return info || infoRecent || Promise.rejected();
+                })
+                .done(function (info) {
+                    // Set the Reference base URL, hopefully it won't change between publications.
+                    Reference.setBaseURL(info.baseURL);
+                })
+                .fail(function () {
+                    log.error(&quot;Unable to retrieve any publication info.&quot;);
+                });
+        };
+
+<span id='PublicationAPI-method-getPublication'>        /**
+</span>         * Get the specified publication.
+         * Note that publications that are not activated or are security restricted may not be available.
+         *
+         * @param {String} publicationID The ID of the publication, as seen in the Publicator under All Publications -&gt; Edit Publication.
+         * @param {Boolean} [preview=false] Whether to use preview mode where changes from the Publicator are visible immediately.
+         *                                  &lt;b&gt;Note that this is a lot slower and thus should not be used for production code!&lt;/b&gt;
+         * @return {Promise} A promise for the {@link Publication}, that fails if unable to create it.
+         */
+        PublicationAPI.prototype.getPublication = function (publicationID, preview) {
+            var publicationInfo;
+
+            return this._getPublicationInfo(publicationID, preview)
+                .done(function (info) {
+                    publicationInfo = info;
+                })
+                .then(getPublicationDescriptor)
+                .then(function (publicationDescriptor) {
+                    // Create the publication with both info and descriptor, in order to encapsulate the implementation
+                    // detail that this is split into two objects from different requests.
+                    return new Publication(publicationID, publicationInfo, publicationDescriptor);
+                });
+        };
+
+<span id='PublicationAPI-method-getPublications'>        /**
+</span>         * Get the specified publications.
+         * Note that publications that are not activated or are security restricted may not be available.
+         *
+         * @param {String[]} publicationIDs A list of the IDs of the publications.
+         * @return {Promise} A promise for the list of {@link Publication}s.
+         */
+        PublicationAPI.prototype.getPublications = function (publicationIDs) {
+            var publications = publicationIDs.map(function (publicationID) {
+                return this.getPublication(publicationID);
+            }, this);
+
+            return Promise.any(publications);
+        };
+
+<span id='PublicationAPI-static-property-HTTP_URL'>        /**
+</span>         * The URL to the HTTP version of the Publication Info service.
+         * @static
+         * @const
+         * @type {String}
+         */
+        PublicationAPI.HTTP_URL = &quot;http://api.viewer.zmags.com/publication/&quot;;
+
+<span id='PublicationAPI-static-property-HTTPS_URL'>        /**
+</span>         * The URL to the HTTPS version of the Publication Info service.
+         * @static
+         * @const
+         * @type {String}
+         */
+        PublicationAPI.HTTPS_URL = &quot;https://secure.api.viewer.zmags.com/publication/&quot;;
+
+        return PublicationAPI;
+    });</pre>
+</body>
+</html>

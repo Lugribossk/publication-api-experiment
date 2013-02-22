@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js">define([],
+    function () {
+        &quot;use strict&quot;;
+
+<span id='Tooltip-method-constructor'><span id='Tooltip'>        /**
+</span></span>         * An enrichment tooltip.
+         *
+         * @class Tooltip
+         * @author Bo Gotthardt
+         * @constructor
+         *
+         * @param {Object} data The raw API data.
+         */
+        function Tooltip(data) {
+<span id='Tooltip-property-type'>            /**
+</span>             * The type of tooltip, see {@link Tooltip.Type}.
+             * @type {String}
+             */
+            this.type = data.type;
+<span id='Tooltip-property-text'>            /**
+</span>             * The tooltip text.
+             * @type {String/undefined}
+             */
+            this.text = data.text;
+<span id='Tooltip-property-title'>            /**
+</span>             * The media title.
+             * @type {String/undefined}
+             */
+            this.title = data.title;
+<span id='Tooltip-property-description'>            /**
+</span>             * The media description.
+             * @type {String/undefined}
+             */
+            this.description = data.description;
+        }
+
+<span id='Tooltip-Type'>        /**
+</span>         * @static
+         * @enum Tooltip.Type
+         */
+        Tooltip.Type = {
+<span id='Tooltip-Type-property-TEXT'>            TEXT: &quot;text&quot;,
+</span><span id='Tooltip-Type-property-MEDIA'>            MEDIA: &quot;media&quot;
+</span>        };
+
+        return Tooltip;
+    });</pre>
+</body>
+</html>
