@@ -48,20 +48,40 @@ define(["jquery", "internal/Reference", "publication/Publication", "util/Promise
 
 
         /**
+         * Get the Ajax settings used for retrieving publication info.
+         *
+         * @private
+         *
+         * @param {String} publicationID The publication ID.
+         * @param {Boolean} [preview=false] Whether to use preview mode.
+         * @return {Object}
+         */
+        PublicationAPI.prototype._getAjaxParameters = function (publicationID, preview) {
+            var params = {
+                url: this._apiURL + publicationID,
+                data: {
+                    key: this._key
+                }
+            };
+
+            if (preview) {
+                params.data.viewType = "pubPreview";
+            }
+
+            return params;
+        };
+
+        /**
          * Get the cached publication info.
          *
          * @private
          *
          * @param {String} publicationID The publication ID.
+         * @param {Boolean} [preview=false] Whether to use preview mode.
          * @return {Promise} A promise for the info. Will resolve with null instead of reject.
          */
-        PublicationAPI.prototype._getPublicationInfoCached = function (publicationID) {
-            return Ajax.get({
-                url: this._apiURL + publicationID,
-                data: {
-                    key: this._key
-                }
-            })
+        PublicationAPI.prototype._getPublicationInfoCached = function (publicationID, preview) {
+            return Ajax.get(this._getAjaxParameters(publicationID, preview))
                 .then(null, function (xhr) {
                     log.warn("There was a problem getting the cached publication descriptor.", xhr);
                     return Promise.resolved(null);
@@ -74,18 +94,16 @@ define(["jquery", "internal/Reference", "publication/Publication", "util/Promise
          * @private
          *
          * @param {String} publicationID The publication ID.
+         * @param {Boolean} [preview=false] Whether to use preview mode.
          * @return {Promise} A promise for the info. Will resolve with null instead of reject.
          */
-        PublicationAPI.prototype._getPublicationInfoRecent = function (publicationID) {
-            return Ajax.get({
-                url: this._apiURL + publicationID,
-                data: {
-                    key: this._key,
-                    recent: true
-                },
-                // Set a low timeout as the recent response may be slow due to not being cached as well.
-                timeout: 2000
-            })
+        PublicationAPI.prototype._getPublicationInfoRecent = function (publicationID, preview) {
+            var params = this._getAjaxParameters(publicationID, preview);
+            params.data.recent = true;
+            // Set a low timeout as the recent response may be slow due to not being cached as well.
+            params.timeout = 2000;
+
+            return Ajax.get(params)
                 .then(null, function (xhr, textStatus) {
                     if (textStatus === "timeout") {
                         log.warn("Timeout while getting the recent publication descriptor.");
@@ -102,11 +120,12 @@ define(["jquery", "internal/Reference", "publication/Publication", "util/Promise
          * @private
          *
          * @param {String} publicationID The publication ID.
+         * @param {Boolean} [preview=false] Whether to use preview mode. <b>Note that this is potentially a lot slower</b>, but
          * @return {Promise} A promise for the publication info.
          */
-        PublicationAPI.prototype._getPublicationInfo = function (publicationID) {
-            return $.when(this._getPublicationInfoCached(publicationID),
-                          this._getPublicationInfoRecent(publicationID))
+        PublicationAPI.prototype._getPublicationInfo = function (publicationID, preview) {
+            return $.when(this._getPublicationInfoCached(publicationID, preview),
+                          this._getPublicationInfoRecent(publicationID, preview))
                 .then(function (infoResponse, infoRecentResponse) {
                     var info,
                         infoRecent;
@@ -141,12 +160,14 @@ define(["jquery", "internal/Reference", "publication/Publication", "util/Promise
          * Note that publications that are not activated or are security restricted may not be available.
          *
          * @param {String} publicationID The ID of the publication, as seen in the Publicator under All Publications -> Edit Publication.
+         * @param {Boolean} [preview=false] Whether to use preview mode where changes from the Publicator are visible immediately.
+         *                                  <b>Note that this is a lot slower and thus should not be used for production code!</b>
          * @return {Promise} A promise for the {@link Publication}, that fails if unable to create it.
          */
-        PublicationAPI.prototype.getPublication = function (publicationID) {
+        PublicationAPI.prototype.getPublication = function (publicationID, preview) {
             var publicationInfo;
 
-            return this._getPublicationInfo(publicationID)
+            return this._getPublicationInfo(publicationID, preview)
                 .done(function (info) {
                     publicationInfo = info;
                 })
