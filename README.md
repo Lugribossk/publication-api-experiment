@@ -1,14 +1,20 @@
-Publication API experiment
+Publication API example
 ==========================
 
-An experiment in constructing a client for the Zmags Publication API from scratch, using just the public documentation.
+Example code for interacting with the Zmags Publication API.
 
-Includes a simple diagnostic-style view of the various elements of a publication, in order to illustrate how the data can be visualized.
-Note that while this superficially resembles the viewer webapp, it is very far from it in functionality.
+## Examples
 
-## Getting started
+### Simple
+Simple demo of how the Publication API can be used to get and show publication content. Note that while this superficially resembles the viewer webapp, it is very far from it in functionality.
 
-Open [src/main/examples/simple/simple.html](src/main/examples/simple/simple.html) or start reading [src/main/examples/simple/simple.js](src/main/examples/simple/simple.js).
+[Demo](http://htmlpreview.github.com/?https://github.com/Lugribossk/publication-api-experiment/blob/master/src/main/examples/simple/simple.html), [code](src/main/examples/simple/simple.js).
+
+### Archive
+Viewer with archive sidebar using a combination of the Viewer API and Publication API.
+
+[Demo](http://htmlpreview.github.com/?https://github.com/Lugribossk/publication-api-experiment/blob/master/src/main/examples/archive/archive.html), [code](src/main/examples/archive/archive.js).
+
 
 ## Technical notes
 
@@ -18,7 +24,7 @@ Open [src/main/examples/simple/simple.html](src/main/examples/simple/simple.html
 - Properties, parameters and return values are non-null unless specified otherwise.
 
 ### JSLint settings
-- Tolerate: plusplus, vars, nomen
+- Tolerate: plusplus, vars, nomen, todo
 - Predefined variables: define
 
 ### RequireJS and classes
@@ -32,7 +38,7 @@ Open [src/main/examples/simple/simple.html](src/main/examples/simple/simple.html
 - Promises are assumed to fail if the requested object could not be found, rather then resolve with null data.
 
 ### JSDuck
-[JSDuck](https://github.com/senchalabs/jsduck) is used to generate documentation. It's designed for code using Sencha's frameworks but can be made to work pretty well with some extra tags:
+- [JSDuck](https://github.com/senchalabs/jsduck) is used to generate documentation. It's designed for code using Sencha's frameworks but can be made to work pretty well with some extra tags.
 - @constructor after the class description but before the parameters makes the constructor function show up in the documentation.
 - @private and @static on all methods that are that, even though it is obvious.
 - The live examples work due to a new live example iframe with RequireJS.
@@ -52,3 +58,7 @@ Open [src/main/examples/simple/simple.html](src/main/examples/simple/simple.html
 - Functions that rely on references or parsing re-do the same work every time they are called.
   An obvious optimization would be to parse on creation and cache the result of references and delete the data they were generated from.
   However that would make it less clear what data is retrieved from the API, and what is constructed by post-processing afterwards.
+- "Views" (i.e. functions that generate DOM elements to visualize the various classes) have been split into their own files. On load, these add the functions to the prototype of their associated classes. This lets them stay out of the model objects if not needed, and avoids having them as completely separate classes.
+
+## References
+[Viewer API documentation](http://documentation.zmags.com/viewercommonapi/index.html)

@@ -11,7 +11,6 @@ module.exports = function (grunt) {
                 vars: true,
                 nomen: true,
                 todo: true,
-                unparam: true,
                 predef: ["define"]
             }
         },

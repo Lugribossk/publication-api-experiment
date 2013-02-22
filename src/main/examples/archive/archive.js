@@ -1,6 +1,13 @@
 /*global require, window*/
 /**
- * Archive demo using the Viewer API.
+ * Viewer with archive sidebar using a combination of the Viewer API and Publication API.
+ *
+ * Features:
+ * - Displays an archive of several other publications next to the current publication.
+ * - Clicking on these switches to that publication.
+ * - Custom links can be used to deeplink to pages between the different publications. E.g. {type=archive&id=1234abcd&page=10}.
+ * - The URL changes to indicate the current publication and page, and also shares this.
+ * - The sidebar is styled with a simple Verge-like theme.
  *
  * @author Bo Gotthardt
  */
@@ -37,10 +44,10 @@ require(["jquery", "api/CustomerAPI", "api/PublicationAPI", "util/Promise", "htt
 
             // Add a class to distinguish the currently selected publication.
             $(".PageRepresentation").removeClass("current");
-            $("#" + currentPublicationID).addClass("current");
+            $("#publication-" + currentPublicationID).addClass("current");
 
             // Remove the viewer for the previous publication.
-            $("#viewer").children().remove();
+            $("#viewer").empty();
 
             // Use the viewer API to insert the new publication.
             var viewer = new Viewer();
@@ -53,7 +60,7 @@ require(["jquery", "api/CustomerAPI", "api/PublicationAPI", "util/Promise", "htt
             viewer.addEventListener(Viewer.CUSTOM_LINK_ACTIVATE, function (event) {
                 var data = event.data;
                 if (data.type === "archive") {
-                    displayPublication(data.id, data.page);
+                    displayPublication(data.id, data.page || 1);
                 }
             });
 
@@ -74,10 +81,10 @@ require(["jquery", "api/CustomerAPI", "api/PublicationAPI", "util/Promise", "htt
 
         // Get all the activated publications the customer has.
         // If we only wanted some specific ones we could do this instead:
-        // new PublicationAPI(key).getPublications(["8d738def", "88f2a97d", "a850b17d"])
-        var key = "2a39a9615b";
+        // new PublicationAPI(apiKey).getPublications(["8d738def", "88f2a97d", "a850b17d"])
+        var apiKey = "2a39a9615b";
         var customerID = "85d291bd";
-        new CustomerAPI(key).getAllPublications(customerID)
+        new CustomerAPI(apiKey).getAllPublications(customerID)
             .then(function (publications) {
                 // Sort publications alphabetically.
                 publications.sort(function (a, b) {
@@ -99,7 +106,8 @@ require(["jquery", "api/CustomerAPI", "api/PublicationAPI", "util/Promise", "htt
                                 src: page.getClosestRepresentation({width: 200, height: 200}).getImageURL(),
                                 "class": "PageRepresentation",
                                 title: publication.name,
-                                id: publication.id})
+                                id: "publication-" + publication.id
+                            })
                                 .on("click", function () {
                                     // Display the clicked publication.
                                     displayPublication(publication.id);
@@ -116,6 +124,6 @@ require(["jquery", "api/CustomerAPI", "api/PublicationAPI", "util/Promise", "htt
                     element.appendTo("#coverpages");
                 });
 
-                $("#" + currentPublicationID).addClass("current");
+                $("#publication-" + currentPublicationID).addClass("current");
             });
     });
