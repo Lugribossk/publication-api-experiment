@@ -9,6 +9,8 @@
  * - The URL changes to indicate the current publication and page, and also shares this.
  * - The sidebar is styled with a simple Verge-like theme.
  *
+ * Note that it must be loaded from a proper domain, as the Flash view will not start if loaded from a file:// URL.
+ *
  * @author Bo Gotthardt
  */
 require(["jquery", "api/CustomerAPI", "api/PublicationAPI", "util/Promise", "http://api.viewer.zmags.com/viewer/viewer.js"],
