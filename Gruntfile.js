@@ -66,4 +66,5 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks("gruntacular");
 
     grunt.registerTask("default", ["jslint", "requirejs"]);
+    grunt.registerTask("travis", ["testacular:ci"]);
 };

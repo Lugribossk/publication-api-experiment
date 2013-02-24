@@ -23,7 +23,7 @@ Start server with `grunt testacular`, run tests with `grunt testacular:unit:run`
 
 Continuous integration with `grunt testacular:ci`
 
-### Windows setup
+### Windows environment variables
 `PHANTOMJS_BIN=node_modules\phantomjs\lib\phantom\phantomjs.exe`
 
 `CHROME_BIN=C:\Program Files (x86)\Google\Chrome\Application\chrome.exe`
