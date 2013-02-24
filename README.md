@@ -39,8 +39,8 @@ Continuous integration with `grunt testacular:ci`
 - Properties, parameters and return values are non-null unless specified otherwise.
 
 ### JSLint settings
-- Tolerate: plusplus, vars, nomen, todo
-- Predefined variables: define
+- Tolerate: `plusplus`, `vars`, `nomen`, `todo`
+- Predefined variables: `define`
 
 ### RequireJS and classes
 - RequireJS is used to split each class into its own file, and to have classes depend on each other without polluting the global namespace.
@@ -54,8 +54,8 @@ Continuous integration with `grunt testacular:ci`
 
 ### JSDuck
 - [JSDuck](https://github.com/senchalabs/jsduck) is used to generate documentation. It's designed for code using Sencha's frameworks but can be made to work pretty well with some extra tags.
-- @constructor after the class description but before the parameters makes the constructor function show up in the documentation.
-- @private and @static on all methods that are that, even though it is obvious.
+- `@constructor` after the class description but before the parameters makes the constructor function show up in the documentation.
+- `@private` and `@static` on all methods that are that, even though it is obvious.
 - The live examples work due to a new live example iframe with RequireJS.
 
 ### Browser compatibility

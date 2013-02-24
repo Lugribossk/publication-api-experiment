@@ -4,7 +4,10 @@ module.exports = function (grunt) {
 
     grunt.initConfig({
         jslint: {
-            files: ["grunt.js", "src/main/javascript/**/*.js", "src/main/examples/**/*.js"],
+            files: ["src/main/javascript/**/*.js",
+                    "src/test/javascript/**/*.js",
+                    "src/main/examples/**/*.js",
+                    "Gruntfile.js"],
             exclude: ["src/main/javascript/lib/*.js"],
             directives: {
                 plusplus: true,
@@ -34,9 +37,9 @@ module.exports = function (grunt) {
                 dest: "docs",
                 options: {
                     "ignore-global": "",
-                    "eg-iframe": "jsduck/jsduck-iframe.html",
+                    "eg-iframe": "src/main/jsduck/jsduck-iframe.html",
                     title: "Publication API Example",
-                    welcome: "jsduck/jsduck-welcome.html",
+                    welcome: "src/main/jsduck/jsduck-welcome.html",
                     footer: ".",
                     external: ["jQuery", "Deferred", "Window"]
                 }
@@ -47,10 +50,10 @@ module.exports = function (grunt) {
                 configFile: "testacular.conf.js"
             },
             unit: {
-
             },
             ci: {
                 singleRun: true,
+                reporters: ["progress", "coverage", "junit"],
                 browsers: ["PhantomJS"],
                 coverageReporter: {
                     type: "cobertura",
