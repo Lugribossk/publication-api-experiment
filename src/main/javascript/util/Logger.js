@@ -1,6 +1,6 @@
 /*global console*/
-define(["jquery", "util/Promise", "util/BrowserCompatibility"],
-    function ($, Promise, BrowserCompatibility) { // BrowserCompatibility only to force it being loaded before its functionality is required, as this class is one of the earliest loaded.
+define(["jquery", "util/Promise", "util/ES5"],
+    function ($, Promise, ES5) { // ES5 only to force it being loaded before its functionality is required, as this class is one of the earliest loaded.
         "use strict";
 
         var output;

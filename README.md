@@ -63,8 +63,8 @@ Continuous integration with `grunt testacular:ci`
 - For it to work reliably it seems that:
    - dataType must be set to "json" explicitly for it to activate.
    - timeout may be required for requests to not silently disappear without succeeding or failing.
-- [es5-shim and es5-sham](https://github.com/kriskowal/es5-shim) are used to enable ES5 functionality in IE 8 and PhantomJS (it's missing Function.prototype.bind()).
-- These are set up as dependencies of the BrowserCompatibility class, which is set up as a dependency in the Logger class and test-main. This should cause it to always be loaded first when using the API classes or running tests.
+- [es5-shim and es5-sham](https://github.com/kriskowal/es5-shim) are used to enable ES5 functionality in IE 8 and PhantomJS (it's missing Function.prototype.bind).
+- These are set up as dependencies of the `Ajax` and `ES5` classes. ES5 is set up as a dependency in the Logger class and test-main. This should cause it to always be loaded first when using the API classes or running tests.
 
 ### Other
 - Constructors explicitly copy properties from their data object parameter. This could be replaced with a
