@@ -24,7 +24,7 @@ define(["jquery", "internal/Reference", "publication/Publication", "util/Promise
          *                          Optional, defaults to the same protocol as the current page.
          */
         function PublicationAPI(key, apiURL) {
-            this._key = key;
+                this._key = key;
             this._apiURL = apiURL || (Browser.isSecure() ? PublicationAPI.HTTPS_URL : PublicationAPI.HTTP_URL);
         }
 

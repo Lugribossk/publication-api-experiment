@@ -23,6 +23,9 @@ Start server with `grunt testacular`, run tests with `grunt testacular:unit:run`
 
 Continuous integration with `grunt testacular:ci`
 
+### Travis CI
+[![Build Status](https://travis-ci.org/Lugribossk/publication-api-experiment.png?branch=master)](https://travis-ci.org/Lugribossk/publication-api-experiment)
+
 ### Windows environment variables
 `PHANTOMJS_BIN=node_modules\phantomjs\lib\phantom\phantomjs.exe`
 
