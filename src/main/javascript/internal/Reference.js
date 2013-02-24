@@ -99,7 +99,8 @@ define(["util/Promise", "util/Logger", "util/Ajax"],
          * @return {Promise} A promise for the reference data as an Object.
          */
         Reference.prototype.get = function () {
-            var promise;
+            var scope = this,
+                promise;
             if (this._resourcePath || this._resourceURL) {
                 promise = Ajax.get({url: this.getBinaryURL()});
             } else if (this._bundlePath) {
@@ -110,8 +111,8 @@ define(["util/Promise", "util/Logger", "util/Ajax"],
 
             return promise
                 .fail(function () {
-                    log.error("Unable to resolve reference", this);
-                }.bind(this));
+                    log.error("Unable to resolve reference", scope);
+                });
         };
 
         /**
