@@ -15,6 +15,6 @@
         "node": ">=0.8"
     },
     "scripts": {
-        "test": "grunt travis"
+        "test": "grunt travis --verbose"
     }
 }
