@@ -77,3 +77,6 @@ Continuous integration with `grunt testacular:ci`
 
 ## References
 [Viewer API documentation](http://documentation.zmags.com/viewercommonapi/index.html)
+
+
+[![githalytics.com alpha](https://cruel-carlota.pagodabox.com/d0f7ee2f59e42083370a5e8e5e9519fa "githalytics.com")](http://githalytics.com/Lugribossk/publication-api-experiment)
