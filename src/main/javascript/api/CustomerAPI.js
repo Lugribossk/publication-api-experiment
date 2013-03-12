@@ -61,7 +61,7 @@ define(["api/PublicationAPI", "util/Logger", "util/Browser", "util/Ajax"],
                     log.error("There was a problem retrieving the publication ID list.", xhr);
                 })
                 .then(function (data) {
-                    return scope._publicationAPI.getPublications(data.publicationIDs);
+                    return scope._publicationAPI.getPublications(data.publicationIDs, true);
                 });
         };
 

@@ -162,16 +162,22 @@ define(["jquery", "internal/Reference", "publication/Publication", "util/Promise
          * @param {String} publicationID The ID of the publication, as seen in the Publicator under All Publications -> Edit Publication.
          * @param {Boolean} [preview=false] Whether to use preview mode where changes from the Publicator are visible immediately.
          *                                  <b>Note that this is a lot slower and thus should not be used for production code!</b>
+         * @param {Boolean} [ignoreNotActivated=false] Whether to ignore that the publication has not been activated and resolve with null, rather than fail and log an error.
          * @return {Promise} A promise for the {@link Publication}, that fails if unable to create it.
          */
-        PublicationAPI.prototype.getPublication = function (publicationID, preview) {
+        PublicationAPI.prototype.getPublication = function (publicationID, preview, ignoreNotActivated) {
             var publicationInfo;
 
             return this._getPublicationInfo(publicationID, preview)
-                .done(function (info) {
+                .then(function (info) {
                     publicationInfo = info;
+
+                    if (!info.publicationDescriptor && ignoreNotActivated) {
+                        return Promise.resolved(null);
+                    }
+
+                    return getPublicationDescriptor(info);
                 })
-                .then(getPublicationDescriptor)
                 .then(function (publicationDescriptor) {
                     // Create the publication with both info and descriptor, in order to encapsulate the implementation
                     // detail that this is split into two objects from different requests.
@@ -184,11 +190,12 @@ define(["jquery", "internal/Reference", "publication/Publication", "util/Promise
          * Note that publications that are not activated or are security restricted may not be available.
          *
          * @param {String[]} publicationIDs A list of the IDs of the publications.
+         * @param {Boolean} [ignoreNotActivated=false] Whether to ignore publications that have not been activated, rather than log an error.
          * @return {Promise} A promise for the list of {@link Publication}s.
          */
-        PublicationAPI.prototype.getPublications = function (publicationIDs) {
+        PublicationAPI.prototype.getPublications = function (publicationIDs, ignoreNotActivated) {
             var publications = publicationIDs.map(function (publicationID) {
-                return this.getPublication(publicationID);
+                return this.getPublication(publicationID, false, ignoreNotActivated);
             }, this);
 
             return Promise.any(publications);
