@@ -140,7 +140,7 @@ define(["jquery"],
          * Also progresses when individual subordinates are done. The progress event will have the resolved Promise's
          * value and the percentage of subordinates that are done as parameters.
          *
-         * See {@link Promise.all} for a note on how the progress events work.
+         * See Promise.all() for a note on how the progress events work.
          *
          * @static
          *
