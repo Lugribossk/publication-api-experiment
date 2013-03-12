@@ -101,7 +101,7 @@ define(["jquery", "internal/Reference", "publication/Publication", "util/Promise
             var params = this._getAjaxParameters(publicationID, preview);
             params.data.recent = true;
             // Set a low timeout as the recent response may be slow due to not being cached as well.
-            params.timeout = 2000;
+            params.timeout = 10000;
 
             return Ajax.get(params)
                 .then(null, function (xhr, textStatus) {
@@ -162,16 +162,22 @@ define(["jquery", "internal/Reference", "publication/Publication", "util/Promise
          * @param {String} publicationID The ID of the publication, as seen in the Publicator under All Publications -> Edit Publication.
          * @param {Boolean} [preview=false] Whether to use preview mode where changes from the Publicator are visible immediately.
          *                                  <b>Note that this is a lot slower and thus should not be used for production code!</b>
+         * @param {Boolean} [ignoreNotActivated=false] Whether to ignore that the publication has not been activated and resolve with null, rather than fail and log an error.
          * @return {Promise} A promise for the {@link Publication}, that fails if unable to create it.
          */
-        PublicationAPI.prototype.getPublication = function (publicationID, preview) {
+        PublicationAPI.prototype.getPublication = function (publicationID, preview, ignoreNotActivated) {
             var publicationInfo;
 
             return this._getPublicationInfo(publicationID, preview)
-                .done(function (info) {
+                .then(function (info) {
                     publicationInfo = info;
+
+                    if (!info.publicationDescriptor && ignoreNotActivated) {
+                        return Promise.resolved(null);
+                    }
+
+                    return getPublicationDescriptor(info);
                 })
-                .then(getPublicationDescriptor)
                 .then(function (publicationDescriptor) {
                     // Create the publication with both info and descriptor, in order to encapsulate the implementation
                     // detail that this is split into two objects from different requests.
@@ -188,7 +194,7 @@ define(["jquery", "internal/Reference", "publication/Publication", "util/Promise
          */
         PublicationAPI.prototype.getPublications = function (publicationIDs) {
             var publications = publicationIDs.map(function (publicationID) {
-                return this.getPublication(publicationID);
+                return this.getPublication(publicationID, false, true);
             }, this);
 
             return Promise.any(publications);
