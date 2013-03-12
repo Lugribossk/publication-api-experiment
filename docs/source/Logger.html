@@ -16,8 +16,8 @@
 </head>
 <body onload="prettyPrint(); highlight();">
   <pre class="prettyprint lang-js">/*global console*/
-define([&quot;jquery&quot;, &quot;util/Promise&quot;, &quot;util/BrowserCompatibility&quot;],
-    function ($, Promise, BrowserCompatibility) { // BrowserCompatibility only to force it being loaded before its functionality is required, as this class is one of the earliest loaded.
+define([&quot;jquery&quot;, &quot;util/Promise&quot;, &quot;util/ES5&quot;],
+    function ($, Promise, ES5) { // ES5 only to force it being loaded before its functionality is required, as this class is one of the earliest loaded.
         &quot;use strict&quot;;
 
         var output;
