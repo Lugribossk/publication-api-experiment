@@ -101,7 +101,7 @@ define(["jquery", "internal/Reference", "publication/Publication", "util/Promise
             var params = this._getAjaxParameters(publicationID, preview);
             params.data.recent = true;
             // Set a low timeout as the recent response may be slow due to not being cached as well.
-            params.timeout = 2000;
+            params.timeout = 10000;
 
             return Ajax.get(params)
                 .then(null, function (xhr, textStatus) {
@@ -190,12 +190,11 @@ define(["jquery", "internal/Reference", "publication/Publication", "util/Promise
          * Note that publications that are not activated or are security restricted may not be available.
          *
          * @param {String[]} publicationIDs A list of the IDs of the publications.
-         * @param {Boolean} [ignoreNotActivated=false] Whether to ignore publications that have not been activated, rather than log an error.
          * @return {Promise} A promise for the list of {@link Publication}s.
          */
-        PublicationAPI.prototype.getPublications = function (publicationIDs, ignoreNotActivated) {
+        PublicationAPI.prototype.getPublications = function (publicationIDs) {
             var publications = publicationIDs.map(function (publicationID) {
-                return this.getPublication(publicationID, false, ignoreNotActivated);
+                return this.getPublication(publicationID, false, true);
             }, this);
 
             return Promise.any(publications);

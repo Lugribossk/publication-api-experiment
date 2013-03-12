@@ -25,17 +25,20 @@ require(["jquery", "api/CustomerAPI"],
 
 
                 publications.forEach(function (publication) {
-
-                    var row = $("<tr><td>" + publication.id + "</td>" +
+                    var row = $("<tr><td class='cover'></td>" +
+                        "<td>" + publication.id + "</td>" +
                         "<td>" + publication.name + "</td>" +
                         "<td>" + publication.numberOfPages + "</td>" +
-                        "<td class='enrichments'></td>" +
                         "<td><a href='http://viewer.zmags.com/publication/" + publication.id + "' target='_blank' class='btn btn-mini btn-success'>View</a></td></tr>")
                         .appendTo("#publications tbody");
 
-                    publication.getEnrichments().then(function (enrichments) {
-                        row.find(".enrichments").text(enrichments.length);
-                    });
+                    publication.getPage(1)
+                        .then(function (page) {
+                            $("<img/>", {
+                                src: page.getClosestRepresentation({width: 50, height: 50}).getImageURL(),
+                                "class": "PageRepresentation"
+                            }).appendTo(row.find(".cover"));
+                        });
                 });
 
             });

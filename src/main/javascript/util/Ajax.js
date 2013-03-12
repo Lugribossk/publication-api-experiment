@@ -29,7 +29,7 @@ define(["jquery", "lib/XDomainRequest"],
         // 2. Set jQuery Ajax defaults so the plugin will always be triggered.
         $.ajaxSetup({
             dataType: "json",
-            timeout: 20000
+            timeout: 30000
         });
 
         return Ajax;
