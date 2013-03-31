@@ -1,5 +1,5 @@
 /*global window, require, beforeEach*/
-// RequireJS main file to start Testacular test runs.
+// RequireJS main file to start Karma test runs.
 (function () {
     "use strict";
 
@@ -12,8 +12,8 @@
         }
     });
 
-    // Testacular has a list of all the files it serves, process those so we can require all the tests (i.e. files that end with "Test.js").
-    var allTests = Object.keys(window.__testacular__.files).filter(function (file) {
+    // Karma has a list of all the files it serves, process those so we can require all the tests (i.e. files that end with "Test.js").
+    var allTests = Object.keys(window.__karma__.files).filter(function (file) {
         return (/Test\.js$/).test(file);
     });
 
@@ -24,6 +24,6 @@
         });
 
         // Start the test run.
-        window.__testacular__.start();
+        window.__karma__.start();
     });
 }());

@@ -48,9 +48,9 @@ module.exports = function (grunt) {
                 }
             }
         },
-        testacular: {
+        karma: {
             options: {
-                configFile: "testacular.conf.js"
+                configFile: "karma.conf.js"
             },
             unit: {
             },
@@ -69,8 +69,8 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks("grunt-jslint");
     grunt.loadNpmTasks("grunt-requirejs");
     grunt.loadNpmTasks("grunt-jsduck");
-    grunt.loadNpmTasks("gruntacular");
+    grunt.loadNpmTasks("grunt-karma");
 
     grunt.registerTask("default", ["jslint", "requirejs"]);
-    grunt.registerTask("travis", ["testacular:ci", "jslint"]);
+    grunt.registerTask("travis", ["karma:ci", "jslint"]);
 };
