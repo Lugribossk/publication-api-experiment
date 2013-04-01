@@ -21,16 +21,38 @@ module.exports = function (grunt) {
             }
         },
         requirejs: {
+            options: {
+                baseUrl: "src/main/javascript",
+                mainConfigFile: "src/main/examples/require.config.js",
+                logLevel: 1,
+                optimize: "uglify2",
+                preserveLicenseComments: false,
+                generateSourceMaps: true
+            },
             compile: {
                 options: {
-                    baseUrl: "src/main/javascript",
-                    mainConfigFile: "src/main/examples/require.config.js",
                     name: "../examples/simple/simple",
-                    out: "target/simple.out.js",
-                    logLevel: 1,
-                    optimize: "uglify2",
-                    preserveLicenseComments: false,
-                    generateSourceMaps: true
+                    out: "target/simple.out.js"
+                }
+            },
+            library: {
+                options: {
+                    include: ["api/CustomerAPI", "api/PublicationAPI"],
+                    out: "target/publicationapi.min.js",
+                    generateSourceMaps: false
+                }
+            }
+        },
+        "string-replace": {
+            library: {
+                files: {
+                    "target/publicationapi.min.js": "target/publicationapi.min.js"
+                },
+                options: {
+                    replacements: [{
+                        pattern: /"(api|enrichment|internal|lib|publication|shape|util|view)\//g,
+                        replacement: "\"publicationapi/$1/"
+                    }]
                 }
             }
         },
@@ -70,7 +92,9 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks("grunt-requirejs");
     grunt.loadNpmTasks("grunt-jsduck");
     grunt.loadNpmTasks("grunt-karma");
+    grunt.loadNpmTasks("grunt-string-replace");
 
     grunt.registerTask("default", ["jslint", "requirejs"]);
     grunt.registerTask("travis", ["karma:ci", "jslint"]);
+    grunt.registerTask("library", ["requirejs:library", "string-replace:library"]);
 };
