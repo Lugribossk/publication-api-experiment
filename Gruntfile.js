@@ -43,8 +43,7 @@ module.exports = function (grunt) {
                         endFile: "src/main/almond/almond-end.js"
                     },
                     include: ["api/PublicationAPI"],
-                    out: "target/publicationapi.min.js",
-                    generateSourceMaps: false
+                    out: "target/publicationapi.min.js"
                 }
             }
         },

@@ -4,14 +4,14 @@
  *
  * @author Bo Gotthardt
  */
-require(["jquery", "api/CustomerAPI"],
-    function ($, CustomerAPI) {
+require(["jquery", "api/PublicationAPI"],
+    function ($, PublicationAPI) {
         "use strict";
 
         var apiKey = "2a39a9615b",
             customerID = "85d291bd";
 
-        new CustomerAPI(apiKey).getAllPublications(customerID)
+        new PublicationAPI(apiKey).getAllPublications(customerID)
             .progress(function (data, progress) {
                 $("#loading-bar").width(progress * 100 + "%");
             })
@@ -22,7 +22,6 @@ require(["jquery", "api/CustomerAPI"],
                     return;
                 }
                 $("#publications").show();
-
 
                 publications.forEach(function (publication) {
                     var row = $("<tr><td class='cover'></td>" +
@@ -35,8 +34,7 @@ require(["jquery", "api/CustomerAPI"],
                     publication.getPage(1)
                         .then(function (page) {
                             $("<img/>", {
-                                src: page.getClosestRepresentation({width: 50, height: 50}).getImageURL(),
-                                "class": "PageRepresentation"
+                                src: page.getClosestRepresentation({width: 50, height: 50}).getImageURL()
                             }).appendTo(row.find(".cover"));
                         });
                 });
