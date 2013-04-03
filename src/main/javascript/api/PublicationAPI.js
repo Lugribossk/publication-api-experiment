@@ -19,13 +19,13 @@ define(["jquery", "internal/Reference", "publication/Publication", "util/Promise
          * @author Bo Gotthardt
          * @constructor
          *
-         * @param {String} key The API key.
-         * @param {String} [apiURL] The URL to the Publication Info service.
-         *                          Optional, defaults to the same protocol as the current page.
+         * @param {String} key The API key, as seen in the Publicator under TODO.
+         * @param {String} [apiDomain] The domain to communicate with the API on.
+         *                          Optional, defaults to an appropriate value based on the protocol used for the current page.
          */
-        function PublicationAPI(key, apiURL) {
+        function PublicationAPI(key, apiDomain) {
             this._key = key;
-            this._apiURL = apiURL || (Browser.isSecure() ? PublicationAPI.HTTPS_URL : PublicationAPI.HTTP_URL);
+            this._apiDomain = apiDomain || (Browser.isSecure() ? PublicationAPI.SECURE_DOMAIN : PublicationAPI.DOMAIN);
         }
 
 
@@ -58,7 +58,7 @@ define(["jquery", "internal/Reference", "publication/Publication", "util/Promise
          */
         PublicationAPI.prototype._getAjaxParameters = function (publicationID, preview) {
             var params = {
-                url: this._apiURL + publicationID,
+                url: this._apiDomain + "publication/" + publicationID,
                 data: {
                     key: this._key
                 }
@@ -201,20 +201,45 @@ define(["jquery", "internal/Reference", "publication/Publication", "util/Promise
         };
 
         /**
-         * The URL to the HTTP version of the Publication Info service.
-         * @static
-         * @const
-         * @type {String}
+         * Get all of the specified customer's publications.
+         * Note that publications that are not activated or are security restricted may not be available.
+         *
+         * @param {String} customerID The ID of the customer, as seen in the Publicator under TODO.
+         * @return {Promise} A promise for the list of {@link Publication}s.
          */
-        PublicationAPI.HTTP_URL = "http://api.viewer.zmags.com/publication/";
+        PublicationAPI.prototype.getAllPublications = function (customerID) {
+            var scope = this;
+
+            return Ajax.get({
+                url: this._apiDomain + "publications/" + customerID,
+                data: {
+                    key: this._key
+                }
+            })
+                .fail(function (xhr) {
+                    log.error("There was a problem retrieving the publication ID list.", xhr);
+                })
+                .then(function (data) {
+                    return scope.getPublications(data.publicationIDs);
+                });
+        };
 
         /**
-         * The URL to the HTTPS version of the Publication Info service.
+         * The domain used for communicating with the API over HTTP.
          * @static
          * @const
          * @type {String}
          */
-        PublicationAPI.HTTPS_URL = "https://secure.api.viewer.zmags.com/publication/";
+        PublicationAPI.DOMAIN = "http://api.viewer.zmags.com/";
+
+        /**
+         * The domain used for communicating with the API over HTTPS.
+         * This is different from HTTP due to Content Delivery Network caching.
+         * @static
+         * @const
+         * @type {String}
+         */
+        PublicationAPI.SECURE_DOMAIN = "https://secure.api.viewer.zmags.com/";
 
         return PublicationAPI;
     });

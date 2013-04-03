@@ -9,19 +9,19 @@ define(["jquery", "api/PublicationAPI", "util/Browser"],
         "use strict";
 
         describe("PublicationAPI", function () {
-            describe("Publication Info service URL", function () {
+            describe("API domain", function () {
                 it("should default to HTTP.", function () {
                     spyOn(Browser, "isSecure").andReturn(false);
                     var api = new PublicationAPI("1234abcd");
 
-                    expect(api._apiURL).toBe(PublicationAPI.HTTP_URL);
+                    expect(api._apiDomain).toBe(PublicationAPI.DOMAIN);
                 });
 
                 it("should use HTTPS when on a secure location.", function () {
                     spyOn(Browser, "isSecure").andReturn(true);
                     var api = new PublicationAPI("1234abcd");
 
-                    expect(api._apiURL).toBe(PublicationAPI.HTTPS_URL);
+                    expect(api._apiDomain).toBe(PublicationAPI.SECURE_DOMAIN);
                 });
             });
         });

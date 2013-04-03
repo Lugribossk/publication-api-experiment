@@ -13,8 +13,8 @@
  *
  * @author Bo Gotthardt
  */
-require(["jquery", "api/CustomerAPI", "api/PublicationAPI", "util/Promise", "http://api.viewer.zmags.com/viewer/viewer.js"],
-    function ($, CustomerAPI, PublicationAPI, Promise, Viewer) {
+require(["jquery", "api/PublicationAPI", "util/Promise", "http://api.viewer.zmags.com/viewer/viewer.js"],
+    function ($, PublicationAPI, Promise, Viewer) {
         "use strict";
         var currentPublicationID = null;
 
@@ -83,10 +83,11 @@ require(["jquery", "api/CustomerAPI", "api/PublicationAPI", "util/Promise", "htt
 
         // Get all the activated publications the customer has.
         // If we only wanted some specific ones we could do this instead:
-        // new PublicationAPI(apiKey).getPublications(["8d738def", "88f2a97d", "a850b17d"])
+        // getPublications(["8d738def", "88f2a97d", "a850b17d"])
         var apiKey = "2a39a9615b";
         var customerID = "85d291bd";
-        new CustomerAPI(apiKey).getAllPublications(customerID)
+
+        new PublicationAPI(apiKey).getAllPublications(customerID)
             .then(function (publications) {
                 // Sort publications alphabetically.
                 publications.sort(function (a, b) {

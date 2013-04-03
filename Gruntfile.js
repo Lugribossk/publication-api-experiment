@@ -21,16 +21,29 @@ module.exports = function (grunt) {
             }
         },
         requirejs: {
+            options: {
+                baseUrl: "src/main/javascript",
+                mainConfigFile: "src/main/examples/require.config.js",
+                logLevel: 1,
+                optimize: "uglify2",
+                preserveLicenseComments: false,
+                generateSourceMaps: true
+            },
             compile: {
                 options: {
-                    baseUrl: "src/main/javascript",
-                    mainConfigFile: "src/main/examples/require.config.js",
                     name: "../examples/simple/simple",
-                    out: "target/simple.out.js",
-                    logLevel: 1,
-                    optimize: "uglify2",
-                    preserveLicenseComments: false,
-                    generateSourceMaps: true
+                    out: "target/simple.out.js"
+                }
+            },
+            library: {
+                options: {
+                    almond: true,
+                    wrap: {
+                        startFile: "src/main/almond/almond-start.js",
+                        endFile: "src/main/almond/almond-end.js"
+                    },
+                    include: ["api/PublicationAPI"],
+                    out: "target/publicationapi.min.js"
                 }
             }
         },
@@ -48,9 +61,9 @@ module.exports = function (grunt) {
                 }
             }
         },
-        testacular: {
+        karma: {
             options: {
-                configFile: "testacular.conf.js"
+                configFile: "karma.conf.js"
             },
             unit: {
             },
@@ -69,8 +82,8 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks("grunt-jslint");
     grunt.loadNpmTasks("grunt-requirejs");
     grunt.loadNpmTasks("grunt-jsduck");
-    grunt.loadNpmTasks("gruntacular");
+    grunt.loadNpmTasks("grunt-karma");
 
     grunt.registerTask("default", ["jslint", "requirejs"]);
-    grunt.registerTask("travis", ["testacular:ci", "jslint"]);
+    grunt.registerTask("travis", ["karma:ci", "jslint"]);
 };
