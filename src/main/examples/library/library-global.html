@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Global Library Example</title>
+        <!-- Load jQuery first. -->
+        <script src="../../javascript/lib/jquery-1.9.1.js"></script>
+        <script src="../../../../target/publicationapi.min.js"></script>
+        <script>
+            /*global console, window*/
+            // The PublicationAPI class is available as a global variable.
+            var api = new window.PublicationAPI("2a39a9615b");
+
+            console.log(api);
+        </script>
+    </head>
+    <body>
+        <p>View source to see how it is set up.</p>
+    </body>
+</html>

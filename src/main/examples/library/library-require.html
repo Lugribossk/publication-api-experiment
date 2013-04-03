@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>RequireJS Library Example</title>
+        <script src="../../javascript/lib/require.js"></script>
+        <script>
+            /*global require*/
+            // This is the external project's RequireJS configuration.
+            require.config({
+                baseUrl: "",
+                paths: {
+                    "jquery": "http://code.jquery.com/jquery-1.9.1.min",
+                    "PublicationAPI": "../../../../target/publicationapi.min"
+                },
+                shim: {
+                    // The library depends on jQuery, but has no way of communicating this to RequireJS when built as a library.
+                    // Fortunately the shim config can do this for us.
+                    "PublicationAPI": ["jquery"]
+                }
+            });
+
+            // Note how we reference the library using the module name defined above, not the "api/PublicationAPI" name it uses internally.
+            require(["PublicationAPI", "util/Logger"],
+                    function (PublicationAPI, Logger) {
+                        "use strict";
+
+                        var api = new PublicationAPI("2a39a9615b");
+
+                        // This external project has an "util/Logger" module whose name conflicts with one used in the
+                        // library, but this is handled without problems.
+                        var logger = new Logger();
+                        logger.log(api);
+                    });
+        </script>
+    </head>
+    <body>
+        <p>View source to see how it is set up.</p>
+    </body>
+</html>

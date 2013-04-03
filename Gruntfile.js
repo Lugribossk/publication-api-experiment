@@ -37,22 +37,14 @@ module.exports = function (grunt) {
             },
             library: {
                 options: {
-                    include: ["api/CustomerAPI", "api/PublicationAPI"],
+                    almond: true,
+                    wrap: {
+                        startFile: "src/main/almond/almond-start.js",
+                        endFile: "src/main/almond/almond-end.js"
+                    },
+                    include: ["api/PublicationAPI"],
                     out: "target/publicationapi.min.js",
                     generateSourceMaps: false
-                }
-            }
-        },
-        "string-replace": {
-            library: {
-                files: {
-                    "target/publicationapi.min.js": "target/publicationapi.min.js"
-                },
-                options: {
-                    replacements: [{
-                        pattern: /"(api|enrichment|internal|lib|publication|shape|util|view)\//g,
-                        replacement: "\"publicationapi/$1/"
-                    }]
                 }
             }
         },
@@ -92,9 +84,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks("grunt-requirejs");
     grunt.loadNpmTasks("grunt-jsduck");
     grunt.loadNpmTasks("grunt-karma");
-    grunt.loadNpmTasks("grunt-string-replace");
 
     grunt.registerTask("default", ["jslint", "requirejs"]);
     grunt.registerTask("travis", ["karma:ci", "jslint"]);
-    grunt.registerTask("library", ["requirejs:library", "string-replace:library"]);
 };

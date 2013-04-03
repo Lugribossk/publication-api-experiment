@@ -3,8 +3,8 @@
     <JSRemoteDebuggerConfigurationSettings>
       <option name="engineId" value="chrome" />
       <option name="fileUrl" value="http://localhost:9876/debug.html" />
-      <mapping local-file="$PROJECT_DIR$/node_modules/testacular/adapter" url="http://localhost:9876/adapter" />
-      <mapping local-file="$PROJECT_DIR$" url="http://localhost:9876/base" />
+      <mapping url="http://localhost:9876/adapter" local-file="$PROJECT_DIR$/node_modules/testacular/adapter" />
+      <mapping url="http://localhost:9876/base" local-file="$PROJECT_DIR$" />
     </JSRemoteDebuggerConfigurationSettings>
     <RunnerSettings RunnerId="JavascriptDebugRunner" />
     <ConfigurationWrapper RunnerId="JavascriptDebugRunner" />
