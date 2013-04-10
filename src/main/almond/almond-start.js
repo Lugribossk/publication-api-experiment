@@ -1,9 +1,9 @@
-// Almond code wrapper, modified from https://github.com/jrburke/almond#exporting-a-public-api
 (function (root, factory) {
+    // Almond code wrapper, modified from https://github.com/jrburke/almond#exporting-a-public-api
     "use strict";
     if (typeof define === "function" && define.amd) {
-        define(factory);
+        define(["jquery"], factory);
     } else {
-        root.PublicationAPI = factory();
+        root.PublicationAPI = factory(null);
     }
-}(this, function () {
+}(this, function (jQuery) {

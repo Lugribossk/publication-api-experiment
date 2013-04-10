@@ -26,7 +26,10 @@ List of all the *activated* publications on an account, including their ID and l
 ## Using as library
 Create a single minified file that includes all the relevant classes with `grunt requirejs:library`. You can then use `target/publicationapi.min.js` as a library in other projects. See examples for a [RequireJS project](src/main/examples/library/library-require.html) and as a [global variable](src/main/examples/library/library-global.html).
 
-Note that it depends on jQuery but does not include it, so you have to either load that first or set it up as a shim dependency.
+**As an AMD module:** jQuery must be loadable as a module under the name "jquery".
+
+**Plain Javascript:** jQuery must be loaded in an earlier script tag.
+
 
 ## Unit tests
 Start server with `grunt karma`, run tests with `grunt karma:unit:run`
