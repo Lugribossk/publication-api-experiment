@@ -11,11 +11,6 @@
                 paths: {
                     "jquery": "http://code.jquery.com/jquery-1.9.1.min",
                     "PublicationAPI": "../../../../target/publicationapi.min"
-                },
-                shim: {
-                    // The library depends on jQuery, but has no way of communicating this to RequireJS when built as a library.
-                    // Fortunately the shim config can do this for us.
-                    "PublicationAPI": ["jquery"]
                 }
             });
 
