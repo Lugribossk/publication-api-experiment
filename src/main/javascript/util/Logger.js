@@ -1,6 +1,6 @@
 /*global console*/
-define(["jquery", "util/Promise", "util/ES5"],
-    function ($, Promise, ES5) { // ES5 only to force it being loaded before its functionality is required, as this class is one of the earliest loaded.
+define(["util/Promise", "util/ES5"],
+    function (Promise, ES5) { // ES5 only to force it being loaded before its functionality is required, as this class is one of the earliest loaded.
         "use strict";
 
         var output;
@@ -37,11 +37,15 @@ define(["jquery", "util/Promise", "util/ES5"],
          * @param {Arguments/ *[]} dataList
          */
         Logger.prototype._callPrintFunction = function (functionName, dataList) {
-            // Chrome requires the console as it's own context.
-            // IE doesn't inherit the logging functions from Function.
-            var func = Function.prototype.bind.call(output[functionName], output);
-            var messages = ["[" + this._name + "]"].concat($.makeArray(dataList));
-            func.apply(output, messages);
+            var messages = ["[" + this._name + "]"].concat(Array.prototype.slice.call(dataList));
+
+            // IE doesn't inherit the logging functions from Function. This also means that ES5-shim's bind() doesn't work on it.
+            if (typeof output[functionName] !== "function") {
+                output[functionName](messages.join(" "));
+            } else {
+                // Chrome requires the console as it's own context.
+                output[functionName].apply(output, messages);
+            }
         };
 
         /**
@@ -66,7 +70,6 @@ define(["jquery", "util/Promise", "util/ES5"],
             } else {
                 scope._callPrintFunction(functionName, dataList);
             }
-
         };
 
         /**
@@ -98,7 +101,7 @@ define(["jquery", "util/Promise", "util/ES5"],
          */
         Logger.prototype.assert = function (condition) {
             if (!condition) {
-                this.error.apply(this, $.makeArray(arguments).slice(1));
+                this.error.apply(this, Array.prototype.slice.call(arguments, 1));
                 // This debugger statement is allowed to stay in as it's part of the assert functionality.
                 /*jslint debug:true*/
                 debugger;
