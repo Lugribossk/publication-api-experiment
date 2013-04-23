@@ -1,4 +1,4 @@
-/*global console*/
+/*global window*/
 define(["util/Promise", "util/ES5"],
     function (Promise, ES5) { // ES5 only to force it being loaded before its functionality is required, as this class is one of the earliest loaded.
         "use strict";
@@ -6,8 +6,8 @@ define(["util/Promise", "util/ES5"],
         var output;
 
         // Create a dummy console for IE.
-        if (console !== undefined) {
-            output = console;
+        if (window.console !== undefined) {
+            output = window.console;
         } else {
             output = {
                 info: function () {},
