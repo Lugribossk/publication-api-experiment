@@ -43,7 +43,7 @@ if (!jQuery.support.cors && window.XDomainRequest) {
             try {
               if ((userType === 'json') || ((userType !== 'text') && jsonRegEx.test(xdr.contentType))) {
                 try {
-                  responses.json = $.parseJSON(xdr.responseText);
+                  responses.json = jQuery.parseJSON(xdr.responseText);
                 } catch(e) {
                   status.code = 500;
                   status.message = 'parseerror';
@@ -75,7 +75,7 @@ if (!jQuery.support.cors && window.XDomainRequest) {
               text: xdr.responseText
             });
           };
-          var postData = (userOptions.data && $.param(userOptions.data)) || '';
+          var postData = (userOptions.data && jQuery.param(userOptions.data)) || '';
           xdr.open(options.type, options.url);
           xdr.send(postData);
         },

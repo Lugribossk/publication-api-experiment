@@ -1,5 +1,5 @@
-define([],
-    function () {
+define(["util/Logger"],
+    function (Logger) {
         "use strict";
 
         /**
