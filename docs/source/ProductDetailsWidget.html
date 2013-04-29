@@ -15,9 +15,10 @@
   </script>
 </head>
 <body onload="prettyPrint(); highlight();">
-  <pre class="prettyprint lang-js">define([&quot;enrichment/Enrichment&quot;, &quot;internal/Reference&quot;, &quot;publication/Product&quot;],
-    function (Enrichment, Reference, Product) {
+  <pre class="prettyprint lang-js">define([&quot;enrichment/Enrichment&quot;, &quot;internal/Reference&quot;, &quot;publication/Product&quot;, &quot;util/Logger&quot;, &quot;util/Promise&quot;],
+    function (Enrichment, Reference, Product, Logger, Promise) {
         &quot;use strict&quot;;
+        var log = new Logger(&quot;ProductDetailsWidget&quot;);
 
 <span id='ProductDetailsWidget-method-constructor'><span id='ProductDetailsWidget'>        /**
 </span></span>         * A widget with details about a {@link Product}. Similar to a {@link ProductLink}, but with more advanced settings.
@@ -35,6 +36,8 @@
             this.button = data.button;
             this.shapeEnabled = data.shapeEnabled;
 
+            this._productSourceType = data.productSourceType;
+            this._externalProduct = data.externalProduct;
             this._productDescriptor = data.productDescriptor;
         }
         ProductDetailsWidget.prototype = Object.create(Enrichment.prototype);
@@ -45,7 +48,16 @@
          * @return {Promise} A promise for the {@link Product}.
          */
         ProductDetailsWidget.prototype.getProduct = function () {
-            return new Reference(this._productDescriptor).getAs(Product);
+            if (this._productSourceType === ProductDetailsWidget.ProductSource.PRODUCT_DATABASE) {
+                return new Reference(this._productDescriptor).getAs(Product);
+            }
+            if (this._productSourceType === ProductDetailsWidget.ProductSource.EXTERNAL) {
+                return Promise.resolved(new Product({
+                    properties: this._externalProduct
+                }));
+            }
+            log.warn(&quot;Unknown product source type &quot;, this._productSourceType);
+            return null;
         };
 
 <span id='ProductDetailsWidget-static-property-TYPE'>        /**
@@ -55,6 +67,22 @@
          * @type {String}
          */
         ProductDetailsWidget.TYPE = &quot;productDetailsWidget&quot;;
+
+<span id='ProductDetailsWidget-ProductSource'>        /**
+</span>         * The types of product sources.
+         * @static
+         * @enum ProductDetailsWidget.ProductSource
+         */
+        ProductDetailsWidget.ProductSource = {
+<span id='ProductDetailsWidget-ProductSource-property-PRODUCT_DATABASE'>            /**
+</span>             * Product database.
+             */
+            PRODUCT_DATABASE: 1,
+<span id='ProductDetailsWidget-ProductSource-property-EXTERNAL'>            /**
+</span>             * External/manual.
+             */
+            EXTERNAL: 2
+        };
 
         return ProductDetailsWidget;
     });</pre>

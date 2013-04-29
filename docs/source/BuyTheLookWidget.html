@@ -15,9 +15,10 @@
   </script>
 </head>
 <body onload="prettyPrint(); highlight();">
-  <pre class="prettyprint lang-js">define([&quot;enrichment/Enrichment&quot;, &quot;internal/Reference&quot;, &quot;publication/Product&quot;, &quot;util/Promise&quot;],
-    function (Enrichment, Reference, Product, Promise) {
+  <pre class="prettyprint lang-js">define([&quot;enrichment/Enrichment&quot;, &quot;internal/Reference&quot;, &quot;publication/Product&quot;, &quot;util/Promise&quot;, &quot;util/Logger&quot;],
+    function (Enrichment, Reference, Product, Promise, Logger) {
         &quot;use strict&quot;;
+        var log = new Logger(&quot;BuyTheLookWidget&quot;);
 
 <span id='BuyTheLookWidget-method-constructor'><span id='BuyTheLookWidget'>        /**
 </span></span>         * A &quot;buy the look&quot; widget. Also known as &quot;shop the look&quot; and several other similar names.
@@ -37,6 +38,8 @@
             this.button = data.button;
             this.shapeEnabled = data.shapeEnabled;
 
+            this._productSourceType = data.productSourceType;
+            this._externalProducts = data.externalProducts;
             this._productDescriptors = data.productDescriptors;
         }
         BuyTheLookWidget.prototype = Object.create(Enrichment.prototype);
@@ -47,11 +50,20 @@
          * @return {Promise} A promise for the list of {@link Product}s.
          */
         BuyTheLookWidget.prototype.getProducts = function () {
-            var deferreds = this._productDescriptors.map(function (descriptor) {
-                return new Reference(descriptor).getAs(Product);
-            });
-
-            return Promise.all(deferreds);
+            if (this._productSourceType === BuyTheLookWidget.ProductSource.PRODUCT_DATABASE) {
+                return Promise.all(this._productDescriptors.map(function (descriptor) {
+                    return new Reference(descriptor).getAs(Product);
+                }));
+            }
+            if (this._productSourceType === BuyTheLookWidget.ProductSource.EXTERNAL) {
+                return Promise.resolved(this._externalProducts.map(function (externalProduct) {
+                    return new Product({
+                        properties: externalProduct
+                    });
+                }));
+            }
+            log.warn(&quot;Unknown product source type &quot;, this._productSourceType);
+            return null;
         };
 
 <span id='BuyTheLookWidget-static-property-TYPE'>        /**
@@ -61,6 +73,22 @@
          * @type {String}
          */
         BuyTheLookWidget.TYPE = &quot;buyTheLookWidget&quot;;
+
+<span id='BuyTheLookWidget-ProductSource'>        /**
+</span>         * The types of product sources.
+         * @static
+         * @enum BuyTheLookWidget.ProductSource
+         */
+        BuyTheLookWidget.ProductSource = {
+<span id='BuyTheLookWidget-ProductSource-property-PRODUCT_DATABASE'>            /**
+</span>             * Product database.
+             */
+            PRODUCT_DATABASE: 1,
+<span id='BuyTheLookWidget-ProductSource-property-EXTERNAL'>            /**
+</span>             * External/manual.
+             */
+            EXTERNAL: 2
+        };
 
         return BuyTheLookWidget;
     });</pre>

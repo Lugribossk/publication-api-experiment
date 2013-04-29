@@ -15,16 +15,16 @@
   </script>
 </head>
 <body onload="prettyPrint(); highlight();">
-  <pre class="prettyprint lang-js">/*global console*/
-define([&quot;jquery&quot;, &quot;util/Promise&quot;, &quot;util/ES5&quot;],
-    function ($, Promise, ES5) { // ES5 only to force it being loaded before its functionality is required, as this class is one of the earliest loaded.
+  <pre class="prettyprint lang-js">/*global window*/
+define([&quot;util/Promise&quot;, &quot;util/ES5&quot;],
+    function (Promise, ES5) { // ES5 only to force it being loaded before its functionality is required, as this class is one of the earliest loaded.
         &quot;use strict&quot;;
 
         var output;
 
         // Create a dummy console for IE.
-        if (console !== undefined) {
-            output = console;
+        if (window.console !== undefined) {
+            output = window.console;
         } else {
             output = {
                 info: function () {},
@@ -54,11 +54,15 @@ define([&quot;jquery&quot;, &quot;util/Promise&quot;, &quot;util/ES5&quot;],
          * @param {Arguments/ *[]} dataList
          */
         Logger.prototype._callPrintFunction = function (functionName, dataList) {
-            // Chrome requires the console as it's own context.
-            // IE doesn't inherit the logging functions from Function.
-            var func = Function.prototype.bind.call(output[functionName], output);
-            var messages = [&quot;[&quot; + this._name + &quot;]&quot;].concat($.makeArray(dataList));
-            func.apply(output, messages);
+            var messages = [&quot;[&quot; + this._name + &quot;]&quot;].concat(Array.prototype.slice.call(dataList));
+
+            // IE doesn't inherit the logging functions from Function. This also means that ES5-shim's bind() doesn't work on it.
+            if (typeof output[functionName] !== &quot;function&quot;) {
+                output[functionName](messages.join(&quot; &quot;));
+            } else {
+                // Chrome requires the console as it's own context.
+                output[functionName].apply(output, messages);
+            }
         };
 
 <span id='Logger-method-_print'>        /**
@@ -83,7 +87,6 @@ define([&quot;jquery&quot;, &quot;util/Promise&quot;, &quot;util/ES5&quot;],
             } else {
                 scope._callPrintFunction(functionName, dataList);
             }
-
         };
 
 <span id='Logger-method-info'>        /**
@@ -115,7 +118,7 @@ define([&quot;jquery&quot;, &quot;util/Promise&quot;, &quot;util/ES5&quot;],
          */
         Logger.prototype.assert = function (condition) {
             if (!condition) {
-                this.error.apply(this, $.makeArray(arguments).slice(1));
+                this.error.apply(this, Array.prototype.slice.call(arguments, 1));
                 // This debugger statement is allowed to stay in as it's part of the assert functionality.
                 /*jslint debug:true*/
                 debugger;

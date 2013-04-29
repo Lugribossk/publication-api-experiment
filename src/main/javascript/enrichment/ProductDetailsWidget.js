@@ -57,7 +57,13 @@ define(["enrichment/Enrichment", "internal/Reference", "publication/Product", "u
          * @enum ProductDetailsWidget.ProductSource
          */
         ProductDetailsWidget.ProductSource = {
+            /**
+             * Product database.
+             */
             PRODUCT_DATABASE: 1,
+            /**
+             * External/manual.
+             */
             EXTERNAL: 2
         };
 
