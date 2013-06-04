@@ -2,23 +2,27 @@
 module.exports = function (grunt) {
     "use strict";
 
+    var jsFiles = ["src/main/javascript/**/*.js",
+        "src/test/javascript/**/*.js",
+        "src/main/examples/**/*.js",
+        "Gruntfile.js",
+        "package.json"];
+
     grunt.initConfig({
-        jslint: {
-            files: ["src/main/javascript/**/*.js",
-                    "src/test/javascript/**/*.js",
-                    "src/main/examples/**/*.js",
-                    "Gruntfile.js",
-                    "package.json"],
-            exclude: ["src/main/javascript/lib/*.js"],
-            directives: {
-                plusplus: true,
-                vars: true,
-                nomen: true,
-                todo: true,
-                predef: ["define"]
-            },
+        jshint: {
             options: {
-                checkstyle: "target/jslint.xml"
+                jshintrc: ".jshintrc",
+                ignores: ["src/main/javascript/lib/*.js"]
+            },
+            all: {
+                src: jsFiles
+            },
+            ci: {
+                src: jsFiles,
+                options: {
+                    reporter: "checkstyle",
+                    reporterOutput: "target/jshint.xml"
+                }
             }
         },
         requirejs: {
@@ -80,11 +84,11 @@ module.exports = function (grunt) {
         }
     });
 
-    grunt.loadNpmTasks("grunt-jslint");
     grunt.loadNpmTasks("grunt-requirejs");
     grunt.loadNpmTasks("grunt-jsduck");
     grunt.loadNpmTasks("grunt-karma");
+    grunt.loadNpmTasks("grunt-contrib-jshint");
 
-    grunt.registerTask("default", ["jslint", "requirejs"]);
-    grunt.registerTask("travis", ["karma:ci", "jslint"]);
+    grunt.registerTask("default", ["jshint:all", "requirejs:library"]);
+    grunt.registerTask("travis", ["karma:ci", "jshint:all", "requirejs:library"]);
 };
