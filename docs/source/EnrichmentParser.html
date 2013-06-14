@@ -22,8 +22,9 @@
         &quot;enrichment/ProductDetailsWidget&quot;,
         &quot;enrichment/BuyTheLookWidget&quot;,
         &quot;enrichment/VideoEnrichment&quot;,
+        &quot;enrichment/IframeWidget&quot;,
         &quot;util/Logger&quot;],
-    function (ProductLink, ExternalLink, InternalLink, CustomLink, ProductDetailsWidget, BuyTheLookWidget, VideoEnrichment, Logger) {
+    function (ProductLink, ExternalLink, InternalLink, CustomLink, ProductDetailsWidget, BuyTheLookWidget, VideoEnrichment, IframeWidget, Logger) {
         &quot;use strict&quot;;
         var log = new Logger(&quot;EnrichmentParser&quot;);
 
@@ -57,6 +58,8 @@
                 return new BuyTheLookWidget(data);
             case VideoEnrichment.TYPE:
                 return new VideoEnrichment(data);
+            case IframeWidget.TYPE:
+                return new IframeWidget(data);
             default:
                 log.error(&quot;Unknown enrichment type&quot;, data.type);
                 return null;

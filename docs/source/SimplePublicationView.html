@@ -43,7 +43,7 @@
             // Extra function so that pageElement is scoped inside the loop = recreated rather than reassigned on each iteration.
             function createPageElement(pageNumber) {
                 // Create and insert a placeholder element for the page immediately.
-                var pageElement = $(&quot;&lt;div/&gt;&quot;).appendTo(publicationElement);
+                var pageElement = $(&quot;&lt;span/&gt;&quot;).appendTo(publicationElement);
 
                 // And then have the page promise insert the real page element into it, so that pages start rendering as
                 // soon as they are done, rather than wait for us to retrieve all the pages and then loop through them.

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js">define([&quot;enrichment/Enrichment&quot;],
+    function (Enrichment) {
+        &quot;use strict&quot;;
+
+<span id='IframeWidget-method-constructor'><span id='IframeWidget'>        /**
+</span></span>         * An iframe widget.
+         *
+         * @extends Enrichment
+         * @author Bo Gotthardt
+         * @constructor
+         *
+         * @param {Object} data The raw API data.
+         */
+        function IframeWidget(data) {
+            Enrichment.call(this, data);
+
+            this.url = data.url;
+            this.interactive = data.interactive;
+            this.fullPage = data.fullPage;
+        }
+        IframeWidget.prototype = Object.create(Enrichment.prototype);
+
+<span id='IframeWidget-static-property-TYPE'>        /**
+</span>         * The API type value for this kind of enrichment.
+         * @static
+         * @const
+         * @type {String}
+         */
+        IframeWidget.TYPE = &quot;iframeWidget&quot;;
+
+        return IframeWidget;
+    });</pre>
+</body>
+</html>
