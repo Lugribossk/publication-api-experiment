@@ -21,16 +21,20 @@ define(["jquery", "lib/XDomainRequest"],
          * @return {Promise} A promise for the response data.
          */
         Ajax.get = function (settings) {
-            return $.ajax(settings).promise();
-        };
+            var ajaxSettings = $.extend({}, settings);
 
-        // Non-JSONP cross-domain support in IE 8/9:
-        // 1. Use XDomainRequest jQuery plugin to add support for this.
-        // 2. Set jQuery Ajax defaults so the plugin will always be triggered.
-        $.ajaxSetup({
-            dataType: "json",
-            timeout: 30000
-        });
+            // Non-JSONP cross-domain support in IE 8/9:
+            // 1. Use XDomainRequest jQuery plugin to add support for this.
+            // 2. Set jQuery Ajax defaults so the plugin will always be triggered.
+            if (!ajaxSettings.dataType) {
+                ajaxSettings.dataType = "json";
+            }
+            if (!ajaxSettings.timeout) {
+                ajaxSettings.timeout = 30000;
+            }
+
+            return $.ajax(ajaxSettings).promise();
+        };
 
         return Ajax;
     });

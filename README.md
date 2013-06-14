@@ -51,9 +51,8 @@ Continuous integration with `grunt karma:ci`
 - Properties are read-only from outside the class unless specified otherwise.
 - Properties, parameters and return values are non-null unless specified otherwise.
 
-### JSLint settings
-- Tolerate: `plusplus`, `vars`, `nomen`, `todo`
-- Predefined variables: `define`
+### JSHint settings
+- See [`.jshintrc`](.jshintrc)
 
 ### RequireJS and classes
 - RequireJS is used to split each class into its own file, and to have classes depend on each other without polluting the global namespace.
