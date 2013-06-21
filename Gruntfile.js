@@ -49,6 +49,7 @@ module.exports = function (grunt) {
                     },
                     include: ["api/PublicationAPI"],
                     out: "target/publicationapi.min.js"
+                    // TODO use require.config
                 }
             }
         },

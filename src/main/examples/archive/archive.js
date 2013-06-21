@@ -13,8 +13,8 @@
  *
  * @author Bo Gotthardt
  */
-require(["jquery", "api/PublicationAPI", "util/Promise", "http://api.viewer.zmags.com/viewer/viewer.js"],
-    function ($, PublicationAPI, Promise, Viewer) {
+require(["jquery", "api/PublicationAPI", "util/Promise", "http://api.viewer.zmags.com/viewer/viewer.js", "util/ES5"],
+    function ($, PublicationAPI, Promise, Viewer, ES5) {
         "use strict";
         var currentPublicationID = null;
 

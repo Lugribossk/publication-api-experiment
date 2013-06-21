@@ -1,5 +1,5 @@
-define(["jquery", "publication/PageRepresentation", "internal/Reference", "enrichment/EnrichmentParser", "util/Promise"],
-    function ($, PageRepresentation, Reference, EnrichmentParser, Promise) {
+define(["publication/PageRepresentation", "internal/Reference", "enrichment/EnrichmentParser", "util/Promise", "util/Deferred"],
+    function (PageRepresentation, Reference, EnrichmentParser, Promise, Deferred) {
         "use strict";
 
         /**
@@ -78,7 +78,7 @@ define(["jquery", "publication/PageRepresentation", "internal/Reference", "enric
                 return new Reference(enrichmentList).getEachWith(new EnrichmentParser().construct);
             });
             // TODO combine the lists into one before returning them
-            return $.when.apply(this, references);
+            return Deferred.when.apply(this, references);
         };
 
         /**

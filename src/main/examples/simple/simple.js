@@ -4,8 +4,8 @@
  *
  * @author Bo Gotthardt
  */
-require(["api/PublicationAPI", "view/SimplePublicationView"],
-    function (PublicationAPI, SimplePublicationView) {
+require(["api/PublicationAPI", "view/SimplePublicationView", "util/ES5"],
+    function (PublicationAPI, SimplePublicationView, ES5) {
         "use strict";
 
         var apiKey = "2a39a9615b",

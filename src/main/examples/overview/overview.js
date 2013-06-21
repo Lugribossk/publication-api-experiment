@@ -4,8 +4,8 @@
  *
  * @author Bo Gotthardt
  */
-require(["jquery", "api/PublicationAPI"],
-    function ($, PublicationAPI) {
+require(["jquery", "api/PublicationAPI", "util/ES5"],
+    function ($, PublicationAPI, ES5) {
         "use strict";
 
         var apiKey = "2a39a9615b",

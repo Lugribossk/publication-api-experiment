@@ -1,5 +1,5 @@
-define(["jquery", "internal/Reference", "publication/Publication", "util/Promise", "util/Logger", "util/Browser", "util/Ajax"],
-    function ($, Reference, Publication, Promise, Logger, Browser, Ajax) {
+define(["internal/Reference", "publication/Publication", "util/Promise", "util/Logger", "util/Browser", "util/Ajax", "util/Deferred"],
+    function (Reference, Publication, Promise, Logger, Browser, Ajax, Deferred) {
         "use strict";
         var log = new Logger("PublicationAPI");
 
@@ -82,7 +82,10 @@ define(["jquery", "internal/Reference", "publication/Publication", "util/Promise
          */
         PublicationAPI.prototype._getPublicationInfoCached = function (publicationID, preview) {
             return Ajax.get(this._getAjaxParameters(publicationID, preview))
-                .then(null, function (xhr) {
+                .then(function (data) {
+                    // Only return the data parameter to avoid having to get it out of an argument list in when() in getPublicationInfo.
+                    return data;
+                }, function (xhr) {
                     log.warn("There was a problem getting the cached publication descriptor.", xhr);
                     return Promise.resolved(null);
                 });
@@ -104,7 +107,9 @@ define(["jquery", "internal/Reference", "publication/Publication", "util/Promise
             params.timeout = 10000;
 
             return Ajax.get(params)
-                .then(null, function (xhr, textStatus) {
+                .then(function (data) {
+                    return data;
+                }, function (xhr, textStatus) {
                     if (textStatus === "timeout") {
                         log.warn("Timeout while getting the recent publication descriptor.");
                     } else {
@@ -124,7 +129,7 @@ define(["jquery", "internal/Reference", "publication/Publication", "util/Promise
          * @return {Promise} A promise for the publication info.
          */
         PublicationAPI.prototype._getPublicationInfo = function (publicationID, preview) {
-            return $.when(this._getPublicationInfoCached(publicationID, preview),
+            return Deferred.when(this._getPublicationInfoCached(publicationID, preview),
                           this._getPublicationInfoRecent(publicationID, preview))
                 .then(function (infoResponse, infoRecentResponse) {
                     var info,
@@ -132,10 +137,10 @@ define(["jquery", "internal/Reference", "publication/Publication", "util/Promise
                     // Both requests have been set to always resolve, so we can continue if one of them fails.
                     // The parameters are lists of the arguments returned by $.ajax, but we're only interested in the first one.
                     if (infoResponse) {
-                        info = infoResponse[0];
+                        info = infoResponse;
                     }
                     if (infoRecentResponse) {
-                        infoRecent = infoRecentResponse[0];
+                        infoRecent = infoRecentResponse;
                     }
 
                     // TODO Can activation status change without version being bumped?

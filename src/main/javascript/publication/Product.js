@@ -1,5 +1,5 @@
-define(["jquery", "internal/Reference", "util/Logger"],
-    function ($, Reference, Logger) {
+define(["internal/Reference", "util/Logger"],
+    function (Reference, Logger) {
         "use strict";
         var log = new Logger("Product");
 
@@ -50,7 +50,11 @@ define(["jquery", "internal/Reference", "util/Logger"],
             }
 
             // Place the properties directly on the object so they are easier to work with and can be inherited individually.
-            $.extend(output, data.properties);
+            for (var prop in data.properties) {
+                if (data.properties.hasOwnProperty(prop)) {
+                    output[prop] = data.properties[prop];
+                }
+            }
 
             // Hopefully no one will end up creating a property called "variants" or "master".
             if (data.properties && data.properties.variants !== undefined) {
@@ -72,16 +76,6 @@ define(["jquery", "internal/Reference", "util/Logger"],
 
             return output;
         }
-
-//        Product.prototype.getImages = function () {
-//            if (this.images) {
-//                return $.map(this.images, function (image) {
-//                    return new Reference(image).getBinaryURL();
-//                });
-//            } else {
-//                return [];
-//            }
-//        };
 
         return Product;
     });

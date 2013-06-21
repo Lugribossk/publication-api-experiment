@@ -1,5 +1,5 @@
-define(["jquery", "enrichment/Enrichment", "publication/MediaRepresentation"],
-    function ($, Enrichment, MediaRepresentation) {
+define(["enrichment/Enrichment", "publication/MediaRepresentation"],
+    function (Enrichment, MediaRepresentation) {
         "use strict";
 
         /**
@@ -57,23 +57,6 @@ define(["jquery", "enrichment/Enrichment", "publication/MediaRepresentation"],
             return this._posterImageRepresentationDescriptors.map(function (poster) {
                 return new MediaRepresentation(poster);
             });
-        };
-
-        VideoEnrichment.prototype.createVideoElement = function () {
-            var video = $("<video/>", {
-                src: this.getMediaRepresentations()[0].getBinaryURL(),
-                controls: this.enableControls,
-                autoplay: this.playOnLoad,
-                loop: this.loop,
-                poster: this.getPosterImages()[0].getBinaryURL()
-            })
-                .css({
-                    width: "100%",
-                    height: "100%"
-                });
-
-            return Enrichment.prototype.createDomElement.call(this, "VideoEnrichment")
-                .append(video);
         };
 
         /**
