@@ -85,6 +85,8 @@ module.exports = function (grunt) {
         }
     });
 
+    grunt.loadTasks("src/main/examples/grunt");
+
     grunt.loadNpmTasks("grunt-requirejs");
     grunt.loadNpmTasks("grunt-jsduck");
     grunt.loadNpmTasks("grunt-karma");
