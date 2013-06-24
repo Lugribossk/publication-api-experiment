@@ -3,9 +3,7 @@ define(["jquery", "lib/XDomainRequest"],
         "use strict";
 
         /**
-         * Utility class for encapsulating Ajax calls, that work cross-domain without JSONP in IE8/9.
-         *
-         * This allows the implementation to be changed to another library without rewriting more than this class.
+         * jQuery-based Ajax request that works cross-domain without JSONP in IE8/9.
          *
          * @author Bo Gotthardt
          * @constructor

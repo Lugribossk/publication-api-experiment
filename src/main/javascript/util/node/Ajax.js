@@ -2,6 +2,12 @@ define(["util/node/node-require", "util/Deferred"], function (nodeRequire, Defer
     "use strict";
     var request = nodeRequire("request");
 
+    /**
+     * NodeJS-based Ajax request.
+     *
+     * @author Bo Gotthardt
+     * @constructor
+     */
     function Ajax() {}
 
     /**

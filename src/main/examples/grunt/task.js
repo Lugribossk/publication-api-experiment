@@ -16,15 +16,17 @@ module.exports = function (grunt) {
 
         if (!publicationID) {
             grunt.fail.warn("--publication option must be specified.");
-
             done(false);
         }
 
         requirejs(["target/publicationapi.min.js"], function (PublicationAPI) {
             new PublicationAPI(apiKey).getPublication(publicationID)
+                .fail(function () {
+                    grunt.fail.warn("Unable to retrieve publication data.");
+                    done(false);
+                })
                 .then(function (publication) {
-                    grunt.log.writeln("Publication name: '" + publication.name + "'.");
-
+                    grunt.log.writeln("Publication '" + publication.name + "' has " + publication.numberOfPages + " pages.");
                     done();
                 });
         });

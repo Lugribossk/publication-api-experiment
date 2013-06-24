@@ -1,5 +1,5 @@
-define(["util/Deferred"],
-    function (Deferred) {
+define(["util/Deferred", "is!~node?util/ES5"],
+    function (Deferred, ES5) { // ES5 dependency only to force it being loaded.
         "use strict";
 
         /**
