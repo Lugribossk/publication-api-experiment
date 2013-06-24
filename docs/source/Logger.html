@@ -15,16 +15,16 @@
   </script>
 </head>
 <body onload="prettyPrint(); highlight();">
-  <pre class="prettyprint lang-js">/*global window*/
-define([&quot;util/Promise&quot;, &quot;util/ES5&quot;],
-    function (Promise, ES5) { // ES5 only to force it being loaded before its functionality is required, as this class is one of the earliest loaded.
+  <pre class="prettyprint lang-js">/*global console*/
+define([&quot;util/Promise&quot;],
+    function (Promise) {
         &quot;use strict&quot;;
 
         var output;
 
         // Create a dummy console for IE.
-        if (window.console !== undefined) {
-            output = window.console;
+        if (typeof console !== &quot;undefined&quot;) {
+            output = console;
         } else {
             output = {
                 info: function () {},

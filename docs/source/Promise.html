@@ -15,8 +15,8 @@
   </script>
 </head>
 <body onload="prettyPrint(); highlight();">
-  <pre class="prettyprint lang-js">define([&quot;jquery&quot;],
-    function ($) {
+  <pre class="prettyprint lang-js">define([&quot;util/Deferred&quot;, &quot;is!~node?util/ES5&quot;],
+    function (Deferred, ES5) { // ES5 dependency only to force it being loaded.
         &quot;use strict&quot;;
 
 <span id='Promise-method-constructor'><span id='Promise'>        /**
@@ -67,7 +67,7 @@
          * @return {Promise}
          */
         Promise.rejected = function (arg) {
-            return new $.Deferred().reject(arg).promise();
+            return new Deferred().reject(arg).promise();
         };
 
 <span id='Promise-static-method-resolved'>        /**
@@ -79,7 +79,7 @@
          * @return {Promise}
          */
         Promise.resolved = function (arg) {
-            return new $.Deferred().resolve(arg).promise();
+            return new Deferred().resolve(arg).promise();
         };
 
 
@@ -124,7 +124,7 @@
         Promise.all = function (subordinates, combinedDeferred) {
             // We would like the returned promise to progress whenever an individual promise has resolved, but $.when() does not support that.
             // So we have to create our own deferred that can be resolved by $.when(), and progressed by done() from the individual promises.
-            combinedDeferred = combinedDeferred || new $.Deferred();
+            combinedDeferred = combinedDeferred || new Deferred();
             var numDone = 0;
 
             subordinates.forEach(function (subordinate) {
@@ -141,10 +141,10 @@
                 }
             });
 
-            $.when.apply(this, subordinates)
+            Deferred.when.apply(this, subordinates)
                 .done(function () {
                     // Return the subordinates' values as one list, instead of as individual arguments.
-                    combinedDeferred.resolve($.makeArray(arguments));
+                    combinedDeferred.resolve(Array.prototype.slice.call(arguments, 1));
                 })
                 .fail(combinedDeferred.reject);
 
@@ -166,7 +166,7 @@
          * @return {Promise} A promise for a list of the values of the subordinates that resolved.
          */
         Promise.any = function (subordinates, combinedDeferred) {
-            combinedDeferred = combinedDeferred || new $.Deferred();
+            combinedDeferred = combinedDeferred || new Deferred();
             var numDone = 0;
 
             // Set up these first so we do not notify on
@@ -195,7 +195,7 @@
                 return subordinate;
             });
 
-            $.when.apply(this, subordinates)
+            Deferred.when.apply(this, subordinates)
                 .done(function () {
                     // Return the subordinates as one list, instead of as individual arguments.
                     combinedDeferred.resolve(Array.prototype.filter.call(arguments, function (item) {
@@ -217,7 +217,7 @@
          */
         Promise.isPromise = function (possiblePromise) {
             // This is how jQuery#when() does it internally.
-            return $.isFunction(possiblePromise.promise);
+            return typeof possiblePromise.promise === &quot;function&quot;;
         };
 
         return Promise;

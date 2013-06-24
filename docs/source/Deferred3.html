@@ -15,19 +15,15 @@
   </script>
 </head>
 <body onload="prettyPrint(); highlight();">
-  <pre class="prettyprint lang-js">define([&quot;is!node?util/node/Ajax:util/jquery/Ajax&quot;],
-    function (Ajax) {
-        &quot;use strict&quot;;
+  <pre class="prettyprint lang-js">define([&quot;util/node/node-require&quot;], function (nodeRequire) {
+    &quot;use strict&quot;;
 
-<span id='global-method-constructor'>        /**
-</span>         * Utility class for encapsulating Ajax calls.
-         *
-         * This allows the implementation to work with both jQuery and NodeJS.
-         *
-         * @author Bo Gotthardt
-         * @constructor
-         */
-        return Ajax;
-    });</pre>
+    var $ = nodeRequire(&quot;jquery-deferred&quot;);
+
+    $.Deferred.when = $.when;
+
+    return $.Deferred;
+});
+</pre>
 </body>
 </html>

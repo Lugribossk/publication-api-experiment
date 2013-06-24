@@ -15,8 +15,8 @@
   </script>
 </head>
 <body onload="prettyPrint(); highlight();">
-  <pre class="prettyprint lang-js">define([&quot;jquery&quot;, &quot;publication/PageRepresentation&quot;, &quot;internal/Reference&quot;, &quot;enrichment/EnrichmentParser&quot;, &quot;util/Promise&quot;],
-    function ($, PageRepresentation, Reference, EnrichmentParser, Promise) {
+  <pre class="prettyprint lang-js">define([&quot;publication/PageRepresentation&quot;, &quot;internal/Reference&quot;, &quot;enrichment/EnrichmentParser&quot;, &quot;util/Promise&quot;, &quot;util/Deferred&quot;],
+    function (PageRepresentation, Reference, EnrichmentParser, Promise, Deferred) {
         &quot;use strict&quot;;
 
 <span id='Page-method-constructor'><span id='Page'>        /**
@@ -95,7 +95,28 @@
                 return new Reference(enrichmentList).getEachWith(new EnrichmentParser().construct);
             });
             // TODO combine the lists into one before returning them
-            return $.when.apply(this, references);
+            return Deferred.when.apply(this, references);
+        };
+
+<span id='Page-method-getProducts'>        /**
+</span>         * Get all the products on this page.
+         *
+         * @returns {Promise} A promise for the list of {@link Product}s.
+         */
+        Page.prototype.getProducts = function () {
+            return this.getEnrichments()
+                .then(function (enrichments) {
+                    var products = [];
+
+                    enrichments.forEach(function (enrichment) {
+                        if (enrichment.getProduct) {
+                            products.push(enrichment.getProduct());
+                        }
+                        // TODO BTL widgets?
+                    });
+
+                    return Promise.all(products);
+                });
         };
 
 <span id='Page-method-getProduct'>        /**
@@ -106,22 +127,9 @@
          * @return {Promise} A promise for the {@link Product}.
          */
         Page.prototype.getProduct = function (productID) {
-            // Get all the enrichments on the page.
-            return this.getEnrichments()
-                .then(function (enrichments) {
-                    var products = [];
-                    // Then get the products for those of the enrichments that have them.
-                    enrichments.forEach(function (enrichment) {
-                        if (enrichment.getProduct) {
-                            products.push(enrichment.getProduct());
-                        }
-                        // TODO BTL widgets?
-                    });
-
-                    return Promise.all(products);
-                })
+            return this.getProducts()
                 .then(function (products) {
-                    // Then see if one of them matches the specified ID.
+                    // See if one of them matches the specified ID.
                     var foundProduct = null;
                     products.forEach(function (product) {
                         if (product.product_id === productID) {

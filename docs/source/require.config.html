@@ -15,19 +15,13 @@
   </script>
 </head>
 <body onload="prettyPrint(); highlight();">
-  <pre class="prettyprint lang-js">define([&quot;is!node?util/node/Ajax:util/jquery/Ajax&quot;],
-    function (Ajax) {
-        &quot;use strict&quot;;
-
-<span id='global-method-constructor'>        /**
-</span>         * Utility class for encapsulating Ajax calls.
-         *
-         * This allows the implementation to work with both jQuery and NodeJS.
-         *
-         * @author Bo Gotthardt
-         * @constructor
-         */
-        return Ajax;
-    });</pre>
+  <pre class="prettyprint lang-js">/*global require*/
+require.config({
+    map: {
+        &quot;*&quot;: {
+            &quot;is&quot;: &quot;lib/require-is/is&quot;
+        }
+    }
+});</pre>
 </body>
 </html>

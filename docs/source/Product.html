@@ -15,8 +15,8 @@
   </script>
 </head>
 <body onload="prettyPrint(); highlight();">
-  <pre class="prettyprint lang-js">define([&quot;jquery&quot;, &quot;internal/Reference&quot;, &quot;util/Logger&quot;],
-    function ($, Reference, Logger) {
+  <pre class="prettyprint lang-js">define([&quot;internal/Reference&quot;, &quot;util/Logger&quot;],
+    function (Reference, Logger) {
         &quot;use strict&quot;;
         var log = new Logger(&quot;Product&quot;);
 
@@ -67,7 +67,11 @@
             }
 
             // Place the properties directly on the object so they are easier to work with and can be inherited individually.
-            $.extend(output, data.properties);
+            for (var prop in data.properties) {
+                if (data.properties.hasOwnProperty(prop)) {
+                    output[prop] = data.properties[prop];
+                }
+            }
 
             // Hopefully no one will end up creating a property called &quot;variants&quot; or &quot;master&quot;.
             if (data.properties &amp;&amp; data.properties.variants !== undefined) {
@@ -89,16 +93,6 @@
 
             return output;
         }
-
-//        Product.prototype.getImages = function () {
-//            if (this.images) {
-//                return $.map(this.images, function (image) {
-//                    return new Reference(image).getBinaryURL();
-//                });
-//            } else {
-//                return [];
-//            }
-//        };
 
         return Product;
     });</pre>

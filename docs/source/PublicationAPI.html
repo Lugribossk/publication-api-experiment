@@ -15,8 +15,8 @@
   </script>
 </head>
 <body onload="prettyPrint(); highlight();">
-  <pre class="prettyprint lang-js">define([&quot;jquery&quot;, &quot;internal/Reference&quot;, &quot;publication/Publication&quot;, &quot;util/Promise&quot;, &quot;util/Logger&quot;, &quot;util/Browser&quot;, &quot;util/Ajax&quot;],
-    function ($, Reference, Publication, Promise, Logger, Browser, Ajax) {
+  <pre class="prettyprint lang-js">define([&quot;internal/Reference&quot;, &quot;publication/Publication&quot;, &quot;util/Promise&quot;, &quot;util/Logger&quot;, &quot;util/Browser&quot;, &quot;util/Ajax&quot;, &quot;util/Deferred&quot;],
+    function (Reference, Publication, Promise, Logger, Browser, Ajax, Deferred) {
         &quot;use strict&quot;;
         var log = new Logger(&quot;PublicationAPI&quot;);
 
@@ -99,7 +99,10 @@
          */
         PublicationAPI.prototype._getPublicationInfoCached = function (publicationID, preview) {
             return Ajax.get(this._getAjaxParameters(publicationID, preview))
-                .then(null, function (xhr) {
+                .then(function (data) {
+                    // Only return the data parameter to avoid having to get it out of an argument list in when() in getPublicationInfo.
+                    return data;
+                }, function (xhr) {
                     log.warn(&quot;There was a problem getting the cached publication descriptor.&quot;, xhr);
                     return Promise.resolved(null);
                 });
@@ -121,7 +124,9 @@
             params.timeout = 10000;
 
             return Ajax.get(params)
-                .then(null, function (xhr, textStatus) {
+                .then(function (data) {
+                    return data;
+                }, function (xhr, textStatus) {
                     if (textStatus === &quot;timeout&quot;) {
                         log.warn(&quot;Timeout while getting the recent publication descriptor.&quot;);
                     } else {
@@ -141,7 +146,7 @@
          * @return {Promise} A promise for the publication info.
          */
         PublicationAPI.prototype._getPublicationInfo = function (publicationID, preview) {
-            return $.when(this._getPublicationInfoCached(publicationID, preview),
+            return Deferred.when(this._getPublicationInfoCached(publicationID, preview),
                           this._getPublicationInfoRecent(publicationID, preview))
                 .then(function (infoResponse, infoRecentResponse) {
                     var info,
@@ -149,10 +154,10 @@
                     // Both requests have been set to always resolve, so we can continue if one of them fails.
                     // The parameters are lists of the arguments returned by $.ajax, but we're only interested in the first one.
                     if (infoResponse) {
-                        info = infoResponse[0];
+                        info = infoResponse;
                     }
                     if (infoRecentResponse) {
-                        infoRecent = infoRecentResponse[0];
+                        infoRecent = infoRecentResponse;
                     }
 
                     // TODO Can activation status change without version being bumped?

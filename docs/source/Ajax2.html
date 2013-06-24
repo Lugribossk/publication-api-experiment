@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js">define([&quot;jquery&quot;, &quot;lib/XDomainRequest&quot;],
+    function ($, XDomainRequest) {
+        &quot;use strict&quot;;
+
+<span id='Ajax-method-constructor'><span id='Ajax'>        /**
+</span></span>         * jQuery-based Ajax request that works cross-domain without JSONP in IE8/9.
+         *
+         * @author Bo Gotthardt
+         * @constructor
+         */
+        function Ajax() {}
+
+<span id='Ajax-static-method-get'>        /**
+</span>         * GET data from a server.
+         *
+         * @static
+         *
+         * @param {Object} settings Object with request settings such as URL and parameters.
+         * @return {Promise} A promise for the response data.
+         */
+        Ajax.get = function (settings) {
+            // Non-JSONP cross-domain support in IE 8/9:
+            // 1. Use XDomainRequest jQuery plugin to add support for this.
+            // 2. Set jQuery Ajax defaults so the plugin will always be triggered.
+            if (!settings.dataType) {
+                settings.dataType = &quot;json&quot;;
+            }
+            if (settings.timeout === undefined) {
+                settings.timeout = 30000;
+            }
+
+            return $.ajax(settings).promise();
+        };
+
+        return Ajax;
+    });</pre>
+</body>
+</html>

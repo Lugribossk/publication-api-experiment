@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js">define([&quot;util/node/node-require&quot;, &quot;util/Deferred&quot;], function (nodeRequire, Deferred) {
+    &quot;use strict&quot;;
+    var request = nodeRequire(&quot;request&quot;);
+
+<span id='Ajax-method-constructor'><span id='Ajax'>    /**
+</span></span>     * NodeJS-based Ajax request.
+     *
+     * @author Bo Gotthardt
+     * @constructor
+     */
+    function Ajax() {}
+
+<span id='Ajax-static-method-get'>    /**
+</span>     * GET data from a server.
+     *
+     * @static
+     *
+     * @param {Object} settings Object with request settings such as URL and parameters.
+     * @return {Promise} A promise for the response data.
+     */
+    Ajax.get = function (settings) {
+        var deferred = new Deferred();
+
+        request({
+            url: settings.url,
+            qs: settings.data,
+            timeout: settings.timeout,
+            json: true
+        }, function (error, response, body) {
+            if (!error &amp;&amp; response.statusCode === 200) {
+                deferred.resolve(body);
+            } else {
+                deferred.reject();
+            }
+        });
+
+        return deferred.promise();
+    };
+
+    return Ajax;
+});</pre>
+</body>
+</html>

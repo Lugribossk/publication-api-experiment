@@ -15,8 +15,8 @@
   </script>
 </head>
 <body onload="prettyPrint(); highlight();">
-  <pre class="prettyprint lang-js">define([&quot;jquery&quot;, &quot;enrichment/Enrichment&quot;, &quot;publication/MediaRepresentation&quot;],
-    function ($, Enrichment, MediaRepresentation) {
+  <pre class="prettyprint lang-js">define([&quot;enrichment/Enrichment&quot;, &quot;publication/MediaRepresentation&quot;],
+    function (Enrichment, MediaRepresentation) {
         &quot;use strict&quot;;
 
 <span id='VideoEnrichment-method-constructor'><span id='VideoEnrichment'>        /**
@@ -74,23 +74,6 @@
             return this._posterImageRepresentationDescriptors.map(function (poster) {
                 return new MediaRepresentation(poster);
             });
-        };
-
-        VideoEnrichment.prototype.createVideoElement = function () {
-            var video = $(&quot;&lt;video/&gt;&quot;, {
-                src: this.getMediaRepresentations()[0].getBinaryURL(),
-                controls: this.enableControls,
-                autoplay: this.playOnLoad,
-                loop: this.loop,
-                poster: this.getPosterImages()[0].getBinaryURL()
-            })
-                .css({
-                    width: &quot;100%&quot;,
-                    height: &quot;100%&quot;
-                });
-
-            return Enrichment.prototype.createDomElement.call(this, &quot;VideoEnrichment&quot;)
-                .append(video);
         };
 
 <span id='VideoEnrichment-static-property-TYPE'>        /**

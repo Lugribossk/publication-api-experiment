@@ -54,6 +54,16 @@
              * @type {Boolean}
              */
             this.activated = info.activated;
+<span id='Publication-property-creationDate'>            /**
+</span>             * Date the publication was created.
+             * @type {String}
+             */
+            this.creationDate = info.creationDate;
+<span id='Publication-property-activationDate'>            /**
+</span>             * Date the publication was last activated, possibly null.
+             * @type {String}
+             */
+            this.activationDate = info.activationDate;
 <span id='Publication-property-name'>            /**
 </span>             * The name of the publication.
              * @type {String}
@@ -124,6 +134,24 @@
                         .then(function (enrichmentLists) {
                             return Array.prototype.concat.apply([], enrichmentLists);
                         });
+                });
+        };
+
+<span id='Publication-method-getProducts'>        /**
+</span>         * Get all the publication's products.
+         *
+         * @returns {Promise} A promise for the list of {@link Product}s.
+         */
+        Publication.prototype.getProducts = function () {
+            return this.getPages()
+                .then(function (pages) {
+                    var products = [];
+
+                    pages.forEach(function (page) {
+                        products.concat(page.getProducts());
+                    });
+
+                    return products;
                 });
         };
 
