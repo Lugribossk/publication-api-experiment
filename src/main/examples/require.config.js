@@ -9,7 +9,8 @@ var require = {
     },
     map: {
         "*": {
-            "is": "lib/require-is/is"
+            is: "lib/require-is/is",
+            node: "util/node/node"
         }
     }
 };

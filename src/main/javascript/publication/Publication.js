@@ -37,6 +37,9 @@ define(["internal/Reference", "publication/Page", "util/Promise", "util/Logger"]
              * @type {Boolean}
              */
             this.activated = info.activated;
+
+            this.creationDate = info.creationDate;
+            this.activationDate = info.activationDate;
             /**
              * The name of the publication.
              * @type {String}

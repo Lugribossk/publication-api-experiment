@@ -47,14 +47,14 @@ module.exports = function (grunt) {
                         startFile: "src/main/almond/almond-start.js",
                         endFile: "src/main/almond/almond-end.js"
                     },
-                    include: ["require.config.js", "api/PublicationAPI"],
+                    include: ["lib/almond", "require.config.js", "api/PublicationAPI"],
                     out: "target/publicationapi.min.js",
                     paths: {
                         node: "util/node/node"
                     },
                     map: {
                         "*": {
-                            "is": "lib/require-is/is"
+                            is: "lib/require-is/is"
                         }
                     },
                     exclude: ["util/node/node-require"]
