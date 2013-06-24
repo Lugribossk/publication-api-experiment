@@ -31,7 +31,7 @@ define([],
          * @return {Boolean}
          */
         Browser.isSecure = function () {
-            return window.location.protocol === "https:";
+            return typeof window !== "undefined" && window.location.protocol === "https:";
         };
 
         return Browser;

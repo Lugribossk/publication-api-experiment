@@ -47,8 +47,17 @@ module.exports = function (grunt) {
                         startFile: "src/main/almond/almond-start.js",
                         endFile: "src/main/almond/almond-end.js"
                     },
-                    include: ["api/PublicationAPI"],
-                    out: "target/publicationapi.min.js"
+                    include: ["lib/almond", "require.config.js", "api/PublicationAPI"],
+                    out: "target/publicationapi.min.js",
+                    paths: {
+                        node: "util/node/node"
+                    },
+                    map: {
+                        "*": {
+                            is: "lib/require-is/is"
+                        }
+                    },
+                    exclude: ["util/node/node-require"]
                 }
             }
         },
@@ -83,6 +92,8 @@ module.exports = function (grunt) {
             }
         }
     });
+
+    grunt.loadTasks("src/main/examples/grunt");
 
     grunt.loadNpmTasks("grunt-requirejs");
     grunt.loadNpmTasks("grunt-jsduck");

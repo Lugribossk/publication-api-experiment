@@ -1,5 +1,5 @@
-define(["jquery", "publication/PageRepresentation", "internal/Reference", "enrichment/EnrichmentParser", "util/Promise"],
-    function ($, PageRepresentation, Reference, EnrichmentParser, Promise) {
+define(["publication/PageRepresentation", "internal/Reference", "enrichment/EnrichmentParser", "util/Promise", "util/Deferred"],
+    function (PageRepresentation, Reference, EnrichmentParser, Promise, Deferred) {
         "use strict";
 
         /**
@@ -78,7 +78,28 @@ define(["jquery", "publication/PageRepresentation", "internal/Reference", "enric
                 return new Reference(enrichmentList).getEachWith(new EnrichmentParser().construct);
             });
             // TODO combine the lists into one before returning them
-            return $.when.apply(this, references);
+            return Deferred.when.apply(this, references);
+        };
+
+        /**
+         * Get all the products on this page.
+         *
+         * @returns {Promise} A promise for the list of {@link Product}s.
+         */
+        Page.prototype.getProducts = function () {
+            return this.getEnrichments()
+                .then(function (enrichments) {
+                    var products = [];
+
+                    enrichments.forEach(function (enrichment) {
+                        if (enrichment.getProduct) {
+                            products.push(enrichment.getProduct());
+                        }
+                        // TODO BTL widgets?
+                    });
+
+                    return Promise.all(products);
+                });
         };
 
         /**
@@ -89,22 +110,9 @@ define(["jquery", "publication/PageRepresentation", "internal/Reference", "enric
          * @return {Promise} A promise for the {@link Product}.
          */
         Page.prototype.getProduct = function (productID) {
-            // Get all the enrichments on the page.
-            return this.getEnrichments()
-                .then(function (enrichments) {
-                    var products = [];
-                    // Then get the products for those of the enrichments that have them.
-                    enrichments.forEach(function (enrichment) {
-                        if (enrichment.getProduct) {
-                            products.push(enrichment.getProduct());
-                        }
-                        // TODO BTL widgets?
-                    });
-
-                    return Promise.all(products);
-                })
+            return this.getProducts()
                 .then(function (products) {
-                    // Then see if one of them matches the specified ID.
+                    // See if one of them matches the specified ID.
                     var foundProduct = null;
                     products.forEach(function (product) {
                         if (product.product_id === productID) {

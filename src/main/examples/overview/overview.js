@@ -4,8 +4,8 @@
  *
  * @author Bo Gotthardt
  */
-require(["jquery", "api/PublicationAPI"],
-    function ($, PublicationAPI) {
+require(["jquery", "api/PublicationAPI", "util/ES5"],
+    function ($, PublicationAPI, ES5) {
         "use strict";
 
         var apiKey = "2a39a9615b",
@@ -27,6 +27,7 @@ require(["jquery", "api/PublicationAPI"],
                     var row = $("<tr><td class='cover'></td>" +
                         "<td>" + publication.id + "</td>" +
                         "<td>" + publication.name + "</td>" +
+                        "<td>" + publication.activationDate + "</td>" +
                         "<td>" + publication.numberOfPages + "</td>" +
                         "<td><a href='http://viewer.zmags.com/publication/" + publication.id + "' target='_blank' class='btn btn-mini btn-success'>View</a></td></tr>")
                         .appendTo("#publications tbody");

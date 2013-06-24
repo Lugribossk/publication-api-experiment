@@ -1,5 +1,5 @@
-define(["jquery"],
-    function ($) {
+define(["util/Deferred", "is!~node?util/ES5"],
+    function (Deferred, ES5) { // ES5 dependency only to force it being loaded.
         "use strict";
 
         /**
@@ -50,7 +50,7 @@ define(["jquery"],
          * @return {Promise}
          */
         Promise.rejected = function (arg) {
-            return new $.Deferred().reject(arg).promise();
+            return new Deferred().reject(arg).promise();
         };
 
         /**
@@ -62,7 +62,7 @@ define(["jquery"],
          * @return {Promise}
          */
         Promise.resolved = function (arg) {
-            return new $.Deferred().resolve(arg).promise();
+            return new Deferred().resolve(arg).promise();
         };
 
 
@@ -107,7 +107,7 @@ define(["jquery"],
         Promise.all = function (subordinates, combinedDeferred) {
             // We would like the returned promise to progress whenever an individual promise has resolved, but $.when() does not support that.
             // So we have to create our own deferred that can be resolved by $.when(), and progressed by done() from the individual promises.
-            combinedDeferred = combinedDeferred || new $.Deferred();
+            combinedDeferred = combinedDeferred || new Deferred();
             var numDone = 0;
 
             subordinates.forEach(function (subordinate) {
@@ -124,10 +124,10 @@ define(["jquery"],
                 }
             });
 
-            $.when.apply(this, subordinates)
+            Deferred.when.apply(this, subordinates)
                 .done(function () {
                     // Return the subordinates' values as one list, instead of as individual arguments.
-                    combinedDeferred.resolve($.makeArray(arguments));
+                    combinedDeferred.resolve(Array.prototype.slice.call(arguments, 1));
                 })
                 .fail(combinedDeferred.reject);
 
@@ -149,7 +149,7 @@ define(["jquery"],
          * @return {Promise} A promise for a list of the values of the subordinates that resolved.
          */
         Promise.any = function (subordinates, combinedDeferred) {
-            combinedDeferred = combinedDeferred || new $.Deferred();
+            combinedDeferred = combinedDeferred || new Deferred();
             var numDone = 0;
 
             // Set up these first so we do not notify on
@@ -178,7 +178,7 @@ define(["jquery"],
                 return subordinate;
             });
 
-            $.when.apply(this, subordinates)
+            Deferred.when.apply(this, subordinates)
                 .done(function () {
                     // Return the subordinates as one list, instead of as individual arguments.
                     combinedDeferred.resolve(Array.prototype.filter.call(arguments, function (item) {
@@ -200,7 +200,7 @@ define(["jquery"],
          */
         Promise.isPromise = function (possiblePromise) {
             // This is how jQuery#when() does it internally.
-            return $.isFunction(possiblePromise.promise);
+            return typeof possiblePromise.promise === "function";
         };
 
         return Promise;
