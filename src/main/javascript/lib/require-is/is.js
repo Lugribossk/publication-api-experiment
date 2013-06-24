@@ -1,3 +1,4 @@
+// Modified to use synchronous require() calls.
 /*
  * RequireJS 'is' plugin
  *
@@ -95,15 +96,14 @@ define(['module', './is-api', 'require'], function(module, api, require) {
       complete(is.features[feature]);
       return;
     }
-    
-    require([feature], function(_feature) {
+
+      var _feature = require(feature);
       if (_feature !== true && _feature !== false)
         throw 'Feature module ' + feature + ' must return true or false.';
-      
+
       is.features[feature] = _feature;
-      
+
       complete(_feature);
-    });
   }
   
   is.load = function(name, req, load, config) {
@@ -117,11 +117,11 @@ define(['module', './is-api', 'require'], function(module, api, require) {
       is.lookup(f.feature, function(_feature) {
         if ((_feature && f.type == 'load_if') || (!_feature && f.type == 'load_if_not'))
           //if doing a build, check if we are including the module or not
-          require([f.yesModuleId], load);
+          load(require(f.yesModuleId));
 
         else if ((!_feature && f.type == 'load_if' && f.noModuleId) || (_feature && f.type == 'load_if_not' && f.noModuleId))
-          require([f.noModuleId], load);
-          
+          load(require(f.noModuleId));
+
         else
           load(is.empty());
       });

@@ -4,7 +4,8 @@ module.exports = function (grunt) {
 
     var requirejs = require("requirejs");
     requirejs.config({
-        nodeRequire: require
+        nodeRequire: require,
+        baseUrl: "."
     });
 
     grunt.registerTask("api-example", "Example Grunt task showing how the API client also works with NodeJS.", function () {
@@ -19,10 +20,10 @@ module.exports = function (grunt) {
             done(false);
         }
 
-        requirejs(["api/PublicationAPI"], function (PublicationAPI) {
+        requirejs(["target/publicationapi.min.js"], function (PublicationAPI) {
             new PublicationAPI(apiKey).getPublication(publicationID)
                 .then(function (publication) {
-                    grunt.log.writeln(publication);
+                    grunt.log.writeln("Publication name: '" + publication.name + "'.");
 
                     done();
                 });

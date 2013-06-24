@@ -30,7 +30,7 @@ module.exports = function (grunt) {
                 baseUrl: "src/main/javascript",
                 mainConfigFile: "src/main/examples/require.config.js",
                 logLevel: 1,
-                optimize: "uglify2",
+                optimize: "none",
                 preserveLicenseComments: false,
                 generateSourceMaps: true
             },
@@ -47,9 +47,17 @@ module.exports = function (grunt) {
                         startFile: "src/main/almond/almond-start.js",
                         endFile: "src/main/almond/almond-end.js"
                     },
-                    include: ["api/PublicationAPI"],
-                    out: "target/publicationapi.min.js"
-                    // TODO use require.config
+                    include: ["require.config.js", "api/PublicationAPI"],
+                    out: "target/publicationapi.min.js",
+                    paths: {
+                        node: "util/node/node"
+                    },
+                    map: {
+                        "*": {
+                            "is": "lib/require-is/is"
+                        }
+                    },
+                    exclude: ["util/node/node-require"]
                 }
             }
         },

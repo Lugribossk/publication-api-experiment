@@ -10,5 +10,5 @@ define([], function () {
      *
      * @author Bo Gotthardt
      */
-    return typeof process !== "undefined" && process.versions && !!process.version.node;
+    return typeof process !== "undefined" && process.versions && !!process.versions.node;
 });

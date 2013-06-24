@@ -1,6 +1,6 @@
-define(["util/node/node-require"], function (nodeRequire) {
+define(["util/node/node-require", "util/Deferred"], function (nodeRequire, Deferred) {
     "use strict";
-    var najax = nodeRequire("najax");
+    var request = nodeRequire("request");
 
     function Ajax() {}
 
@@ -13,9 +13,22 @@ define(["util/node/node-require"], function (nodeRequire) {
      * @return {Promise} A promise for the response data.
      */
     Ajax.get = function (settings) {
-        // Seems to need this to be set explicitly or it will return a string instead of an object.
-        settings.dataType = "json";
-        return najax(settings).promise();
+        var deferred = new Deferred();
+
+        request({
+            url: settings.url,
+            qs: settings.data,
+            timeout: settings.timeout,
+            json: true
+        }, function (error, response, body) {
+            if (!error && response.statusCode === 200) {
+                deferred.resolve(body);
+            } else {
+                deferred.reject();
+            }
+        });
+
+        return deferred.promise();
     };
 
     return Ajax;

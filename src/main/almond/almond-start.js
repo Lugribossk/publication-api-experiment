@@ -10,7 +10,7 @@
     // The define used here is the one defined by the page this script is running inside.
 
     if (typeof define === "function" && define.amd) {
-        if (typeof process !== "undefined" && process.versions && !!process.version.node) {
+        if (typeof process !== "undefined" && process.versions && !!process.versions.node) {
             // Running in NodeJS, so depend on the NodeJS module that makes NodeJS and RequireJS work together.
             define(["requirejs"], factory);
         } else {
