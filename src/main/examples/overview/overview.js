@@ -27,6 +27,7 @@ require(["jquery", "api/PublicationAPI", "util/ES5"],
                     var row = $("<tr><td class='cover'></td>" +
                         "<td>" + publication.id + "</td>" +
                         "<td>" + publication.name + "</td>" +
+                        "<td>" + publication.activationDate + "</td>" +
                         "<td>" + publication.numberOfPages + "</td>" +
                         "<td><a href='http://viewer.zmags.com/publication/" + publication.id + "' target='_blank' class='btn btn-mini btn-success'>View</a></td></tr>")
                         .appendTo("#publications tbody");
