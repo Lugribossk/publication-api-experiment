@@ -37,8 +37,15 @@ define(["internal/Reference", "publication/Page", "util/Promise", "util/Logger"]
              * @type {Boolean}
              */
             this.activated = info.activated;
-
+            /**
+             * Date the publication was created.
+             * @type {String}
+             */
             this.creationDate = info.creationDate;
+            /**
+             * Date the publication was last activated, possibly null.
+             * @type {String}
+             */
             this.activationDate = info.activationDate;
             /**
              * The name of the publication.
@@ -110,6 +117,24 @@ define(["internal/Reference", "publication/Page", "util/Promise", "util/Logger"]
                         .then(function (enrichmentLists) {
                             return Array.prototype.concat.apply([], enrichmentLists);
                         });
+                });
+        };
+
+        /**
+         * Get all the publication's products.
+         *
+         * @returns {Promise} A promise for the list of {@link Product}s.
+         */
+        Publication.prototype.getProducts = function () {
+            return this.getPages()
+                .then(function (pages) {
+                    var products = [];
+
+                    pages.forEach(function (page) {
+                        products.concat(page.getProducts());
+                    });
+
+                    return products;
                 });
         };
 

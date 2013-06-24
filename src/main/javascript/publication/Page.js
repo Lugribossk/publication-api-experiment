@@ -82,18 +82,15 @@ define(["publication/PageRepresentation", "internal/Reference", "enrichment/Enri
         };
 
         /**
-         * Get the specified product.
-         * Only works for products that are in the enrichments on this page.
+         * Get all the products on this page.
          *
-         * @param {String} productID The product ID.
-         * @return {Promise} A promise for the {@link Product}.
+         * @returns {Promise} A promise for the list of {@link Product}s.
          */
-        Page.prototype.getProduct = function (productID) {
-            // Get all the enrichments on the page.
+        Page.prototype.getProducts = function () {
             return this.getEnrichments()
                 .then(function (enrichments) {
                     var products = [];
-                    // Then get the products for those of the enrichments that have them.
+
                     enrichments.forEach(function (enrichment) {
                         if (enrichment.getProduct) {
                             products.push(enrichment.getProduct());
@@ -102,9 +99,20 @@ define(["publication/PageRepresentation", "internal/Reference", "enrichment/Enri
                     });
 
                     return Promise.all(products);
-                })
+                });
+        };
+
+        /**
+         * Get the specified product.
+         * Only works for products that are in the enrichments on this page.
+         *
+         * @param {String} productID The product ID.
+         * @return {Promise} A promise for the {@link Product}.
+         */
+        Page.prototype.getProduct = function (productID) {
+            return this.getProducts()
                 .then(function (products) {
-                    // Then see if one of them matches the specified ID.
+                    // See if one of them matches the specified ID.
                     var foundProduct = null;
                     products.forEach(function (product) {
                         if (product.product_id === productID) {

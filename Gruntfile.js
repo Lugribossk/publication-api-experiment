@@ -30,7 +30,7 @@ module.exports = function (grunt) {
                 baseUrl: "src/main/javascript",
                 mainConfigFile: "src/main/examples/require.config.js",
                 logLevel: 1,
-                optimize: "none",
+                optimize: "uglify2",
                 preserveLicenseComments: false,
                 generateSourceMaps: true
             },
