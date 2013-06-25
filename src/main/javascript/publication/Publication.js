@@ -113,28 +113,32 @@ define(["internal/Reference", "publication/Page", "util/Promise", "util/Logger"]
                     var deferreds = pages.map(function (page) {
                         return page.getEnrichments();
                     });
-                    return Promise.all(deferreds)
-                        .then(function (enrichmentLists) {
-                            return Array.prototype.concat.apply([], enrichmentLists);
-                        });
+                    return Promise.all(deferreds);
+                })
+                .then(function (enrichmentLists) {
+                    return Array.prototype.concat.apply([], enrichmentLists);
                 });
         };
 
         /**
          * Get all the publication's products.
+         * This is only a list of the "root" products linked to in enrichments, not a list of all the variants in each of these.
          *
          * @returns {Promise} A promise for the list of {@link Product}s.
          */
         Publication.prototype.getProducts = function () {
             return this.getPages()
                 .then(function (pages) {
-                    var products = [];
+                    var productPromises = [];
 
                     pages.forEach(function (page) {
-                        products.concat(page.getProducts());
+                        productPromises.push(page.getProducts());
                     });
 
-                    return products;
+                    return Promise.all(productPromises);
+                })
+                .then(function (productLists) {
+                    return Array.prototype.concat.apply([], productLists);
                 });
         };
 

@@ -66,6 +66,12 @@ define(["util/Deferred", "is!~node?util/ES5"],
         };
 
 
+        /**
+         * Set up the specified list of subordinate deferreds to progress the combined deferred when done.
+         *
+         * @param {Deferred[]} subordinates
+         * @param {Deferred} combinedDeferred
+         */
         function notification(subordinates, combinedDeferred) {
             var numDone = 0;
 
@@ -75,11 +81,11 @@ define(["util/Deferred", "is!~node?util/ES5"],
                 if (Promise.isPromise(subordinate)) {
                     subordinate.done(function (arg) {
                         numDone++;
-                        combinedDeferred.notify.call(this, arg, numDone / subordinates.length);
+                        combinedDeferred.notify.call(combinedDeferred, arg, numDone / subordinates.length);
                     });
                 } else {
                     numDone++;
-                    combinedDeferred.notify.call(this, subordinate, numDone / subordinates.length);
+                    combinedDeferred.notify.call(combinedDeferred, subordinate, numDone / subordinates.length);
                 }
             });
         }
@@ -108,26 +114,13 @@ define(["util/Deferred", "is!~node?util/ES5"],
             // We would like the returned promise to progress whenever an individual promise has resolved, but $.when() does not support that.
             // So we have to create our own deferred that can be resolved by $.when(), and progressed by done() from the individual promises.
             combinedDeferred = combinedDeferred || new Deferred();
-            var numDone = 0;
 
-            subordinates.forEach(function (subordinate) {
-                // The subordinates can be both promises and already computed synchronous values.
-                // This is the same check as in $.when().
-                if (Promise.isPromise(subordinate)) {
-                    subordinate.done(function (arg) {
-                        numDone++;
-                        combinedDeferred.notify.call(this, arg, numDone / subordinates.length);
-                    });
-                } else {
-                    numDone++;
-                    combinedDeferred.notify.call(this, subordinate, numDone / subordinates.length);
-                }
-            });
+            notification(subordinates, combinedDeferred);
 
             Deferred.when.apply(this, subordinates)
                 .done(function () {
                     // Return the subordinates' values as one list, instead of as individual arguments.
-                    combinedDeferred.resolve(Array.prototype.slice.call(arguments, 1));
+                    combinedDeferred.resolve(Array.prototype.slice.call(arguments, 0));
                 })
                 .fail(combinedDeferred.reject);
 
@@ -150,28 +143,13 @@ define(["util/Deferred", "is!~node?util/ES5"],
          */
         Promise.any = function (subordinates, combinedDeferred) {
             combinedDeferred = combinedDeferred || new Deferred();
-            var numDone = 0;
 
-            // Set up these first so we do not notify on
-            subordinates.forEach(function (subordinate) {
-                // The subordinates can be both promises and already computed synchronous values.
-                // This is the same check as in $.when().
-                if (Promise.isPromise(subordinate)) {
-                    subordinate.done(function (arg) {
-                        numDone++;
-                        combinedDeferred.notify.call(this, arg, numDone / subordinates.length);
-                    });
-                } else {
-                    numDone++;
-                    combinedDeferred.notify.call(this, subordinate, numDone / subordinates.length);
-                }
-            });
+            notification(subordinates, combinedDeferred);
 
             subordinates = subordinates.map(function (subordinate) {
                 if (Promise.isPromise(subordinate)) {
                     // Always resolve subordinates rather than reject so the when() deferred always resolves.
                     return subordinate.then(null, function () {
-                        numDone++;
                         return Promise.resolved();
                     });
                 }
